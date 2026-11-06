@@ -25,12 +25,13 @@ window.__DATA = {"rf_infl_week": [{"id": "w2026-09-28", "date": "2026-09-28", "w
     return {status: 'missing', data: []};
   };
   const run = () => { for (const [n, f] of Object.entries(draws)) document.querySelectorAll('[data-draw="' + n + '"]').forEach(el => { if (el.closest('[hidden]')) return; try { f(el); } catch (e) { console.error(n, e); } }); };
-  window.dash = {data, calc: (id, o) => { calcs[id] = o; }, draw: (n, f) => { draws[n] = f; }, onData: () => {}, colors: ['#153F9B', '#12AA9E', '#FDBC16', '#804F80', '#666FB4', '#c2412d', '#0e8f84', '#7f8c8d'],
+  window.dash = {data, calc: (id, o) => { calcs[id] = o; }, draw: (n, f) => { draws[n] = f; }, onData: () => {}, colors: ['#7B4DDB', '#12AA9E', '#153F9B', '#FDBC16', '#E0679E', '#d24b3a', '#0e8f84', '#8a84a3'],
     setLink: (id) => { try { history.replaceState(null, '', '#' + id); } catch (e) {} setTimeout(run, 0); }, params: () => ({}), setParams() {}, resetParams() {}, refresh() {}, loader() {}};
   window.addEventListener('load', run);
   let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(run, 150); });
 })();
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap">
 </head><body><script>(function(){var t='light';try{t=localStorage.getItem('lxTheme')||t}catch(e){}document.documentElement.setAttribute('data-theme',t);var P={light:['#153F9B','#12AA9E','#FDBC16','#804F80','#666FB4','#c2412d','#0e8f84','#7f8c8d'],dark:['#6f9bff','#2fd3c4','#FDBC16','#d08fd0','#a3abf0','#ff7a66','#3fd1c3','#aab4c8']};window.__lxPal=P;if(window.dash&&window.dash.colors){var c=P[t];for(var i=0;i<c.length;i++)window.dash.colors[i]=c[i];}})();</script><div class="bg-anim" aria-hidden="true"><i></i><i></i><i></i><i></i></div><canvas id="bg3d" aria-hidden="true"></canvas><div class="wrap">
 <style>
 .lx{font-family:var(--font-anthropic-sans);display:flex;flex-direction:column;gap:var(--cds-gap-lg)}
@@ -76,156 +77,206 @@ window.__DATA = {"rf_infl_week": [{"id": "w2026-09-28", "date": "2026-09-28", "w
 .lx-grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));gap:var(--cds-gap-md)}
 </style>
 <style>
-/* Фирменный стиль АЭРЛО для публичного сайта (по брендбуку: Blue #153F9B, Seafoam #12AA9E, White;
-   дополнительные #FDBC16, #804F80, #666FB4; шрифт для экранов — PT Root UI, системная замена — Arial) */
+/* Публичный сайт: бенто-инфографика, фиолетовый акцент, стеклянные карточки.
+   Шрифты: Manrope (заголовки и цифры) и Inter (текст) — хорошо читаются, есть кириллица. */
 :root{
-  --brand-blue:#153F9B; --brand-sea:#12AA9E; --brand-yellow:#FDBC16; --brand-plum:#804F80; --brand-lilac:#666FB4;
-  --font-anthropic-sans:"PT Root UI",Arial,"Helvetica Neue",sans-serif;
-  --font-anthropic-serif:"PT Root UI",Arial,"Helvetica Neue",sans-serif;
-  --color-fg:#14213d; --color-fg-muted:#5b6478; --color-bg:#f3f6fb; --color-panel:#ffffff; --color-border-line:#dfe5f0;
-  --color-ok:#0e8f84; --color-warn:#b7860b; --color-bad:#c2412d;
-  --cds-chart-grid:#e8edf5; --cds-chart-axis:#b9c3d6; --cds-chart-muted:#c9d2e3; --cds-border:#dfe5f0; --cds-text-secondary:#5b6478;
-  --cds-radius:10px;
+  --ac:#7B4DDB; --ac-2:#9B7BEA; --ac-3:#E9E1FB; --ac-deep:#3A2378;
+  --blue:#153F9B; --sea:#12AA9E; --yellow:#FDBC16; --pink:#E0679E;
+  --font-anthropic-sans:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --font-anthropic-serif:"Manrope","Inter",system-ui,Arial,sans-serif;
+  --font-head:"Manrope","Inter",system-ui,Arial,sans-serif;
+  --color-fg:#191632; --color-fg-muted:#5f5b78; --color-bg:#f2f0fa; --color-panel:#ffffff; --color-border-line:#e6e2f3;
+  --color-ok:#14947f; --color-warn:#b7860b; --color-bad:#d24b3a;
+  --cds-chart-grid:#ebe8f5; --cds-chart-axis:#c3bdd9; --cds-chart-muted:#d6d1e8; --cds-border:#e6e2f3; --cds-text-secondary:#5f5b78;
+  --cds-radius:16px; --cds-font-size-caption:13px; --cds-font-size-body:15px;
+  --glass:linear-gradient(135deg,rgba(255,255,255,.78),rgba(255,255,255,.52));
+  --glass-border:rgba(255,255,255,.75);
+  --glass-shadow:0 10px 34px rgba(58,35,120,.10),inset 0 1px 0 rgba(255,255,255,.95);
+  --dark-card:linear-gradient(145deg,rgba(32,24,62,.92),rgba(24,20,44,.86));
 }
-html,body{background:var(--color-bg);color:var(--color-fg);overflow-x:hidden}
+html,body{background:var(--color-bg);color:var(--color-fg);overflow-x:hidden;font-family:var(--font-anthropic-sans);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-size:15px;line-height:1.5}
 .wrap{padding-top:0}
+.lx{gap:22px}
+.lx h1,.lx h2,.lx h3,.ix-sec-h,.hero-title{font-family:var(--font-head);letter-spacing:-.01em}
 
-/* Шапка */
-.site-head{margin:0 0 4px calc(50% - 50vw);width:100vw;box-sizing:border-box;padding:28px max(clamp(16px,3vw,40px),calc(50vw - 600px + 32px)) 22px;color:#fff;position:relative;overflow:hidden;
-  background:linear-gradient(120deg,var(--brand-blue) 0%,#1b56b0 55%,var(--brand-sea) 100%)}
-.site-head::after{content:"";position:absolute;right:-40px;bottom:-40px;width:260px;height:260px;opacity:.18;
-  background:repeating-linear-gradient(135deg,#fff 0 6px,transparent 6px 16px)}
-.site-head .row{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;position:relative;z-index:1}
-.site-head img.logo{height:72px;width:auto;display:block}
-.site-head .title{font-size:clamp(20px,2.4vw,28px);font-weight:600;margin:0;letter-spacing:.2px;position:relative;z-index:1}
-.site-head .sub{margin-top:6px;opacity:.85;font-size:14px;max-width:780px;position:relative;z-index:1}
-.site-head .channels{display:flex;gap:8px;flex-wrap:wrap}
-.site-head .channels a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:6px 14px;font-size:14px;white-space:nowrap}
-.site-head .channels a:hover{background:rgba(255,255,255,.15)}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:20px;position:relative;z-index:1}
-.kpi{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:10px 14px}
-.kpi .k{font-size:12px;opacity:.85}
-.kpi .v{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2}
-.kpi .d{font-size:12px;opacity:.8}
-.site-foot{margin-top:28px;padding:16px 0;border-top:1px solid var(--color-border-line);font-size:12px;color:var(--color-fg-muted);display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
-.site-foot a{color:var(--brand-blue)}
-
-/* Карточки, вкладки, таблицы */
-.lx h1{font-family:var(--font-anthropic-sans);font-weight:600}
-.lx-card{border:0;box-shadow:0 1px 2px rgba(20,33,61,.06),0 4px 14px rgba(20,33,61,.05);border-top:3px solid var(--brand-sea)}
-.lx-card h3{color:var(--brand-blue);font-size:16px}
-.lx-tile{border:1px solid var(--color-border-line);background:#fbfcfe}
-.lx-big{font-family:var(--font-anthropic-sans);font-weight:600;color:var(--brand-blue)}
-.lx-up.lx-big,.lx-big.lx-up{color:var(--color-ok)} .lx-big.lx-down{color:var(--color-bad)}
-.lx-tabs{border-bottom:0;gap:6px;position:sticky;top:0;z-index:5;background:var(--color-bg);padding:8px 0}
-.lx-tab{border:1px solid var(--color-border-line);border-radius:999px;padding:7px 16px;background:#fff;color:var(--color-fg)}
-.lx-tab:hover{border-color:var(--brand-sea)}
-.lx-tab[aria-selected="true"]{background:var(--brand-blue);border-color:var(--brand-blue);color:#fff}
-.lx th{color:var(--brand-blue);background:#f6f8fc}
-.lx td a{color:var(--brand-blue)}
-.lx tbody tr:hover td{background:#f6f9ff}
-.lx-note{border:0;background:rgba(18,170,158,.08);color:#0b6f67}
-.lx-pill{background:#fff}
-@media (max-width:640px){.site-head img.logo{height:46px}.kpi .v{font-size:20px}}
-
-/* ===== Анимированный фон, liquid glass, 3D ===== */
-body{background:#eef3fb}
-.bg-anim{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;
-  background:radial-gradient(120% 80% at 10% 0%,#e3ecfb 0%,#eef3fb 50%,#e6f6f4 100%)}
-.bg-anim i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;will-change:transform}
-.bg-anim i:nth-child(1){width:46vw;height:46vw;left:-10vw;top:-12vw;background:#153F9B;opacity:.28;animation:blob1 26s ease-in-out infinite alternate}
-.bg-anim i:nth-child(2){width:40vw;height:40vw;right:-8vw;top:20vh;background:#12AA9E;opacity:.32;animation:blob2 30s ease-in-out infinite alternate}
-.bg-anim i:nth-child(3){width:30vw;height:30vw;left:30vw;bottom:-12vw;background:#666FB4;opacity:.26;animation:blob3 34s ease-in-out infinite alternate}
-.bg-anim i:nth-child(4){width:18vw;height:18vw;left:62vw;top:8vh;background:#FDBC16;opacity:.16;animation:blob2 38s ease-in-out infinite alternate-reverse}
+/* ---------- Анимированный фон ---------- */
+.bg-anim{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;background:radial-gradient(120% 80% at 10% 0%,#ece6fb 0%,#f2f0fa 50%,#e7f6f4 100%)}
+.bg-anim i{position:absolute;border-radius:50%;filter:blur(80px);will-change:transform}
+.bg-anim i:nth-child(1){width:46vw;height:46vw;left:-10vw;top:-12vw;background:var(--ac);opacity:.26;animation:blob1 26s ease-in-out infinite alternate}
+.bg-anim i:nth-child(2){width:40vw;height:40vw;right:-8vw;top:20vh;background:var(--sea);opacity:.24;animation:blob2 30s ease-in-out infinite alternate}
+.bg-anim i:nth-child(3){width:32vw;height:32vw;left:30vw;bottom:-12vw;background:var(--blue);opacity:.20;animation:blob3 34s ease-in-out infinite alternate}
+.bg-anim i:nth-child(4){width:20vw;height:20vw;left:62vw;top:8vh;background:var(--pink);opacity:.14;animation:blob2 38s ease-in-out infinite alternate-reverse}
 @keyframes blob1{to{transform:translate(18vw,22vh) scale(1.15)}}
 @keyframes blob2{to{transform:translate(-20vw,18vh) scale(.9)}}
 @keyframes blob3{to{transform:translate(-14vw,-26vh) scale(1.2)}}
 #bg3d{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none}
 
-.site-head{background:linear-gradient(115deg,#153F9B,#1b56b0,#12AA9E,#666FB4,#153F9B);background-size:300% 300%;animation:headflow 18s ease-in-out infinite}
+/* ---------- Шапка ---------- */
+.site-head{padding:18px 0 4px;color:var(--color-fg)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.brand{font-family:var(--font-head);font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px}
+.brand-dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--sea));box-shadow:0 0 0 4px rgba(123,77,219,.15)}
+.channels{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.channels a{color:var(--color-fg);text-decoration:none;border:1px solid var(--glass-border);background:var(--glass);border-radius:999px;padding:7px 16px;font-size:14px;font-weight:500;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:var(--glass-shadow)}
+.channels a:hover{border-color:var(--ac);color:var(--ac)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
+.hero-card{position:relative;overflow:hidden;border-radius:24px;padding:30px 30px 26px;color:#fff;min-height:300px;display:grid;grid-template-columns:1fr minmax(150px,240px);align-items:center;gap:10px;
+  background:linear-gradient(120deg,#2a1960,#5a33b8,#7B4DDB,#12AA9E,#2a1960);background-size:300% 300%;animation:headflow 18s ease-in-out infinite;
+  box-shadow:0 20px 50px rgba(58,35,120,.30)}
+.hero-card::after{content:"";position:absolute;right:-50px;bottom:-50px;width:240px;height:240px;opacity:.14;background:repeating-linear-gradient(135deg,#fff 0 6px,transparent 6px 16px);pointer-events:none}
 @keyframes headflow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-.site-head .hero{display:grid;grid-template-columns:1fr minmax(160px,260px);gap:16px;align-items:center;position:relative;z-index:1}
-#globe3d{width:100%;aspect-ratio:1/1;max-height:240px;display:block}
-@media (max-width:760px){.site-head .hero{grid-template-columns:1fr}#globe3d{max-height:150px;margin:-4px auto 0;width:150px}}
+.hero-text{position:relative;z-index:1}
+.eyebrow{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:5px 12px}
+.hero-title{font-size:clamp(26px,3.2vw,40px);line-height:1.12;font-weight:800;margin:16px 0 10px}
+.hero-sub{font-size:15px;opacity:.88;max-width:460px;margin:0}
+#globe3d{width:100%;aspect-ratio:1/1;max-height:250px;display:block;position:relative;z-index:1}
+@media (max-width:600px){.hero-card{grid-template-columns:1fr;padding:24px}#globe3d{max-height:160px;width:160px;margin:0 auto}}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:600px){.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-/* Liquid glass */
-.lx-card,.lx-tile,.kpi,.lx-tab{
-  background:linear-gradient(135deg,rgba(255,255,255,.72),rgba(255,255,255,.48));
-  -webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);
-  border:1px solid rgba(255,255,255,.7);
-  box-shadow:0 8px 32px rgba(21,63,155,.10),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.25)}
-.lx-card{position:relative;border-top:1px solid rgba(255,255,255,.9);border-radius:18px;overflow:visible}
-.lx-card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  background:linear-gradient(120deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 35%,rgba(255,255,255,0) 70%,rgba(18,170,158,.10) 100%)}
-.lx-card > *{position:relative}
-.lx-tile{border-radius:14px;transition:transform .25s ease, box-shadow .25s ease}
-.lx-tile.tilting,.kpi.tilting{box-shadow:0 14px 36px rgba(21,63,155,.18),inset 0 1px 0 rgba(255,255,255,.9)}
-.lx-tile.tilting::after,.kpi.tilting::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  background:radial-gradient(180px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.55),transparent 60%)}
-.lx-tile,.kpi{position:relative}
-.kpi{background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.35);border-radius:14px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 22px rgba(0,0,0,.08);transition:transform .25s ease}
-.lx th{background:rgba(246,248,252,.85);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.lx-tabs{background:transparent;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.lx-tab[aria-selected="true"]{background:linear-gradient(135deg,#153F9B,#1d5bc4);border-color:rgba(255,255,255,.6);box-shadow:0 6px 18px rgba(21,63,155,.3)}
-.lx-tip{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);background:rgba(255,255,255,.85)}
+/* ---------- Инфографика ---------- */
+.ix-sec{display:flex;flex-direction:column;gap:12px}
+.ix-sec-h{font-size:22px;font-weight:800;margin:6px 0 0}
+.bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:1000px){.bento{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.bento{grid-template-columns:1fr}.bento .span2{grid-column:auto}}
+.span2{grid-column:span 2}
+.ix{position:relative;border-radius:20px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;min-width:0;
+  background:var(--glass);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
+.ix.dark{background:var(--dark-card);color:#fff;border-color:rgba(255,255,255,.08);box-shadow:0 16px 40px rgba(25,18,52,.30)}
+.ix.dark .ix-sub,.ix.dark .ix-t{color:rgba(255,255,255,.72)}
+.ix-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.ix-t{font-size:13px;font-weight:600;color:var(--color-fg-muted);line-height:1.3}
+.ix-h{font-family:var(--font-head);font-size:16px;font-weight:700;line-height:1.3}
+.ic{flex:none;width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--ac),var(--ac-2));color:#fff;box-shadow:0 6px 16px rgba(123,77,219,.35)}
+.ic svg{width:18px;height:18px}
+.ix-big{font-family:var(--font-head);font-weight:800;font-size:34px;line-height:1.05;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.ix-big.sm{font-size:28px}
+.ix-sub{font-size:13px;color:var(--color-fg-muted)}
+.ix-note{font-size:12px;color:var(--color-fg-muted);background:rgba(123,77,219,.07);border-radius:999px;padding:4px 10px;align-self:flex-start}
+.ix.dark .ix-note{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8)}
+.ix-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--ac-3);color:var(--ac-deep)}
+.pill.ok{background:#dcf5ef;color:#0d6f60}.pill.bad{background:#fde4e0;color:#a5321f}.pill.ac{background:var(--ac);color:#fff}
+.kpi-card{transition:transform .25s ease, box-shadow .25s ease}
+.kpi-card .ix-big{font-size:28px}
+.c1{stroke:var(--ac);background:var(--ac)} .c2{stroke:var(--sea);background:var(--sea)} .c3{stroke:var(--blue);background:var(--blue)}
+.d-track{stroke:rgba(123,77,219,.12)}
+.donut-wrap{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;position:relative}
+.donut-c{position:absolute;left:0;top:0;width:150px;height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.donut-c b{font-family:var(--font-head);font-size:24px;font-weight:800}.donut-c span{font-size:12px;color:var(--color-fg-muted)}
+.legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:14px}
+.legend li{display:flex;align-items:center;gap:8px}.legend b{margin-left:auto;font-family:var(--font-head)}
+.dot{width:12px;height:12px;border-radius:4px;display:inline-block}
+.prog{display:flex;flex-direction:column;gap:5px}
+.prog-h{display:flex;justify-content:space-between;font-size:14px;font-weight:600}.prog-h i{font-style:normal;color:var(--color-fg-muted);font-weight:500}
+.prog-t{height:12px;border-radius:999px;background:rgba(123,77,219,.10);overflow:hidden}
+.prog-b{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--ac),var(--ac-2))}
+.prog-b.c2{background:linear-gradient(90deg,#0f8f85,var(--sea))}.prog-b.c3{background:linear-gradient(90deg,var(--blue),#3f6fd1)}
+.prog-n{font-size:12px;color:var(--color-fg-muted)}
+.vbars{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px;align-items:end;height:calc(var(--h) + 44px)}
+.vb{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;min-width:0}
+.vb-b{width:100%;max-width:34px;border-radius:10px 10px 4px 4px;background:linear-gradient(180deg,var(--ac-2),rgba(123,77,219,.35))}
+.vb.hi .vb-b{background:repeating-linear-gradient(135deg,var(--ac) 0 6px,var(--ac-2) 6px 12px)}
+.vb-v{font-size:11px;font-weight:600;font-variant-numeric:tabular-nums}.vb-l{font-size:11px;color:var(--color-fg-muted)}
+.hbars{display:flex;flex-direction:column;gap:8px}
+.hb{display:grid;grid-template-columns:minmax(90px,38%) 1fr auto;gap:10px;align-items:center;font-size:13px}
+.hb-l{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-track{position:relative;height:10px;border-radius:999px;background:rgba(123,77,219,.08)}
+.hb-b{position:absolute;top:0;height:100%;border-radius:999px;background:rgba(123,77,219,.45)}
+.hb-b.neg{background:rgba(210,75,58,.5)}
+.hb.hi .hb-b{background:linear-gradient(90deg,var(--ac),var(--ac-2))}.hb.hi .hb-b.neg{background:var(--color-bad)}
+.hb.hi .hb-l,.hb.hi .hb-v{font-weight:700}
+.hb-zero{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--cds-chart-axis)}
+.hb-v{font-variant-numeric:tabular-nums;font-weight:600;min-width:52px;text-align:right}
+.nb-h{font-size:12px;font-weight:600;color:var(--color-fg-muted);margin-top:4px}
+.rings{display:flex;gap:12px;justify-content:space-around;flex-wrap:wrap}
+.ring{position:relative;width:112px;height:112px}
+.ring-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-c b{font-family:var(--font-head);font-size:22px;font-weight:800}.ring-c span{font-size:12px;color:var(--color-fg-muted)}
+.big-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.big-grid div,.stack div,.mini-row div{display:flex;flex-direction:column;gap:2px}
+.big-grid b{font-family:var(--font-head);font-size:30px;font-weight:800;line-height:1.1}
+.big-grid span,.stack span,.mini-row span{font-size:12px;opacity:.75}
+.stack{display:flex;flex-direction:column;gap:12px}.stack b{font-family:var(--font-head);font-size:24px;font-weight:800}
+.stack b.neg{color:var(--color-bad)}.stack b.pos{color:var(--color-ok)}
+.mini-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}.mini-row b{font-family:var(--font-head);font-size:20px}
+
+/* ---------- Дашборд под инфографикой ---------- */
+.lx-card,.lx-tile,.lx-tab{background:var(--glass);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);
+  -webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
+.lx-card{position:relative;border-radius:20px}
+.lx-card h3{font-family:var(--font-head);font-size:17px;font-weight:700;color:var(--color-fg)}
+.lx-card h3::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ac);margin-right:8px;vertical-align:middle;box-shadow:0 0 0 4px rgba(123,77,219,.15)}
+.lx-tile{border-radius:16px;position:relative;transition:transform .25s ease, box-shadow .25s ease}
+.lx-big{font-family:var(--font-head);font-weight:800;color:var(--color-fg);letter-spacing:-.02em}
+.lx-muted{font-size:13px}
+.lx table{font-size:13.5px}
+.lx th{color:var(--ac-deep);background:rgba(246,243,253,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-weight:600}
+.lx td a{color:var(--ac)}
+.lx tbody tr:hover td{background:rgba(123,77,219,.05)}
+.lx-tabs{border-bottom:0;gap:8px;position:sticky;top:0;z-index:5;padding:10px 0;background:transparent;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.lx-tab{border-radius:999px;padding:8px 18px;color:var(--color-fg);font-weight:500;font-size:14px}
+.lx-tab:hover{border-color:var(--ac)}
+.lx-tab[aria-selected="true"]{background:linear-gradient(135deg,var(--ac),#5a33b8);border-color:transparent;color:#fff;box-shadow:0 8px 20px rgba(123,77,219,.35)}
+.lx-pill{background:rgba(255,255,255,.7)}
+.lx-tip{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);background:rgba(255,255,255,.92)}
+.lx-note{border:0;background:rgba(123,77,219,.08);color:var(--ac-deep)}
 .lx-page:not([hidden]){animation:fadeup .45s ease both}
 @keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.lx-card,.lx-tile,.lx-tab{background:rgba(255,255,255,.94)}}
-@media (prefers-reduced-motion:reduce){.bg-anim i,.site-head,.lx-page{animation:none!important}}
+.tilting{box-shadow:0 16px 38px rgba(58,35,120,.18),inset 0 1px 0 rgba(255,255,255,.9)!important}
+.tilting::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(180px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.55),transparent 60%)}
+.site-foot{margin-top:28px;padding:16px 0;border-top:1px solid var(--color-border-line);font-size:12px;color:var(--color-fg-muted);display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+.site-foot a{color:var(--ac)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.ix,.lx-card,.lx-tile,.lx-tab,.channels a{background:rgba(255,255,255,.95)}}
 
-/* ===== Переключатель темы ===== */
-.theme-toggle{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.14);color:#fff;
-  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;position:relative;overflow:hidden;
-  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:background .2s}
-.theme-toggle:hover{background:rgba(255,255,255,.26)}
+/* ---------- Переключатель темы ---------- */
+.theme-toggle{width:38px;height:38px;border-radius:50%;border:1px solid var(--glass-border);background:var(--glass);color:var(--ac);box-shadow:var(--glass-shadow);
+  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;position:relative;overflow:hidden;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.theme-toggle:hover{border-color:var(--ac)}
 .theme-toggle svg{width:20px;height:20px;position:absolute;transition:transform .45s cubic-bezier(.4,1.4,.5,1),opacity .3s}
 .theme-toggle .sun{transform:rotate(90deg) scale(0);opacity:0}
-.theme-toggle .moon{transform:none;opacity:1}
 [data-theme="dark"] .theme-toggle .sun{transform:none;opacity:1}
 [data-theme="dark"] .theme-toggle .moon{transform:rotate(-90deg) scale(0);opacity:0}
-.site-head .channels{align-items:center}
 
-/* ===== Тёмная тема ===== */
+/* ---------- Тёмная тема ---------- */
 [data-theme="dark"]{
-  --color-fg:#e8eefc; --color-fg-muted:#9fb0d0; --color-bg:#0a1330; --color-panel:#121d3f; --color-border-line:rgba(255,255,255,.12);
-  --color-ok:#3fd1c3; --color-warn:#f2c14e; --color-bad:#ff7a66;
-  --cds-chart-grid:rgba(255,255,255,.08); --cds-chart-axis:rgba(255,255,255,.25); --cds-chart-muted:rgba(255,255,255,.18);
-  --cds-border:rgba(255,255,255,.14); --cds-text-secondary:#9fb0d0; --cds-surface-popover:#16224a; color-scheme:dark}
-[data-theme="dark"] body,[data-theme="dark"] html{background:#0a1330}
-[data-theme="dark"] .bg-anim{background:radial-gradient(120% 80% at 10% 0%,#0f1d48 0%,#0a1330 55%,#062a33 100%)}
-[data-theme="dark"] .bg-anim i:nth-child(1){opacity:.45}
-[data-theme="dark"] .bg-anim i:nth-child(2){opacity:.30}
-[data-theme="dark"] .bg-anim i:nth-child(3){opacity:.35}
-[data-theme="dark"] .site-head{background:linear-gradient(115deg,#0d2a6e,#123f8a,#0b7d74,#3f478a,#0d2a6e);background-size:300% 300%}
-[data-theme="dark"] .lx-card,[data-theme="dark"] .lx-tile,[data-theme="dark"] .lx-tab{
-  background:linear-gradient(135deg,rgba(30,46,96,.62),rgba(16,26,58,.48));border:1px solid rgba(255,255,255,.12);
-  box-shadow:0 10px 34px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.10)}
-[data-theme="dark"] .lx-card::before{background:linear-gradient(120deg,rgba(255,255,255,.08) 0%,rgba(255,255,255,0) 35%,rgba(255,255,255,0) 70%,rgba(18,170,158,.10) 100%)}
-[data-theme="dark"] .lx-card h3{color:#9cc0ff}
-[data-theme="dark"] .lx-big{color:#a9c6ff}
-[data-theme="dark"] .lx-tab{color:#e8eefc}
-[data-theme="dark"] .lx-tab[aria-selected="true"]{background:linear-gradient(135deg,#2a5fd0,#12AA9E);color:#fff}
-[data-theme="dark"] .lx th{background:rgba(18,29,63,.92);color:#9cc0ff}
-[data-theme="dark"] .lx td a,[data-theme="dark"] .site-foot a{color:#9cc0ff}
-[data-theme="dark"] .lx tbody tr:hover td{background:rgba(255,255,255,.04)}
-[data-theme="dark"] .lx-note{background:rgba(18,170,158,.12);color:#7fe0d6}
-[data-theme="dark"] .lx-pill{background:rgba(255,255,255,.04)}
-[data-theme="dark"] .lx-tip{background:rgba(22,34,74,.92);color:#e8eefc}
-[data-theme="dark"] .lx-tile.tilting::after{background:radial-gradient(180px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.10),transparent 60%)}
+  --ac:#9B7BEA; --ac-2:#B9A2F2; --ac-3:rgba(155,123,234,.18); --ac-deep:#d9ccff;
+  --color-fg:#ece9fb; --color-fg-muted:#a9a3c6; --color-bg:#0e0b1f; --color-panel:#17132e; --color-border-line:rgba(255,255,255,.10);
+  --color-ok:#3fd1b5; --color-warn:#f2c14e; --color-bad:#ff7a66;
+  --cds-chart-grid:rgba(255,255,255,.07); --cds-chart-axis:rgba(255,255,255,.22); --cds-chart-muted:rgba(255,255,255,.16);
+  --cds-border:rgba(255,255,255,.12); --cds-text-secondary:#a9a3c6; --cds-surface-popover:#1d1838;
+  --glass:linear-gradient(135deg,rgba(40,32,78,.66),rgba(22,18,44,.52)); --glass-border:rgba(255,255,255,.10);
+  --glass-shadow:0 12px 36px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.08); color-scheme:dark}
+[data-theme="dark"] .bg-anim{background:radial-gradient(120% 80% at 10% 0%,#1d1446 0%,#0e0b1f 55%,#062a2c 100%)}
+[data-theme="dark"] .bg-anim i:nth-child(1){opacity:.40}
+[data-theme="dark"] .ix.dark{background:linear-gradient(145deg,rgba(123,77,219,.35),rgba(30,22,62,.75))}
+[data-theme="dark"] .pill.ok{background:rgba(63,209,181,.15);color:#7ce8d3}[data-theme="dark"] .pill.bad{background:rgba(255,122,102,.15);color:#ffab9e}
+[data-theme="dark"] .lx th{background:rgba(26,21,50,.94);color:#cdbfff}
+[data-theme="dark"] .lx-tip{background:rgba(29,24,56,.94);color:var(--color-fg)}
+[data-theme="dark"] .lx-pill{background:rgba(255,255,255,.05)}
+[data-theme="dark"] .tilting::after{background:radial-gradient(180px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.10),transparent 60%)}
+@media (prefers-reduced-motion:reduce){.bg-anim i,.hero-card,.lx-page{animation:none!important}}
 
 </style>
 
 
 <div class="lx">
   <header class="site-head">
-  <div class="hero"><div>
-  <div class="row"><div class="title">Аналитика: каналы, экономика РФ и Ленобласти</div>
+  <div class="topbar"><div class="brand"><span class="brand-dot"></span>Экономика Ленобласти · аналитика</div>
   <div class="channels"><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener">Telegram</a><a href="https://max.ru/id4703059140_gos" target="_blank" rel="noopener">MAX</a><a href="https://vk.com/lenoblinvest" target="_blank" rel="noopener">ВКонтакте</a><button class="theme-toggle" type="button" aria-label="Переключить тему" title="Светлая / тёмная тема"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg><svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg></button></div></div>
-  <div class="sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», экономика России и региона, предприятия области. Данные обновляются раз в час · обновлено 06.11.2026, 01:50 МСК.</div>
-  </div><canvas id="globe3d" aria-hidden="true"></canvas></div>
-  <div class="kpis"><div class="kpi"><div class="k">Telegram</div><div class="v">2 206</div><div class="d">подписчиков</div></div><div class="kpi"><div class="k">MAX</div><div class="v">469</div><div class="d">подписчиков</div></div><div class="kpi"><div class="k">ВКонтакте</div><div class="v">≈1 900</div><div class="d">подписчиков</div></div><div class="kpi"><div class="k">Ключевая ставка</div><div class="v">14%</div><div class="d">Банк России</div></div><div class="kpi"><div class="k">Доллар</div><div class="v">81,79 ₽</div><div class="d">курс ЦБ на 06.11.2026</div></div><div class="kpi"><div class="k">Нефть Brent</div><div class="v">97,35 $</div><div class="d">Мосбиржа</div></div></div>
+  <div class="hero-grid">
+    <div class="hero-card"><div class="hero-text"><span class="eyebrow">Обновляется каждый час · 06.11.2026, 01:50 МСК</span>
+      <h1 class="hero-title">Каналы, экономика России и&nbsp;Ленобласти</h1>
+      <p class="hero-sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», макроэкономика, регион и предприятия области — в одном месте.</p></div>
+      <canvas id="globe3d" aria-hidden="true"></canvas></div>
+    <div class="kpi-grid"><div class="ix kpi-card "><div class="ix-top"><span class="ix-t">Telegram</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 17.5V19"/><circle cx="10" cy="7.5" r="3.5"/><path d="M20 19v-1.5a3.5 3.5 0 0 0-2.6-3.4M15.5 4.2a3.5 3.5 0 0 1 0 6.6"/></svg></span></div><div class="ix-big">2 206</div><div class="ix-sub">подписчиков</div><div class="ix-note">−5 за неделю</div></div><div class="ix kpi-card "><div class="ix-top"><span class="ix-t">MAX</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 17.5V19"/><circle cx="10" cy="7.5" r="3.5"/><path d="M20 19v-1.5a3.5 3.5 0 0 0-2.6-3.4M15.5 4.2a3.5 3.5 0 0 1 0 6.6"/></svg></span></div><div class="ix-big">469</div><div class="ix-sub">подписчиков</div><div class="ix-note">+27 за 30 дней</div></div><div class="ix kpi-card "><div class="ix-top"><span class="ix-t">ВКонтакте</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 17.5V19"/><circle cx="10" cy="7.5" r="3.5"/><path d="M20 19v-1.5a3.5 3.5 0 0 0-2.6-3.4M15.5 4.2a3.5 3.5 0 0 1 0 6.6"/></svg></span></div><div class="ix-big">≈1 900</div><div class="ix-sub">подписчиков</div></div><div class="ix kpi-card "><div class="ix-top"><span class="ix-t">Ключевая ставка</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18L12 4 3 10zM5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/></svg></span></div><div class="ix-big">14%</div><div class="ix-sub">Банк России</div><div class="ix-note">сохранена</div></div><div class="ix kpi-card "><div class="ix-top"><span class="ix-t">Доллар</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20V4h6a4 4 0 0 1 0 8H6M6 16h8"/></svg></span></div><div class="ix-big">81,79 ₽</div><div class="ix-sub">курс ЦБ</div><div class="ix-note">+3,8% с начала года</div></div><div class="ix kpi-card "><div class="ix-top"><span class="ix-t">Нефть Brent</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></span></div><div class="ix-big">97,35 $</div><div class="ix-sub">Мосбиржа</div></div></div>
+  </div>
 </header>
+<section class="ix-sec"><h2 class="ix-sec-h">Каналы в цифрах</h2><div class="bento"><div class="ix span2 glass"><div class="ix-top"><span class="ix-h">Аудитория по площадкам</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.8 3.8 5.8 3.8 9s-1.3 6.2-3.8 9c-2.5-2.8-3.8-5.8-3.8-9S9.5 5.8 12 3z"/></svg></span></div><div class="donut-wrap"><svg class="donut" viewBox="0 0 150 150" width="150" height="150"><circle r="64.0" cx="75.0" cy="75.0" fill="none" class="d-track" stroke-width="22"/><circle r="64.0" cx="75.0" cy="75.0" fill="none" class="c1" stroke-width="22" stroke-dasharray="191.9 402.1" stroke-dashoffset="0.0" transform="rotate(-90 75.0 75.0)"/><circle r="64.0" cx="75.0" cy="75.0" fill="none" class="c2" stroke-width="22" stroke-dasharray="165.0 402.1" stroke-dashoffset="-193.9" transform="rotate(-90 75.0 75.0)"/><circle r="64.0" cx="75.0" cy="75.0" fill="none" class="c3" stroke-width="22" stroke-dasharray="39.2 402.1" stroke-dashoffset="-360.9" transform="rotate(-90 75.0 75.0)"/></svg><div class="donut-c"><b>4 575</b><span>всего</span></div><ul class="legend"><li><i class="dot c1"></i>Telegram<b>48%</b></li><li><i class="dot c2"></i>ВКонтакте<b>42%</b></li><li><i class="dot c3"></i>MAX<b>10%</b></li></ul></div></div><div class="ix span2 glass"><div class="ix-top"><span class="ix-h">Цели по подписчикам</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8"/></svg></span></div><div class="prog"><div class="prog-h"><span>Telegram</span><b>2 208 <i>/ 2 500</i></b></div><div class="prog-t"><span class="prog-b c1" style="width:88.3%"></span></div><div class="prog-n">88% цели · к 31.12</div></div><div class="prog"><div class="prog-h"><span>MAX</span><b>469 <i>/ 1 000</i></b></div><div class="prog-t"><span class="prog-b c3" style="width:46.9%"></span></div><div class="prog-n">47% цели · к 31.12</div></div><div class="prog"><div class="prog-h"><span>ВКонтакте</span><b>1 900 <i>/ 2 000</i></b></div><div class="prog-t"><span class="prog-b c2" style="width:95.0%"></span></div><div class="prog-n">95% цели · к 31.12</div></div><div class="ix-note">Цели заданы для примера — их можно поменять в дашборде.</div></div><div class="ix span2 glass"><div class="ix-top"><span class="ix-h">Медиана просмотров поста в Telegram</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span></div><div class="ix-row"><div class="ix-big sm">231</div><span class="pill bad">−5% к прошлому месяцу</span></div><div class="vbars" style="--h:120px"><div class="vb"><span class="vb-v">581</span><span class="vb-b" style="height:90px"></span><span class="vb-l">дек</span></div><div class="vb"><span class="vb-v">774</span><span class="vb-b" style="height:120px"></span><span class="vb-l">янв</span></div><div class="vb"><span class="vb-v">692</span><span class="vb-b" style="height:107px"></span><span class="vb-l">фев</span></div><div class="vb"><span class="vb-v">570</span><span class="vb-b" style="height:88px"></span><span class="vb-l">мар</span></div><div class="vb"><span class="vb-v">368</span><span class="vb-b" style="height:57px"></span><span class="vb-l">апр</span></div><div class="vb"><span class="vb-v">320</span><span class="vb-b" style="height:50px"></span><span class="vb-l">май</span></div><div class="vb"><span class="vb-v">300</span><span class="vb-b" style="height:47px"></span><span class="vb-l">июн</span></div><div class="vb"><span class="vb-v">294</span><span class="vb-b" style="height:46px"></span><span class="vb-l">июл</span></div><div class="vb"><span class="vb-v">256</span><span class="vb-b" style="height:40px"></span><span class="vb-l">авг</span></div><div class="vb"><span class="vb-v">243</span><span class="vb-b" style="height:38px"></span><span class="vb-l">сен</span></div><div class="vb"><span class="vb-v">231</span><span class="vb-b" style="height:36px"></span><span class="vb-l">окт</span></div><div class="vb hi"><span class="vb-v">185</span><span class="vb-b" style="height:29px"></span><span class="vb-l">ноя</span></div></div><div class="ix-note">Последний столбец — текущий неполный месяц.</div></div><div class="ix span2 glass"><div class="ix-top"><span class="ix-h">Охват поста, % от подписчиков</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></span></div><div class="hbars"><div class="hb"><span class="hb-l">Александр Дрозденко</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:100.0%"></span></span><span class="hb-v">14,6%</span></div><div class="hb hi"><span class="hb-l">Мы</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:70.4%"></span></span><span class="hb-v">10,3%</span></div><div class="hb"><span class="hb-l">МойБизнес47</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:30.0%"></span></span><span class="hb-v">4,4%</span></div><div class="hb"><span class="hb-l">Минэкономразвития Росс</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:28.6%"></span></span><span class="hb-v">4,2%</span></div><div class="hb"><span class="hb-l">Админка Ленобласти</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:27.2%"></span></span><span class="hb-v">4,0%</span></div></div><div class="ix-note">Медиана просмотров к числу подписчиков за 30 дней — у маленьких каналов доля выше.</div></div><div class="ix dark span2"><div class="ix-top"><span class="ix-t">MAX: вовлечённость</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5z"/></svg></span></div><div class="ix-big">48,8%</div><div class="ix-sub">ERR — доля подписчиков, увидевших пост</div><div class="mini-row"><div><b>61</b><span>постов за 30 дней</span></div><div><b>224</b><span>просмотров на пост</span></div></div></div><div class="ix span2 glass"><div class="ix-top"><span class="ix-h">Постов в Telegram по месяцам</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5z"/></svg></span></div><div class="vbars" style="--h:90px"><div class="vb"><span class="vb-v">61</span><span class="vb-b" style="height:65px"></span><span class="vb-l">дек</span></div><div class="vb"><span class="vb-v">28</span><span class="vb-b" style="height:30px"></span><span class="vb-l">янв</span></div><div class="vb"><span class="vb-v">43</span><span class="vb-b" style="height:46px"></span><span class="vb-l">фев</span></div><div class="vb"><span class="vb-v">56</span><span class="vb-b" style="height:60px"></span><span class="vb-l">мар</span></div><div class="vb"><span class="vb-v">63</span><span class="vb-b" style="height:68px"></span><span class="vb-l">апр</span></div><div class="vb"><span class="vb-v">56</span><span class="vb-b" style="height:60px"></span><span class="vb-l">май</span></div><div class="vb"><span class="vb-v">66</span><span class="vb-b" style="height:71px"></span><span class="vb-l">июн</span></div><div class="vb"><span class="vb-v">49</span><span class="vb-b" style="height:52px"></span><span class="vb-l">июл</span></div><div class="vb"><span class="vb-v">54</span><span class="vb-b" style="height:58px"></span><span class="vb-l">авг</span></div><div class="vb"><span class="vb-v">84</span><span class="vb-b" style="height:90px"></span><span class="vb-l">сен</span></div><div class="vb"><span class="vb-v">63</span><span class="vb-b" style="height:68px"></span><span class="vb-l">окт</span></div><div class="vb hi"><span class="vb-v">8</span><span class="vb-b" style="height:9px"></span><span class="vb-l">ноя</span></div></div><div class="ix-note">За октябрь — 63 постов</div></div></div></section><section class="ix-sec"><h2 class="ix-sec-h">Экономика в цифрах</h2><div class="bento"><div class="ix dark span2"><div class="ix-top"><span class="ix-t">Экономика России</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></span></div><div class="big-grid"><div><b>+1,0%</b><span>ВВП за 2025 год</span></div><div><b>14%</b><span>ключевая ставка</span></div><div><b>7,11%</b><span>годовая инфляция</span></div><div><b>7,1–7,6%</b><span>прогноз ЦБ на год</span></div><div><b>+1,3%</b><span>ВВП, II кв. 2026</span></div><div><b>49,9</b><span>PMI промышленности (спад)</span></div></div></div><div class="ix span2 glass"><div class="ix-top"><span class="ix-h">ВРП Ленобласти — 2024</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V10l6 3V10l6 3V6h6v14H3z"/><path d="M7 17h2M12 17h2M17 17h1"/></svg></span></div><div class="ix-row"><div class="ix-big sm">2,4 трлн ₽</div><span class="pill ac">1,3% ВРП России</span></div><div class="ix-sub">Крупнейшие отрасли, % ВРП</div><div class="hbars"><div class="hb hi"><span class="hb-l">Обрабатывающие производства</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:100.0%"></span></span><span class="hb-v">27,4%</span></div><div class="hb"><span class="hb-l">Транспортировка и хранение</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:53.3%"></span></span><span class="hb-v">14,6%</span></div><div class="hb"><span class="hb-l">Строительство</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:47.1%"></span></span><span class="hb-v">12,9%</span></div><div class="hb"><span class="hb-l">Торговля</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:35.0%"></span></span><span class="hb-v">9,6%</span></div><div class="hb"><span class="hb-l">Операции с недвижимостью</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:29.2%"></span></span><span class="hb-v">8,0%</span></div><div class="hb"><span class="hb-l">Энергетика (электроэнергия, газ, пар)</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:18.2%"></span></span><span class="hb-v">5,0%</span></div></div></div><div class="ix glass"><div class="ix-top"><span class="ix-h">Ленобласть сейчас</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V10l6 3V10l6 3V6h6v14H3z"/><path d="M7 17h2M12 17h2M17 17h1"/></svg></span></div><div class="stack"><div><b>7,2%</b><span>инфляция</span></div><div><b class="neg">−19,0%</b><span>промпроизводство г/г</span></div><div><b class="pos">+31,5%</b><span>кредиты бизнесу г/г</span></div></div></div><div class="ix glass"><div class="ix-top"><span class="ix-h">Бюджет области 2026 (на 05.11)</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a1 1 0 0 1-1-1V7z"/><path d="M4 7l11-3v3M16 13.5h2"/></svg></span></div><div class="rings"><div class="ring"><svg viewBox="0 0 112 112" width="112" height="112"><circle r="50.0" cx="56.0" cy="56.0" fill="none" class="d-track" stroke-width="12"/><circle r="50.0" cx="56.0" cy="56.0" fill="none" class="c1" stroke-width="12" stroke-linecap="round" stroke-dasharray="276.5 314.2" transform="rotate(-90 56.0 56.0)"/></svg><div class="ring-c"><b>88%</b><span>доходы</span></div></div><div class="ring"><svg viewBox="0 0 112 112" width="112" height="112"><circle r="50.0" cx="56.0" cy="56.0" fill="none" class="d-track" stroke-width="12"/><circle r="50.0" cx="56.0" cy="56.0" fill="none" class="c2" stroke-width="12" stroke-linecap="round" stroke-dasharray="257.6 314.2" transform="rotate(-90 56.0 56.0)"/></svg><div class="ring-c"><b>82%</b><span>расходы</span></div></div></div><div class="ix-note">246,6 из 281,8 млрд ₽ доходов</div></div><div class="ix span2 glass"><div class="ix-top"><span class="ix-h">Ленобласть и соседи</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.8 3.8 5.8 3.8 9s-1.3 6.2-3.8 9c-2.5-2.8-3.8-5.8-3.8-9S9.5 5.8 12 3z"/></svg></span></div><div class="nb-h">Инвестиции, % г/г</div><div class="hbars"><div class="hb hi"><span class="hb-l">Ленобласть</span><span class="hb-track"><span class="hb-b" style="left:50.0%;width:25.4%"></span><span class="hb-zero"></span></span><span class="hb-v">12,3%</span></div><div class="hb"><span class="hb-l">Санкт-Петербург</span><span class="hb-track"><span class="hb-b neg" style="left:34.3%;width:15.7%"></span><span class="hb-zero"></span></span><span class="hb-v">-7,6%</span></div><div class="hb"><span class="hb-l">Новгородская</span><span class="hb-track"><span class="hb-b" style="left:50.0%;width:37.0%"></span><span class="hb-zero"></span></span><span class="hb-v">17,9%</span></div><div class="hb"><span class="hb-l">Псковская</span><span class="hb-track"><span class="hb-b neg" style="left:0.0%;width:50.0%"></span><span class="hb-zero"></span></span><span class="hb-v">-24,2%</span></div></div><div class="nb-h">Кредиты компаниям, % г/г</div><div class="hbars"><div class="hb hi"><span class="hb-l">Ленобласть</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:100.0%"></span></span><span class="hb-v">31,5%</span></div><div class="hb"><span class="hb-l">Санкт-Петербург</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:26.7%"></span></span><span class="hb-v">8,4%</span></div><div class="hb"><span class="hb-l">Новгородская</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:41.3%"></span></span><span class="hb-v">13,0%</span></div><div class="hb"><span class="hb-l">Псковская</span><span class="hb-track"><span class="hb-b" style="left:0.0%;width:48.6%"></span></span><span class="hb-v">15,3%</span></div></div></div></div></section>
   
 
   <div class="lx-grid">

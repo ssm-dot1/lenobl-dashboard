@@ -60,8 +60,8 @@
   var bc = document.getElementById('bg3d');
   if (bc) {
     var shapes = [
-      {kind: 'torus', lines: torus(1, 0.38, 28, 18), x: 0.88, y: 0.30, s: 0.17, sp: 0.00018, col: '18,170,158'},
-      {kind: 'ico', edges: ico(), x: 0.08, y: 0.62, s: 0.12, sp: 0.00026, col: '21,63,155'},
+      {kind: 'torus', lines: torus(1, 0.38, 28, 18), x: 0.88, y: 0.30, s: 0.17, sp: 0.00018, col: '123,77,219'},
+      {kind: 'ico', edges: ico(), x: 0.08, y: 0.62, s: 0.12, sp: 0.00026, col: '18,170,158'},
       {kind: 'ico', edges: ico(), x: 0.70, y: 0.86, s: 0.07, sp: -0.00034, col: '128,79,128'}
     ];
     var bctx = bc.getContext('2d');
@@ -87,7 +87,7 @@
   // Лёгкий 3D-наклон плиток за курсором
   if (!reduce && window.matchMedia('(hover: hover)').matches) {
     document.addEventListener('pointermove', function (e) {
-      var el = e.target.closest && e.target.closest('.kpi, .lx-tile');
+      var el = e.target.closest && e.target.closest('.kpi-card, .lx-tile');
       document.querySelectorAll('.tilting').forEach(function (n) { if (n !== el) { n.classList.remove('tilting'); n.style.transform = ''; } });
       if (!el) return;
       var r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;

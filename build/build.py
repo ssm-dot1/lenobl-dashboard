@@ -66,19 +66,27 @@ kpis=''.join([
   _kpi('Доллар', _fmt(fx.get('usd',0), 2)+' ₽', 'курс ЦБ на '+'.'.join(reversed(str(fx.get('date','')).split('-')))),
   _kpi('Нефть Brent', _fmt(oil.get('brent',0), 2)+' $', 'Мосбиржа'),
 ])
+import sys; sys.path.insert(0, B)
+import overview as _ov
+_hero_kpis, _overview = _ov.build(data)
 header=f"""<header class="site-head">
-  <div class="hero"><div>
-  <div class="row"><div class="title">Аналитика: каналы, экономика РФ и Ленобласти</div>
+  <div class="topbar"><div class="brand"><span class="brand-dot"></span>Экономика Ленобласти · аналитика</div>
   <div class="channels"><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener">Telegram</a><a href="https://max.ru/id4703059140_gos" target="_blank" rel="noopener">MAX</a><a href="https://vk.com/lenoblinvest" target="_blank" rel="noopener">ВКонтакте</a><button class="theme-toggle" type="button" aria-label="Переключить тему" title="Светлая / тёмная тема"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg><svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg></button></div></div>
-  <div class="sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», экономика России и региона, предприятия области. Данные обновляются раз в час{(' · обновлено '+upd) if upd else ''}.</div>
-  </div><canvas id="globe3d" aria-hidden="true"></canvas></div>
-  <div class="kpis">{kpis}</div>
-</header>"""
+  <div class="hero-grid">
+    <div class="hero-card"><div class="hero-text"><span class="eyebrow">Обновляется каждый час{(' · ' + upd) if upd else ''}</span>
+      <h1 class="hero-title">Каналы, экономика России и&nbsp;Ленобласти</h1>
+      <p class="hero-sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», макроэкономика, регион и предприятия области — в одном месте.</p></div>
+      <canvas id="globe3d" aria-hidden="true"></canvas></div>
+    <div class="kpi-grid">{_hero_kpis}</div>
+  </div>
+</header>
+{_overview}"""
 html=re.sub(r'<header>.*?</header>', lambda m: header, html, count=1, flags=re.S)
 html=html.replace('<p class="lx-note">Данные обновляются автоматически раз в час из открытых источников.</p>', '', 1)
 html=re.sub(r'@media \(prefers-color-scheme: dark\)\{.*?\}\}', '', html, count=1)
-html=html.replace("colors: ['#3a6fd8', '#d9822b', '#2e9e6b', '#9b59b6', '#c2412d', '#1f9bb3', '#b8860b', '#7f8c8d']", "colors: ['#153F9B', '#12AA9E', '#FDBC16', '#804F80', '#666FB4', '#c2412d', '#0e8f84', '#7f8c8d']", 1)
+html=html.replace("colors: ['#3a6fd8', '#d9822b', '#2e9e6b', '#9b59b6', '#c2412d', '#1f9bb3', '#b8860b', '#7f8c8d']", "colors: ['#7B4DDB', '#12AA9E', '#153F9B', '#FDBC16', '#E0679E', '#d24b3a', '#0e8f84', '#8a84a3']", 1)
 css=open(os.path.join(B,'site.css')).read()
+html=html.replace('</head>','<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap">\n</head>',1)
 i=html.find('</style>', html.find('<div class="wrap">'))
 html=html[:i+8]+'\n<style>\n'+css+'\n</style>\n'+html[i+8:]
 foot='<footer class="site-foot"><span>Агентство экономического развития Ленинградской области · <a href="https://lenoblinvest.ru" target="_blank" rel="noopener">lenoblinvest.ru</a></span><span>Источники: TGStat, Telemetr, MXStat, Банк России, Росстат, Минэкономразвития, открытые данные</span></footer>'

@@ -131,10 +131,12 @@ def handler(event, context):
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", "replace")[:300]
         print("YandexGPT error", e.code, detail)
-        return _resp(502, {"error": "Нейросеть не ответила, попробуйте ещё раз через минуту"}, origin)
+        return _resp(502, {"error": "Нейросеть не ответила, попробуйте ещё раз через минуту",
+                           "detail": f"{e.code}: {detail}"}, origin)
     except Exception as e:  # сеть, таймаут
         print("YandexGPT request failed", repr(e))
-        return _resp(502, {"error": "Нейросеть не ответила, попробуйте ещё раз через минуту"}, origin)
+        return _resp(502, {"error": "Нейросеть не ответила, попробуйте ещё раз через минуту",
+                           "detail": repr(e)[:300]}, origin)
 
     try:
         text = res["result"]["alternatives"][0]["message"]["text"]

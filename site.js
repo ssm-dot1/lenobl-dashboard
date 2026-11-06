@@ -96,3 +96,17 @@
     });
   }
 })();
+
+/* Переключатель светлой и тёмной темы */
+(function () {
+  var btn = document.querySelector('.theme-toggle');
+  if (!btn) return;
+  btn.addEventListener('click', function () {
+    var root = document.documentElement, t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', t);
+    try { localStorage.setItem('lxTheme', t); } catch (e) {}
+    var pal = window.__lxPal && window.__lxPal[t];
+    if (pal && window.dash && window.dash.colors) for (var i = 0; i < pal.length; i++) window.dash.colors[i] = pal[i];
+    window.dispatchEvent(new Event('resize')); // перерисовать графики в новых цветах
+  });
+})();

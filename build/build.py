@@ -69,7 +69,7 @@ kpis=''.join([
 header=f"""<header class="site-head">
   <div class="hero"><div>
   <div class="row"><div class="title">Аналитика: каналы, экономика РФ и Ленобласти</div>
-  <div class="channels"><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener">Telegram</a><a href="https://max.ru/id4703059140_gos" target="_blank" rel="noopener">MAX</a><a href="https://vk.com/lenoblinvest" target="_blank" rel="noopener">ВКонтакте</a></div></div>
+  <div class="channels"><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener">Telegram</a><a href="https://max.ru/id4703059140_gos" target="_blank" rel="noopener">MAX</a><a href="https://vk.com/lenoblinvest" target="_blank" rel="noopener">ВКонтакте</a><button class="theme-toggle" type="button" aria-label="Переключить тему" title="Светлая / тёмная тема"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg><svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg></button></div></div>
   <div class="sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», экономика России и региона, предприятия области. Данные обновляются раз в час{(' · обновлено '+upd) if upd else ''}.</div>
   </div><canvas id="globe3d" aria-hidden="true"></canvas></div>
   <div class="kpis">{kpis}</div>
@@ -83,6 +83,6 @@ i=html.find('</style>', html.find('<div class="wrap">'))
 html=html[:i+8]+'\n<style>\n'+css+'\n</style>\n'+html[i+8:]
 foot='<footer class="site-foot"><span>Агентство экономического развития Ленинградской области · <a href="https://lenoblinvest.ru" target="_blank" rel="noopener">lenoblinvest.ru</a></span><span>Источники: TGStat, Telemetr, MXStat, Банк России, Росстат, Минэкономразвития, открытые данные</span></footer>'
 html=html.replace('\n<script>\n'+scripts, '\n'+foot+'\n<script>\n'+scripts, 1)
-html=html.replace('<body><div class="wrap">','<body><div class="bg-anim" aria-hidden="true"><i></i><i></i><i></i><i></i></div><canvas id="bg3d" aria-hidden="true"></canvas><div class="wrap">',1)
+html=html.replace('<body><div class="wrap">','<body><script>(function(){var t=\'light\';try{t=localStorage.getItem(\'lxTheme\')||t}catch(e){}document.documentElement.setAttribute(\'data-theme\',t);var P={light:[\'#153F9B\',\'#12AA9E\',\'#FDBC16\',\'#804F80\',\'#666FB4\',\'#c2412d\',\'#0e8f84\',\'#7f8c8d\'],dark:[\'#6f9bff\',\'#2fd3c4\',\'#FDBC16\',\'#d08fd0\',\'#a3abf0\',\'#ff7a66\',\'#3fd1c3\',\'#aab4c8\']};window.__lxPal=P;if(window.dash&&window.dash.colors){var c=P[t];for(var i=0;i<c.length;i++)window.dash.colors[i]=c[i];}})();</script><div class="bg-anim" aria-hidden="true"><i></i><i></i><i></i><i></i></div><canvas id="bg3d" aria-hidden="true"></canvas><div class="wrap">',1)
 html=html.replace('</body></html>','<script src="site.js" defer></script>\n</body></html>',1)
 open(os.path.join(RT,'index.html'),'w').write(html); print(len(html))

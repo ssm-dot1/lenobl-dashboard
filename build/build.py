@@ -67,9 +67,11 @@ kpis=''.join([
   _kpi('Нефть Brent', _fmt(oil.get('brent',0), 2)+' $', 'Мосбиржа'),
 ])
 header=f"""<header class="site-head">
+  <div class="hero"><div>
   <div class="row"><div class="title">Аналитика: каналы, экономика РФ и Ленобласти</div>
   <div class="channels"><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener">Telegram</a><a href="https://max.ru/id4703059140_gos" target="_blank" rel="noopener">MAX</a><a href="https://vk.com/lenoblinvest" target="_blank" rel="noopener">ВКонтакте</a></div></div>
   <div class="sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», экономика России и региона, предприятия области. Данные обновляются раз в час{(' · обновлено '+upd) if upd else ''}.</div>
+  </div><canvas id="globe3d" aria-hidden="true"></canvas></div>
   <div class="kpis">{kpis}</div>
 </header>"""
 html=re.sub(r'<header>.*?</header>', lambda m: header, html, count=1, flags=re.S)
@@ -81,4 +83,6 @@ i=html.find('</style>', html.find('<div class="wrap">'))
 html=html[:i+8]+'\n<style>\n'+css+'\n</style>\n'+html[i+8:]
 foot='<footer class="site-foot"><span>Агентство экономического развития Ленинградской области · <a href="https://lenoblinvest.ru" target="_blank" rel="noopener">lenoblinvest.ru</a></span><span>Источники: TGStat, Telemetr, MXStat, Банк России, Росстат, Минэкономразвития, открытые данные</span></footer>'
 html=html.replace('\n<script>\n'+scripts, '\n'+foot+'\n<script>\n'+scripts, 1)
+html=html.replace('<body><div class="wrap">','<body><div class="bg-anim" aria-hidden="true"><i></i><i></i><i></i><i></i></div><canvas id="bg3d" aria-hidden="true"></canvas><div class="wrap">',1)
+html=html.replace('</body></html>','<script src="site.js" defer></script>\n</body></html>',1)
 open(os.path.join(RT,'index.html'),'w').write(html); print(len(html))

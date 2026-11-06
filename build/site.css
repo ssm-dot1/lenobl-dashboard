@@ -49,3 +49,49 @@ html,body{background:var(--color-bg);color:var(--color-fg);overflow-x:hidden}
 .lx-note{border:0;background:rgba(18,170,158,.08);color:#0b6f67}
 .lx-pill{background:#fff}
 @media (max-width:640px){.site-head img.logo{height:46px}.kpi .v{font-size:20px}}
+
+/* ===== Анимированный фон, liquid glass, 3D ===== */
+body{background:#eef3fb}
+.bg-anim{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;
+  background:radial-gradient(120% 80% at 10% 0%,#e3ecfb 0%,#eef3fb 50%,#e6f6f4 100%)}
+.bg-anim i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;will-change:transform}
+.bg-anim i:nth-child(1){width:46vw;height:46vw;left:-10vw;top:-12vw;background:#153F9B;opacity:.28;animation:blob1 26s ease-in-out infinite alternate}
+.bg-anim i:nth-child(2){width:40vw;height:40vw;right:-8vw;top:20vh;background:#12AA9E;opacity:.32;animation:blob2 30s ease-in-out infinite alternate}
+.bg-anim i:nth-child(3){width:30vw;height:30vw;left:30vw;bottom:-12vw;background:#666FB4;opacity:.26;animation:blob3 34s ease-in-out infinite alternate}
+.bg-anim i:nth-child(4){width:18vw;height:18vw;left:62vw;top:8vh;background:#FDBC16;opacity:.16;animation:blob2 38s ease-in-out infinite alternate-reverse}
+@keyframes blob1{to{transform:translate(18vw,22vh) scale(1.15)}}
+@keyframes blob2{to{transform:translate(-20vw,18vh) scale(.9)}}
+@keyframes blob3{to{transform:translate(-14vw,-26vh) scale(1.2)}}
+#bg3d{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none}
+
+.site-head{background:linear-gradient(115deg,#153F9B,#1b56b0,#12AA9E,#666FB4,#153F9B);background-size:300% 300%;animation:headflow 18s ease-in-out infinite}
+@keyframes headflow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.site-head .hero{display:grid;grid-template-columns:1fr minmax(160px,260px);gap:16px;align-items:center;position:relative;z-index:1}
+#globe3d{width:100%;aspect-ratio:1/1;max-height:240px;display:block}
+@media (max-width:760px){.site-head .hero{grid-template-columns:1fr}#globe3d{max-height:150px;margin:-4px auto 0;width:150px}}
+
+/* Liquid glass */
+.lx-card,.lx-tile,.kpi,.lx-tab{
+  background:linear-gradient(135deg,rgba(255,255,255,.72),rgba(255,255,255,.48));
+  -webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 8px 32px rgba(21,63,155,.10),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.25)}
+.lx-card{position:relative;border-top:1px solid rgba(255,255,255,.9);border-radius:18px;overflow:visible}
+.lx-card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(120deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 35%,rgba(255,255,255,0) 70%,rgba(18,170,158,.10) 100%)}
+.lx-card > *{position:relative}
+.lx-tile{border-radius:14px;transition:transform .25s ease, box-shadow .25s ease}
+.lx-tile.tilting,.kpi.tilting{box-shadow:0 14px 36px rgba(21,63,155,.18),inset 0 1px 0 rgba(255,255,255,.9)}
+.lx-tile.tilting::after,.kpi.tilting::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(180px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.55),transparent 60%)}
+.lx-tile,.kpi{position:relative}
+.kpi{background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.35);border-radius:14px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 22px rgba(0,0,0,.08);transition:transform .25s ease}
+.lx th{background:rgba(246,248,252,.85);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.lx-tabs{background:transparent;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.lx-tab[aria-selected="true"]{background:linear-gradient(135deg,#153F9B,#1d5bc4);border-color:rgba(255,255,255,.6);box-shadow:0 6px 18px rgba(21,63,155,.3)}
+.lx-tip{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);background:rgba(255,255,255,.85)}
+.lx-page:not([hidden]){animation:fadeup .45s ease both}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.lx-card,.lx-tile,.lx-tab{background:rgba(255,255,255,.94)}}
+@media (prefers-reduced-motion:reduce){.bg-anim i,.site-head,.lx-page{animation:none!important}}

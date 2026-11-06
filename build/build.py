@@ -93,7 +93,7 @@ html=re.sub(r'<header>.*?</header>', lambda m: header, html, count=1, flags=re.S
 import plan as _plan
 _cp=json.load(open(os.path.join(RT,'data','content_plan.json')))
 html=html.replace('<button class="lx-tab" role="tab" data-tab="ideas" aria-selected="false">Идеи для постов</button>','<button class="lx-tab" role="tab" data-tab="plan" aria-selected="false">Контент-план</button>\n    <button class="lx-tab" role="tab" data-tab="ideas" aria-selected="false">Идеи для постов</button>',1)
-html=html.replace('<section class="lx-page" id="ideas" hidden>', _plan.build(_cp)+'\n  <section class="lx-page" id="ideas" hidden>',1)
+html=html.replace('<section class="lx-page" id="ideas" hidden>', _plan.build(_cp, data.get('tg_posts_history', []), (__import__('datetime').datetime.now(__import__('datetime').timezone.utc)+__import__('datetime').timedelta(hours=3)).date(), json.load(open(os.path.join(RT,'data','biz_deadlines.json'))))+'\n  <section class="lx-page" id="ideas" hidden>',1)
 html=html.replace('<p class="lx-note">Данные обновляются автоматически раз в час из открытых источников.</p>', '', 1)
 html=re.sub(r'@media \(prefers-color-scheme: dark\)\{.*?\}\}', '', html, count=1)
 html=html.replace("colors: ['#3a6fd8', '#d9822b', '#2e9e6b', '#9b59b6', '#c2412d', '#1f9bb3', '#b8860b', '#7f8c8d']", "colors: ['#7B4DDB', '#12AA9E', '#153F9B', '#FDBC16', '#E0679E', '#d24b3a', '#0e8f84', '#8a84a3']", 1)
@@ -109,6 +109,7 @@ open(os.path.join(RT,'index.html'),'w').write(html); print(len(html))
 
 # ---- отдельные страницы: генератор постов и рекомендации ----
 import recs as _recs
+import weekposts as _wp
 _theme=re.search(r'<script>\(function\(\)\{var t=.*?</script>', html).group(0)
 _toggle=re.search(r'<button class="theme-toggle".*?</button>', html, re.S).group(0)
 def subpage(fn, title, h1, lead, body, extra_css='', js=''):
@@ -137,4 +138,4 @@ subpage('post.html','Генератор постов','Генератор пос
   _pg.build(data, _cfg.get('post_api','')).replace('<h2 class="ix-sec-h">Генератор постов для бизнеса</h2>',''), _pg.CSS, _pg.JS)
 subpage('recs.html','Рекомендации по каналам','Как улучшить каналы',
   'Выводы из статистики Telegram, MAX и ВКонтакте на этом сайте и конкретные шаги. Цифры пересчитываются при каждом обновлении данных.',
-  _recs.build(data), _recs.CSS)
+  _recs.build(data).replace('<div class="rc-grid">', _wp.build(data, (__import__('datetime').datetime.now(__import__('datetime').timezone.utc)+__import__('datetime').timedelta(hours=3)).date()) + '<h2 class="ix-sec-h">Что улучшить</h2><div class="rc-grid">', 1), _recs.CSS + _wp.CSS)

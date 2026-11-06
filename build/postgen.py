@@ -108,7 +108,7 @@ var api=root.getAttribute('data-api'),f=root.querySelector('form'),st=root.query
 out=root.querySelector('.pg-text'),chk=root.querySelector('.pg-check'),cp=root.querySelector('.pg-copy'),go=root.querySelector('.pg-go');
 root.querySelectorAll('.pg-chip').forEach(function(b){b.addEventListener('click',function(){f.topic.value=b.getAttribute('data-topic');
  var r=b.getAttribute('data-rubric');for(var i=0;i<f.rubric.options.length;i++)if(f.rubric.options[i].text===r)f.rubric.selectedIndex=i;f.topic.focus();});});
-try{var qt=new URLSearchParams(location.search).get('topic');if(qt){f.topic.value=qt;}}catch(e){}
+try{var qs=new URLSearchParams(location.search),qt=qs.get('topic'),qf=qs.get('facts'),qr=qs.get('rubric');if(qt){f.topic.value=qt;}if(qf){f.facts.value=qf;}if(qr){for(var ri=0;ri<f.rubric.options.length;ri++)if(f.rubric.options[ri].text===qr)f.rubric.selectedIndex=ri;}}catch(e){}
 var fl=root.querySelector('.pg-link');fl.addEventListener('click',function(){var v=fl.getAttribute('data-facts');f.facts.value=(f.facts.value?f.facts.value+'\n':'')+v;});
 if(!api){st.textContent='Генератор скоро заработает: подключаем нейросеть.';}
 f.addEventListener('submit',function(e){e.preventDefault();if(!api){st.textContent='Генератор скоро заработает: подключаем нейросеть.';return;}

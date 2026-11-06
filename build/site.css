@@ -1,0 +1,51 @@
+/* Фирменный стиль АЭРЛО для публичного сайта (по брендбуку: Blue #153F9B, Seafoam #12AA9E, White;
+   дополнительные #FDBC16, #804F80, #666FB4; шрифт для экранов — PT Root UI, системная замена — Arial) */
+:root{
+  --brand-blue:#153F9B; --brand-sea:#12AA9E; --brand-yellow:#FDBC16; --brand-plum:#804F80; --brand-lilac:#666FB4;
+  --font-anthropic-sans:"PT Root UI",Arial,"Helvetica Neue",sans-serif;
+  --font-anthropic-serif:"PT Root UI",Arial,"Helvetica Neue",sans-serif;
+  --color-fg:#14213d; --color-fg-muted:#5b6478; --color-bg:#f3f6fb; --color-panel:#ffffff; --color-border-line:#dfe5f0;
+  --color-ok:#0e8f84; --color-warn:#b7860b; --color-bad:#c2412d;
+  --cds-chart-grid:#e8edf5; --cds-chart-axis:#b9c3d6; --cds-chart-muted:#c9d2e3; --cds-border:#dfe5f0; --cds-text-secondary:#5b6478;
+  --cds-radius:10px;
+}
+html,body{background:var(--color-bg);color:var(--color-fg);overflow-x:hidden}
+.wrap{padding-top:0}
+
+/* Шапка */
+.site-head{margin:0 0 4px calc(50% - 50vw);width:100vw;box-sizing:border-box;padding:28px max(clamp(16px,3vw,40px),calc(50vw - 600px + 32px)) 22px;color:#fff;position:relative;overflow:hidden;
+  background:linear-gradient(120deg,var(--brand-blue) 0%,#1b56b0 55%,var(--brand-sea) 100%)}
+.site-head::after{content:"";position:absolute;right:-40px;bottom:-40px;width:260px;height:260px;opacity:.18;
+  background:repeating-linear-gradient(135deg,#fff 0 6px,transparent 6px 16px)}
+.site-head .row{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;position:relative;z-index:1}
+.site-head img.logo{height:72px;width:auto;display:block}
+.site-head .title{font-size:clamp(20px,2.4vw,28px);font-weight:600;margin:18px 0 4px;letter-spacing:.2px;position:relative;z-index:1}
+.site-head .sub{opacity:.85;font-size:14px;max-width:780px;position:relative;z-index:1}
+.site-head .channels{display:flex;gap:8px;flex-wrap:wrap}
+.site-head .channels a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:6px 14px;font-size:14px;white-space:nowrap}
+.site-head .channels a:hover{background:rgba(255,255,255,.15)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:20px;position:relative;z-index:1}
+.kpi{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:10px 14px}
+.kpi .k{font-size:12px;opacity:.85}
+.kpi .v{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2}
+.kpi .d{font-size:12px;opacity:.8}
+.site-foot{margin-top:28px;padding:16px 0;border-top:1px solid var(--color-border-line);font-size:12px;color:var(--color-fg-muted);display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+.site-foot a{color:var(--brand-blue)}
+
+/* Карточки, вкладки, таблицы */
+.lx h1{font-family:var(--font-anthropic-sans);font-weight:600}
+.lx-card{border:0;box-shadow:0 1px 2px rgba(20,33,61,.06),0 4px 14px rgba(20,33,61,.05);border-top:3px solid var(--brand-sea)}
+.lx-card h3{color:var(--brand-blue);font-size:16px}
+.lx-tile{border:1px solid var(--color-border-line);background:#fbfcfe}
+.lx-big{font-family:var(--font-anthropic-sans);font-weight:600;color:var(--brand-blue)}
+.lx-up.lx-big,.lx-big.lx-up{color:var(--color-ok)} .lx-big.lx-down{color:var(--color-bad)}
+.lx-tabs{border-bottom:0;gap:6px;position:sticky;top:0;z-index:5;background:var(--color-bg);padding:8px 0}
+.lx-tab{border:1px solid var(--color-border-line);border-radius:999px;padding:7px 16px;background:#fff;color:var(--color-fg)}
+.lx-tab:hover{border-color:var(--brand-sea)}
+.lx-tab[aria-selected="true"]{background:var(--brand-blue);border-color:var(--brand-blue);color:#fff}
+.lx th{color:var(--brand-blue);background:#f6f8fc}
+.lx td a{color:var(--brand-blue)}
+.lx tbody tr:hover td{background:#f6f9ff}
+.lx-note{border:0;background:rgba(18,170,158,.08);color:#0b6f67}
+.lx-pill{background:#fff}
+@media (max-width:640px){.site-head img.logo{height:46px}.kpi .v{font-size:20px}}

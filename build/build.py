@@ -41,4 +41,45 @@ window.__DATA = __DATA__;
 </head><body><div class="wrap">
 '''.replace('__DATA__', json.dumps(data, ensure_ascii=False).replace('</', '<\\/'))
 html=head+body+'\n<script>\n'+scripts+'\n</script>\n</div></body></html>\n'
+
+# ---- Оформление публичного сайта (фирменный стиль АЭРЛО) ----
+import re, html as _h
+def _last(rows, key):
+    rows=[r for r in rows if r.get(key) is not None]
+    return rows[-1] if rows else {}
+def _fmt(v, d=0):
+    s=f"{v:,.{d}f}".replace(',', ' ').replace('.', ',')
+    return s
+plat={}
+for r in data.get('platforms', []): plat[r['platform']]=r
+fx=_last(data.get('fx', []), 'usd'); oil=_last(data.get('oil', []), 'brent')
+ms=_last(data.get('max_summary', []), 'at'); _at=str(ms.get('at',''))
+upd=(_at[8:10]+'.'+_at[5:7]+'.'+_at[:4]+', '+_at[11:16]+' МСК') if len(_at)>=16 else ''
+kr=next((m for m in data.get('macro', []) if m.get('indicator')=='key_rate'), {})
+def _kpi(k, v, d=''):
+    return f'<div class="kpi"><div class="k">{_h.escape(k)}</div><div class="v">{v}</div><div class="d">{_h.escape(d)}</div></div>'
+kpis=''.join([
+  _kpi('Telegram', _fmt(plat.get('Telegram',{}).get('subscribers',0)), 'подписчиков'),
+  _kpi('MAX', _fmt(plat.get('MAX',{}).get('subscribers',0)), 'подписчиков'),
+  _kpi('ВКонтакте', '≈'+_fmt(plat.get('ВКонтакте',{}).get('subscribers',0)), 'подписчиков'),
+  _kpi('Ключевая ставка', _fmt(kr.get('value',0), 0)+'%', 'Банк России'),
+  _kpi('Доллар', _fmt(fx.get('usd',0), 2)+' ₽', 'курс ЦБ на '+'.'.join(reversed(str(fx.get('date','')).split('-')))),
+  _kpi('Нефть Brent', _fmt(oil.get('brent',0), 2)+' $', 'Мосбиржа'),
+])
+header=f"""<header class="site-head">
+  <div class="row"><img class="logo" src="logo-aerlo-white.png" alt="Агентство экономического развития Ленинградской области">
+  <div class="channels"><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener">Telegram</a><a href="https://max.ru/id4703059140_gos" target="_blank" rel="noopener">MAX</a><a href="https://vk.com/lenoblinvest" target="_blank" rel="noopener">ВКонтакте</a></div></div>
+  <div class="title">Аналитика: каналы, экономика РФ и Ленобласти</div>
+  <div class="sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», экономика России и региона, предприятия области. Данные обновляются раз в час{(' · обновлено '+upd) if upd else ''}.</div>
+  <div class="kpis">{kpis}</div>
+</header>"""
+html=re.sub(r'<header>.*?</header>', lambda m: header, html, count=1, flags=re.S)
+html=html.replace('<p class="lx-note">Данные обновляются автоматически раз в час из открытых источников.</p>', '', 1)
+html=re.sub(r'@media \(prefers-color-scheme: dark\)\{.*?\}\}', '', html, count=1)
+html=html.replace("colors: ['#3a6fd8', '#d9822b', '#2e9e6b', '#9b59b6', '#c2412d', '#1f9bb3', '#b8860b', '#7f8c8d']", "colors: ['#153F9B', '#12AA9E', '#FDBC16', '#804F80', '#666FB4', '#c2412d', '#0e8f84', '#7f8c8d']", 1)
+css=open(os.path.join(B,'site.css')).read()
+i=html.find('</style>', html.find('<div class="wrap">'))
+html=html[:i+8]+'\n<style>\n'+css+'\n</style>\n'+html[i+8:]
+foot='<footer class="site-foot"><span>Агентство экономического развития Ленинградской области · <a href="https://lenoblinvest.ru" target="_blank" rel="noopener">lenoblinvest.ru</a></span><span>Источники: TGStat, Telemetr, MXStat, Банк России, Росстат, Минэкономразвития, открытые данные</span></footer>'
+html=html.replace('\n<script>\n'+scripts, '\n'+foot+'\n<script>\n'+scripts, 1)
 open(os.path.join(RT,'index.html'),'w').write(html); print(len(html))

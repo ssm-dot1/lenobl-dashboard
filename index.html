@@ -8,7 +8,7 @@
 --cds-font-size-caption:12.5px;--cds-font-size-body:15px;--cds-font-size-heading:18px;--cds-font-size-title:28px;--cds-font-weight-medium:600;
 --cds-gap-xs:4px;--cds-gap-sm:8px;--cds-gap-md:12px;--cds-gap-lg:20px;--cds-pad-xs:4px;--cds-pad-sm:8px;--cds-pad-md:12px;--cds-pad-lg:16px;--cds-radius:8px;
 --cds-chart-muted:#cfcac0;--cds-chart-grid:#ece9e3;--cds-chart-axis:#bdb8ae;--cds-surface-popover:#fff;--cds-border:#e4e1da;--cds-shadow-popover:0 4px 16px rgba(0,0,0,.12);--cds-text-secondary:#6b6862;--cds-dur-slow:.3s}
-@media (prefers-color-scheme: dark){:root{--color-fg:#ecebe7;--color-fg-muted:#a5a29b;--color-bg:#1d1c1a;--color-panel:#262523;--color-border-line:#3a3936;--color-ok:#6cc58f;--color-warn:#e0a54a;--color-bad:#ef7d6a;--cds-chart-muted:#55534e;--cds-chart-grid:#33322f;--cds-chart-axis:#55534e;--cds-surface-popover:#2e2d2a;--cds-border:#3a3936;--cds-text-secondary:#a5a29b}}
+
 html,body{margin:0;background:var(--color-bg);color:var(--color-fg)}
 .wrap{max-width:1200px;margin:0 auto;padding:24px clamp(12px,3vw,32px) 48px}
 .dash-skeleton:empty{background:linear-gradient(90deg,var(--color-panel),var(--cds-chart-grid),var(--color-panel));background-size:200% 100%;animation:sk 1.4s infinite;border-radius:var(--cds-radius)}
@@ -25,7 +25,7 @@ window.__DATA = {"rf_infl_week": [{"id": "w2026-09-28", "date": "2026-09-28", "w
     return {status: 'missing', data: []};
   };
   const run = () => { for (const [n, f] of Object.entries(draws)) document.querySelectorAll('[data-draw="' + n + '"]').forEach(el => { if (el.closest('[hidden]')) return; try { f(el); } catch (e) { console.error(n, e); } }); };
-  window.dash = {data, calc: (id, o) => { calcs[id] = o; }, draw: (n, f) => { draws[n] = f; }, onData: () => {}, colors: ['#3a6fd8', '#d9822b', '#2e9e6b', '#9b59b6', '#c2412d', '#1f9bb3', '#b8860b', '#7f8c8d'],
+  window.dash = {data, calc: (id, o) => { calcs[id] = o; }, draw: (n, f) => { draws[n] = f; }, onData: () => {}, colors: ['#153F9B', '#12AA9E', '#FDBC16', '#804F80', '#666FB4', '#c2412d', '#0e8f84', '#7f8c8d'],
     setLink: (id) => { try { history.replaceState(null, '', '#' + id); } catch (e) {} setTimeout(run, 0); }, params: () => ({}), setParams() {}, resetParams() {}, refresh() {}, loader() {}};
   window.addEventListener('load', run);
   let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(run, 150); });
@@ -75,13 +75,71 @@ window.__DATA = {"rf_infl_week": [{"id": "w2026-09-28", "date": "2026-09-28", "w
 .lx-list .lx-pill{font-size:var(--cds-font-size-caption);margin-right:.25em}
 .lx-grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));gap:var(--cds-gap-md)}
 </style>
+<style>
+/* Фирменный стиль АЭРЛО для публичного сайта (по брендбуку: Blue #153F9B, Seafoam #12AA9E, White;
+   дополнительные #FDBC16, #804F80, #666FB4; шрифт для экранов — PT Root UI, системная замена — Arial) */
+:root{
+  --brand-blue:#153F9B; --brand-sea:#12AA9E; --brand-yellow:#FDBC16; --brand-plum:#804F80; --brand-lilac:#666FB4;
+  --font-anthropic-sans:"PT Root UI",Arial,"Helvetica Neue",sans-serif;
+  --font-anthropic-serif:"PT Root UI",Arial,"Helvetica Neue",sans-serif;
+  --color-fg:#14213d; --color-fg-muted:#5b6478; --color-bg:#f3f6fb; --color-panel:#ffffff; --color-border-line:#dfe5f0;
+  --color-ok:#0e8f84; --color-warn:#b7860b; --color-bad:#c2412d;
+  --cds-chart-grid:#e8edf5; --cds-chart-axis:#b9c3d6; --cds-chart-muted:#c9d2e3; --cds-border:#dfe5f0; --cds-text-secondary:#5b6478;
+  --cds-radius:10px;
+}
+html,body{background:var(--color-bg);color:var(--color-fg);overflow-x:hidden}
+.wrap{padding-top:0}
+
+/* Шапка */
+.site-head{margin:0 0 4px calc(50% - 50vw);width:100vw;box-sizing:border-box;padding:28px max(clamp(16px,3vw,40px),calc(50vw - 600px + 32px)) 22px;color:#fff;position:relative;overflow:hidden;
+  background:linear-gradient(120deg,var(--brand-blue) 0%,#1b56b0 55%,var(--brand-sea) 100%)}
+.site-head::after{content:"";position:absolute;right:-40px;bottom:-40px;width:260px;height:260px;opacity:.18;
+  background:repeating-linear-gradient(135deg,#fff 0 6px,transparent 6px 16px)}
+.site-head .row{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;position:relative;z-index:1}
+.site-head img.logo{height:72px;width:auto;display:block}
+.site-head .title{font-size:clamp(20px,2.4vw,28px);font-weight:600;margin:18px 0 4px;letter-spacing:.2px;position:relative;z-index:1}
+.site-head .sub{opacity:.85;font-size:14px;max-width:780px;position:relative;z-index:1}
+.site-head .channels{display:flex;gap:8px;flex-wrap:wrap}
+.site-head .channels a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:6px 14px;font-size:14px;white-space:nowrap}
+.site-head .channels a:hover{background:rgba(255,255,255,.15)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:20px;position:relative;z-index:1}
+.kpi{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:10px 14px}
+.kpi .k{font-size:12px;opacity:.85}
+.kpi .v{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2}
+.kpi .d{font-size:12px;opacity:.8}
+.site-foot{margin-top:28px;padding:16px 0;border-top:1px solid var(--color-border-line);font-size:12px;color:var(--color-fg-muted);display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+.site-foot a{color:var(--brand-blue)}
+
+/* Карточки, вкладки, таблицы */
+.lx h1{font-family:var(--font-anthropic-sans);font-weight:600}
+.lx-card{border:0;box-shadow:0 1px 2px rgba(20,33,61,.06),0 4px 14px rgba(20,33,61,.05);border-top:3px solid var(--brand-sea)}
+.lx-card h3{color:var(--brand-blue);font-size:16px}
+.lx-tile{border:1px solid var(--color-border-line);background:#fbfcfe}
+.lx-big{font-family:var(--font-anthropic-sans);font-weight:600;color:var(--brand-blue)}
+.lx-up.lx-big,.lx-big.lx-up{color:var(--color-ok)} .lx-big.lx-down{color:var(--color-bad)}
+.lx-tabs{border-bottom:0;gap:6px;position:sticky;top:0;z-index:5;background:var(--color-bg);padding:8px 0}
+.lx-tab{border:1px solid var(--color-border-line);border-radius:999px;padding:7px 16px;background:#fff;color:var(--color-fg)}
+.lx-tab:hover{border-color:var(--brand-sea)}
+.lx-tab[aria-selected="true"]{background:var(--brand-blue);border-color:var(--brand-blue);color:#fff}
+.lx th{color:var(--brand-blue);background:#f6f8fc}
+.lx td a{color:var(--brand-blue)}
+.lx tbody tr:hover td{background:#f6f9ff}
+.lx-note{border:0;background:rgba(18,170,158,.08);color:#0b6f67}
+.lx-pill{background:#fff}
+@media (max-width:640px){.site-head img.logo{height:46px}.kpi .v{font-size:20px}}
+
+</style>
+
 
 <div class="lx">
-  <header>
-    <h1>Аналитика: каналы, экономика РФ и Ленобласти</h1>
-    <p class="lx-muted">Telegram и MAX «Экономика Ленобласти», главные экономические новости России и региона, мониторинг компаний Ленобласти. Данные на <span data-draw="val" data-source="max_summary" data-field="at" data-fmt="dt">—</span>.</p>
-  </header>
-  <p class="lx-note">Данные обновляются автоматически раз в час из открытых источников.</p>
+  <header class="site-head">
+  <div class="row"><img class="logo" src="logo-aerlo-white.png" alt="Агентство экономического развития Ленинградской области">
+  <div class="channels"><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener">Telegram</a><a href="https://max.ru/id4703059140_gos" target="_blank" rel="noopener">MAX</a><a href="https://vk.com/lenoblinvest" target="_blank" rel="noopener">ВКонтакте</a></div></div>
+  <div class="title">Аналитика: каналы, экономика РФ и Ленобласти</div>
+  <div class="sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», экономика России и региона, предприятия области. Данные обновляются раз в час · обновлено 06.11.2026, 01:50 МСК.</div>
+  <div class="kpis"><div class="kpi"><div class="k">Telegram</div><div class="v">2 206</div><div class="d">подписчиков</div></div><div class="kpi"><div class="k">MAX</div><div class="v">469</div><div class="d">подписчиков</div></div><div class="kpi"><div class="k">ВКонтакте</div><div class="v">≈1 900</div><div class="d">подписчиков</div></div><div class="kpi"><div class="k">Ключевая ставка</div><div class="v">14%</div><div class="d">Банк России</div></div><div class="kpi"><div class="k">Доллар</div><div class="v">81,79 ₽</div><div class="d">курс ЦБ на 06.11.2026</div></div><div class="kpi"><div class="k">Нефть Brent</div><div class="v">97,35 $</div><div class="d">Мосбиржа</div></div></div>
+</header>
+  
 
   <div class="lx-grid">
     <div class="lx-card" id="summary"><h3>Главное за месяц</h3><p class="lx-muted">Выводы по каналам, региону и компаниям за последние 30 дней</p><ul class="lx-list" data-draw="list" data-source="insights"></ul></div>
@@ -491,6 +549,7 @@ window.__DATA = {"rf_infl_week": [{"id": "w2026-09-28", "date": "2026-09-28", "w
   </details>
 </div>
 
+<footer class="site-foot"><span>Агентство экономического развития Ленинградской области · <a href="https://lenoblinvest.ru" target="_blank" rel="noopener">lenoblinvest.ru</a></span><span>Источники: TGStat, Telemetr, MXStat, Банк России, Росстат, Минэкономразвития, открытые данные</span></footer>
 <script>
 dash.calc('tg_kpi', {inputs: ['tg_posts', 'tg_history'], fn: (tg_posts, tg_history) => {
   const h = [...tg_history].sort((a, b) => a.at < b.at ? -1 : 1);

@@ -4,6 +4,12 @@ import os
 B=os.path.dirname(os.path.abspath(__file__)); RT=os.path.dirname(B)
 ids=[l.strip() for l in open(os.path.join(B,'datasets.txt')) if l.strip()]
 data={i:json.load(open(os.path.join(RT,'data',i+'.json'))) for i in ids}
+# новости наших каналов не показываем в лентах новостей
+import re as _re0
+_OURS=_re0.compile(r't\.me/(s/)?lenoblinvest|max\.ru/id4703059140|vk\.(com|ru)/lenoblinvest|@lenoblinvest|Экономика Ленобласти', _re0.I)
+for _nk in ('news_lo','news_rf'):
+    if isinstance(data.get(_nk), list):
+        data[_nk]=[x for x in data[_nk] if not _OURS.search(str(x.get('url') or '')+' '+str(x.get('source') or ''))]
 body=open(os.path.join(B,'page_body.html')).read(); scripts=open(os.path.join(B,'page_scripts.js')).read()
 head='''<!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">

@@ -67,9 +67,8 @@ kpis=''.join([
   _kpi('Нефть Brent', _fmt(oil.get('brent',0), 2)+' $', 'Мосбиржа'),
 ])
 header=f"""<header class="site-head">
-  <div class="row"><img class="logo" src="logo-aerlo-white.png" alt="Агентство экономического развития Ленинградской области">
+  <div class="row"><div class="title">Аналитика: каналы, экономика РФ и Ленобласти</div>
   <div class="channels"><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener">Telegram</a><a href="https://max.ru/id4703059140_gos" target="_blank" rel="noopener">MAX</a><a href="https://vk.com/lenoblinvest" target="_blank" rel="noopener">ВКонтакте</a></div></div>
-  <div class="title">Аналитика: каналы, экономика РФ и Ленобласти</div>
   <div class="sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», экономика России и региона, предприятия области. Данные обновляются раз в час{(' · обновлено '+upd) if upd else ''}.</div>
   <div class="kpis">{kpis}</div>
 </header>"""

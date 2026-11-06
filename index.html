@@ -1416,6 +1416,7 @@ dash.draw('lomap', (el) => {
 </script>
 </div><script>
 (function(){var root=document.querySelector('.pg');if(!root)return;
+function cl(t){return String(t||'').replace(/\*\*/g,'').replace(/^[\s*#]+\n/,'').replace(/\n[\s*]+$/,'').trim();}
 var api=root.getAttribute('data-api'),f=root.querySelector('form'),st=root.querySelector('.pg-status'),
 out=root.querySelector('.pg-text'),chk=root.querySelector('.pg-check'),cp=root.querySelector('.pg-copy'),go=root.querySelector('.pg-go');
 root.querySelectorAll('.pg-chip').forEach(function(b){b.addEventListener('click',function(){f.topic.value=b.getAttribute('data-topic');
@@ -1426,8 +1427,8 @@ f.addEventListener('submit',function(e){e.preventDefault();if(!api){st.textConte
  var body={topic:f.topic.value,rubric:f.rubric.value,format:f.format.value,audience:f.audience.value,length:f.length.value,facts:f.facts.value};
  go.disabled=true;st.textContent='Пишем пост… обычно 10–30 секунд';
  fetch(api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j};});})
- .then(function(x){if(!x.ok||!x.j.post)throw new Error(x.j&&x.j.error||'Ошибка');out.textContent=x.j.post;out.classList.remove('pg-empty');out.contentEditable='true';cp.disabled=false;
-  if(x.j.check){chk.hidden=false;chk.querySelector('div').textContent=x.j.check;}else chk.hidden=true;st.textContent='Готово. Можно поправить текст и скопировать.';})
+ .then(function(x){if(!x.ok||!x.j.post)throw new Error(x.j&&x.j.error||'Ошибка');out.textContent=cl(x.j.post);out.classList.remove('pg-empty');out.contentEditable='true';cp.disabled=false;
+  if(x.j.check){chk.hidden=false;chk.querySelector('div').textContent=cl(x.j.check);}else chk.hidden=true;st.textContent='Готово. Можно поправить текст и скопировать.';})
  .catch(function(err){st.textContent=(err&&err.message&&err.message!=='Failed to fetch')?err.message:'Не получилось связаться с нейросетью, попробуйте ещё раз.';})
  .then(function(){go.disabled=false;});});
 cp.addEventListener('click',function(){var t=out.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){cp.textContent='Скопировано';setTimeout(function(){cp.textContent='Копировать';},1500);},function(){var r=document.createRange();r.selectNodeContents(out);var s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand('copy');});});

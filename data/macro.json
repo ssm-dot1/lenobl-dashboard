@@ -1,0 +1,122 @@
+[
+ {
+  "indicator": "key_rate",
+  "label": "Ключевая ставка ЦБ",
+  "value": 14,
+  "unit": "%",
+  "date": "2026-10-23",
+  "note": "сохранена",
+  "source": "bankiros.ru",
+  "url": "https://bankiros.ru/news/klyuchevuyu-stavku-sohranili-na-urovne-14-23-oktyabrya-chego-dalshe-zhdat-ot-cb-22788"
+ },
+ {
+  "indicator": "next_meeting",
+  "label": "Следующее заседание ЦБ",
+  "value": null,
+  "unit": "",
+  "date": "2026-12-18",
+  "note": "18 декабря 2026",
+  "source": "The Moscow Times",
+  "url": "https://ru.themoscowtimes.com/2026/10/23/tekst-soobschenie-tsbr-o-klyuchevoy-stavke-a209415"
+ },
+ {
+  "indicator": "cbr_infl_low",
+  "label": "Прогноз инфляции ЦБ на 2026, от",
+  "value": 7.1,
+  "unit": "%",
+  "date": "2026-10-23",
+  "note": "повышен в октябре (резюме ЦБ от 5 ноября)",
+  "source": "retail.ru",
+  "url": "https://www.retail.ru/news/tsb-rf-sokhranil-klyuchevuyu-stavku-na-urovne-14-godovykh-12-sentyabrya-2026-282051/"
+ },
+ {
+  "indicator": "cbr_infl_high",
+  "label": "Прогноз инфляции ЦБ на 2026, до",
+  "value": 7.6,
+  "unit": "%",
+  "date": "2026-10-23",
+  "note": "повышен в октябре (резюме ЦБ от 5 ноября)",
+  "source": "retail.ru",
+  "url": "https://www.retail.ru/news/tsb-rf-sokhranil-klyuchevuyu-stavku-na-urovne-14-godovykh-12-sentyabrya-2026-282051/"
+ },
+ {
+  "indicator": "usd_q4",
+  "label": "Курс доллара, IV кв. 2026 (консенсус)",
+  "value": 85.3,
+  "unit": "₽",
+  "date": "2026-10-15",
+  "note": "макроопрос ЦБ",
+  "source": "tks.ru",
+  "url": "https://www.tks.ru/tags/klyuchevaya-stavka/"
+ },
+ {
+  "indicator": "gdp_gov",
+  "label": "Прогноз роста ВВП 2026 (правительство)",
+  "value": 0.4,
+  "unit": "%",
+  "date": "2026-05-13",
+  "note": "понижен с 1,3%",
+  "source": "statbase.ru",
+  "url": "https://statbase.ru/news/economics/rossiya-ponizila-prognoz-rosta-vvp-na-2026-god-do-0-4-s-1-3/"
+ },
+ {
+  "indicator": "lo_infl",
+  "label": "Годовая инфляция, Ленобласть",
+  "value": 7.2,
+  "unit": "%",
+  "date": "2026-09-30",
+  "note": "сентябрь 2026",
+  "source": "Банк России",
+  "url": "https://cbr.ru/spb/ekonom_profil_lenobl/"
+ },
+ {
+  "indicator": "ru_infl",
+  "label": "Годовая инфляция, Россия",
+  "value": 7.11,
+  "unit": "%",
+  "date": "2026-10-26",
+  "note": "на 26 октября 2026 (Росстат)",
+  "source": "Банк России",
+  "url": "https://cbr.ru/spb/ekonom_profil_lenobl/"
+ },
+ {
+  "indicator": "lo_pmef",
+  "label": "Инвестсоглашения Ленобласти на ПМЭФ-2026",
+  "value": 314,
+  "unit": "млрд ₽",
+  "date": "2026-06-06",
+  "note": "",
+  "source": "Finmarket",
+  "url": "https://www.finmarket.ru/database/news/6638417"
+ },
+ {
+  "indicator": "lo_unemp",
+  "label": "Безработица по МОТ, Ленобласть",
+  "value": 2.8,
+  "unit": "%",
+  "date": "2026-09-30",
+  "note": "июль–сентябрь 2026",
+  "source": "Банк России",
+  "url": "https://cbr.ru/spb/ekonom_profil_lenobl/"
+ },
+ {
+  "indicator": "lo_invest",
+  "label": "Инвестиции в основной капитал, Ленобласть",
+  "value": 12.3,
+  "unit": "% г/г",
+  "date": "2026-06-30",
+  "note": "I полугодие 2026",
+  "source": "Банк России",
+  "url": "https://cbr.ru/spb/ekonom_profil_lenobl/"
+ },
+ {
+  "indicator": "lo_prom",
+  "label": "Промпроизводство, Ленобласть",
+  "value": -11.8,
+  "unit": "% г/г",
+  "date": "2026-09-30",
+  "note": "январь–сентябрь 2026",
+  "source": "Банк России",
+  "url": "https://cbr.ru/spb/ekonom_profil_lenobl/"
+ }
+]

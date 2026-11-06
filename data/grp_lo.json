@@ -1,0 +1,52 @@
+[
+ {
+  "id": "g2021",
+  "year": "2021",
+  "grp": 1473,
+  "real": null,
+  "est": false,
+  "note": "Петростат, уточнённая оценка",
+  "url": "https://78.rosstat.gov.ru/storage/mediabank/VRP21-22.pdf",
+  "real_pct": null
+ },
+ {
+  "id": "g2022",
+  "year": "2022",
+  "grp": 1660,
+  "real": null,
+  "est": false,
+  "note": "Петростат, уточнённая оценка",
+  "url": "https://78.rosstat.gov.ru/storage/mediabank/VRP22-23.pdf",
+  "real_pct": null
+ },
+ {
+  "id": "g2023",
+  "year": "2023",
+  "grp": 1915,
+  "real": 109.0,
+  "est": false,
+  "note": "Петростат: рост 9% в сопоставимых ценах; 944 тыс. ₽ на жителя",
+  "url": "https://78.rosstat.gov.ru/storage/mediabank/VRP22-23.pdf",
+  "real_pct": 9.0
+ },
+ {
+  "id": "g2024",
+  "year": "2024",
+  "grp": 2404.1,
+  "real": 105.0,
+  "est": false,
+  "note": "Объём — Росстат; рост 5% — оценка правительства ЛО (прогноз СЭР); 1,3% ВРП России",
+  "url": "https://lenoblinvest.ru/o-regione/ekonomika-i-investitsionnyj-klimat/",
+  "real_pct": 5.0
+ },
+ {
+  "id": "g2025",
+  "year": "2025 (оценка)",
+  "grp": 2596.8,
+  "real": 101.9,
+  "est": true,
+  "note": "Оценка правительства ЛО; Росстат опубликует ВРП за 2025 год в 2027",
+  "url": "https://finance.mail.ru/article/vlasti-leningradskoj-oblasti-ozhidayut-rost-vrp-do-18-k-2029-godu-69220091/",
+  "real_pct": 1.9
+ }
+]

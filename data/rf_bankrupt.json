@@ -1,0 +1,29 @@
+[
+ {
+  "id": "q1",
+  "period": "I кв. 2026",
+  "order": 1,
+  "companies": 1643,
+  "yoy": 0.9,
+  "observations": null,
+  "note": "Расчёт: 3547 за полугодие минус II квартал"
+ },
+ {
+  "id": "q2",
+  "period": "II кв. 2026",
+  "order": 2,
+  "companies": 1904,
+  "yoy": 21.0,
+  "observations": null,
+  "note": "Оценка по данным Федресурса (1818 на 4,5% меньше)"
+ },
+ {
+  "id": "q3",
+  "period": "III кв. 2026",
+  "order": 3,
+  "companies": 1818,
+  "yoy": 18.5,
+  "observations": 1619,
+  "note": "Федресурс; новых дел (наблюдение) +28,9%"
+ }
+]

@@ -1,0 +1,114 @@
+[
+ {
+  "id": "org_2025-07",
+  "period": "2025-07",
+  "label": "июль 2025",
+  "registered": 233,
+  "liquidated": 334,
+  "saldo": -101
+ },
+ {
+  "id": "org_2025-08",
+  "period": "2025-08",
+  "label": "август 2025",
+  "registered": 189,
+  "liquidated": 226,
+  "saldo": -37
+ },
+ {
+  "id": "org_2025-09",
+  "period": "2025-09",
+  "label": "сентябрь 2025",
+  "registered": 239,
+  "liquidated": 274,
+  "saldo": -35
+ },
+ {
+  "id": "org_2025-10",
+  "period": "2025-10",
+  "label": "октябрь 2025",
+  "registered": 215,
+  "liquidated": 215,
+  "saldo": 0
+ },
+ {
+  "id": "org_2025-11",
+  "period": "2025-11",
+  "label": "ноябрь 2025",
+  "registered": 204,
+  "liquidated": 381,
+  "saldo": -177
+ },
+ {
+  "id": "org_2025-12",
+  "period": "2025-12",
+  "label": "декабрь 2025",
+  "registered": 241,
+  "liquidated": 170,
+  "saldo": 71
+ },
+ {
+  "id": "org_2026-01",
+  "period": "2026-01",
+  "label": "январь 2026",
+  "registered": 143,
+  "liquidated": 83,
+  "saldo": 60
+ },
+ {
+  "id": "org_2026-02",
+  "period": "2026-02",
+  "label": "февраль 2026",
+  "registered": 232,
+  "liquidated": 136,
+  "saldo": 96
+ },
+ {
+  "id": "org_2026-03",
+  "period": "2026-03",
+  "label": "март 2026",
+  "registered": 248,
+  "liquidated": 169,
+  "saldo": 79
+ },
+ {
+  "id": "org_2026-04",
+  "period": "2026-04",
+  "label": "апрель 2026",
+  "registered": 234,
+  "liquidated": 185,
+  "saldo": 49
+ },
+ {
+  "id": "org_2026-05",
+  "period": "2026-05",
+  "label": "май 2026",
+  "registered": 207,
+  "liquidated": 243,
+  "saldo": -36
+ },
+ {
+  "id": "org_2026-06",
+  "period": "2026-06",
+  "label": "июнь 2026",
+  "registered": 199,
+  "liquidated": 200,
+  "saldo": -1
+ },
+ {
+  "id": "org_2026-07",
+  "period": "2026-07",
+  "label": "июль 2026",
+  "registered": 186,
+  "liquidated": 193,
+  "saldo": -7
+ },
+ {
+  "id": "org_2026-08",
+  "period": "2026-08",
+  "label": "август 2026",
+  "registered": 229,
+  "liquidated": 213,
+  "saldo": 16
+ }
+]

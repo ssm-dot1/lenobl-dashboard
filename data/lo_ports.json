@@ -1,0 +1,68 @@
+[
+ {
+  "id": "pt2026-01",
+  "period": "2026-01",
+  "label": "январь",
+  "ustluga": 11.1,
+  "ustluga_ch": -0.1,
+  "primorsk": 6.3,
+  "primorsk_ch": 3.8,
+  "vysotsk": 0.9,
+  "vysotsk_ch": -15.7
+ },
+ {
+  "id": "pt2026-02",
+  "period": "2026-02",
+  "label": "январь–февраль",
+  "ustluga": 19.4,
+  "ustluga_ch": -7.0,
+  "primorsk": 11.2,
+  "primorsk_ch": 1.1,
+  "vysotsk": 1.5,
+  "vysotsk_ch": -24.8
+ },
+ {
+  "id": "pt2026-03",
+  "period": "2026-03",
+  "label": "январь–март",
+  "ustluga": 30.0,
+  "ustluga_ch": -6.8,
+  "primorsk": 17.0,
+  "primorsk_ch": 3.7,
+  "vysotsk": 2.0,
+  "vysotsk_ch": -30.9
+ },
+ {
+  "id": "pt2026-04",
+  "period": "2026-04",
+  "label": "январь–апрель",
+  "ustluga": 38.8,
+  "ustluga_ch": -10.5,
+  "primorsk": 23.2,
+  "primorsk_ch": 8.9,
+  "vysotsk": 3.0,
+  "vysotsk_ch": -20.0
+ },
+ {
+  "id": "pt2026-09",
+  "period": "2026-09",
+  "label": "январь–сентябрь",
+  "ustluga": 94.8,
+  "ustluga_ch": -4.2,
+  "primorsk": null,
+  "primorsk_ch": null,
+  "vysotsk": null,
+  "vysotsk_ch": null
+ },
+ {
+  "id": "pt2025",
+  "period": "2025-12",
+  "label": "2025 год",
+  "ustluga": 130.5,
+  "ustluga_ch": -3.4,
+  "primorsk": 63.9,
+  "primorsk_ch": 5.2,
+  "vysotsk": 11.6,
+  "vysotsk_ch": -6.6
+ }
+]

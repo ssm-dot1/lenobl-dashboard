@@ -1,0 +1,458 @@
+<style>
+.lx{font-family:var(--font-anthropic-sans);display:flex;flex-direction:column;gap:var(--cds-gap-lg)}
+.lx h1{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);margin:0}
+.lx h2{font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium);margin:0}
+.lx h3{font-size:var(--cds-font-size-body);font-weight:var(--cds-font-weight-medium);margin:0}
+.lx p{margin:0}
+.lx-muted{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
+.lx-tabs{display:flex;flex-wrap:wrap;gap:var(--cds-gap-xs);border-bottom:1px solid var(--color-border-line)}
+.lx-tab{font:inherit;background:none;border:0;border-bottom:2px solid transparent;padding:var(--cds-pad-sm) var(--cds-pad-md);color:var(--color-fg-muted);cursor:pointer}
+.lx-tab[aria-selected="true"]{color:var(--color-fg);border-bottom-color:var(--color-fg)}
+.lx-page{display:flex;flex-direction:column;gap:var(--cds-gap-lg)}
+.lx-page[hidden]{display:none}
+.lx-note{background:var(--color-panel);border:1px dashed var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-sm) var(--cds-pad-md);font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.lx-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:var(--cds-gap-md)}
+.lx-tile,.lx-card{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-lg);display:flex;flex-direction:column;gap:var(--cds-gap-xs);min-width:0}
+.lx-big{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);font-variant-numeric:tabular-nums;line-height:1.1}
+.lx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:var(--cds-gap-md)}
+.lx-chart{position:relative;min-height:220px}
+.lx-chart.lx-tall{min-height:260px}
+.lx-chart.lx-auto{min-height:60px}
+.lx-flat{color:var(--color-fg-muted)}
+.lx-card .lx-tiles .lx-tile{padding:var(--cds-pad-md)}
+.lx-up{color:var(--color-ok)}.lx-down{color:var(--color-bad)}
+.lx b{font-weight:var(--cds-font-weight-medium);font-variant-numeric:tabular-nums}
+.lx-tablebox{max-height:28rem;overflow:auto}
+.lx table{width:100%;border-collapse:collapse;font-size:var(--cds-font-size-caption);font-variant-numeric:tabular-nums}
+.lx th{position:sticky;top:0;background:var(--color-panel);text-align:left;font-weight:var(--cds-font-weight-medium);color:var(--color-fg-muted);padding:var(--cds-pad-xs) var(--cds-pad-sm);border-bottom:1px solid var(--color-border-line)}
+.lx td{padding:var(--cds-pad-xs) var(--cds-pad-sm);border-bottom:1px solid var(--color-border-line);vertical-align:top}
+.lx td.lx-num,.lx th.lx-num{text-align:right;white-space:nowrap}
+.lx td a{color:inherit}
+.lx-pill{display:inline-block;padding:0 .5em;border-radius:999px;border:1px solid var(--color-border-line);white-space:nowrap}
+.lx-pill.ok{color:var(--color-ok)}.lx-pill.warn{color:var(--color-warn)}.lx-pill.bad{color:var(--color-bad)}
+.lx-tip{position:absolute;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);border-radius:var(--cds-radius);box-shadow:var(--cds-shadow-popover);padding:var(--cds-pad-xs) var(--cds-pad-sm);font-size:var(--cds-font-size-caption);white-space:nowrap;z-index:2}
+.lx-tip span{color:var(--cds-text-secondary)}
+.lx-fail{display:flex;align-items:center;justify-content:center;gap:.5em;height:100%;min-height:inherit;color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
+.lx-fail i{width:.375rem;height:.375rem;border-radius:50%;background:var(--color-bad)}
+.lx details{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.lx dt{color:var(--color-fg);font-weight:var(--cds-font-weight-medium);margin-top:var(--cds-gap-sm)}
+.lx dd{margin:0}
+.lx-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--cds-gap-sm);font-size:var(--cds-font-size-body)}
+.lx-list .lx-pill{font-size:var(--cds-font-size-caption);margin-right:.25em}
+.lx-grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));gap:var(--cds-gap-md)}
+</style>
+
+<div class="lx">
+  <header>
+    <h1>Аналитика: каналы, экономика РФ и Ленобласти</h1>
+    <p class="lx-muted">Telegram и MAX «Экономика Ленобласти», главные экономические новости России и региона, мониторинг компаний Ленобласти. Данные на <span data-draw="val" data-source="max_summary" data-field="at" data-fmt="dt">—</span>.</p>
+  </header>
+  <p class="lx-note">Данные обновляются автоматически раз в час из открытых источников.</p>
+
+  <div class="lx-grid">
+    <div class="lx-card" id="summary"><h3>Главное за месяц</h3><p class="lx-muted">Выводы по каналам, региону и компаниям за последние 30 дней</p><ul class="lx-list" data-draw="list" data-source="insights"></ul></div>
+    <div class="lx-card" id="alerts"><h3>Сигналы</h3><p class="lx-muted">Что требует внимания прямо сейчас: всплески и провалы охвата, отписки, негатив по компаниям</p><ul class="lx-list" data-draw="list" data-source="alerts"></ul></div>
+  </div>
+
+  <nav class="lx-tabs" role="tablist">
+    <button class="lx-tab" role="tab" data-tab="tg" aria-selected="true">Telegram</button>
+    <button class="lx-tab" role="tab" data-tab="max" aria-selected="false">MAX</button>
+    <button class="lx-tab" role="tab" data-tab="cmp" aria-selected="false">Сравнение</button>
+    <button class="lx-tab" role="tab" data-tab="rf" aria-selected="false">Экономика РФ</button>
+    <button class="lx-tab" role="tab" data-tab="lo" aria-selected="false">Экономика Ленобласти</button>
+    <button class="lx-tab" role="tab" data-tab="co" aria-selected="false">Компании Ленобласти</button>
+    <button class="lx-tab" role="tab" data-tab="ideas" aria-selected="false">Идеи для постов</button>
+  </nav>
+
+  <!-- TELEGRAM -->
+  <section class="lx-page" id="tg">
+    <div>
+      <h2>Telegram · @lenoblinvest</h2>
+      <p>У канала <b data-draw="val" data-source="tg_kpi" data-field="subscribers" data-fmt="int">—</b> подписчиков; за последние 30 дней пост в среднем набирает <b data-draw="val" data-source="tg_kpi" data-field="avg_reach" data-fmt="int">—</b> просмотров, то есть его видят <b data-draw="val" data-source="tg_kpi" data-field="err" data-fmt="pct1">—</b> аудитории.</p>
+    </div>
+    <p class="lx-note">Данные TGStat и публичной страницы t.me/s/lenoblinvest.</p>
+    <div class="lx-tiles">
+      <div class="lx-tile"><span class="lx-muted">Подписчики</span><span class="lx-big" data-draw="val" data-source="tg_kpi" data-field="subscribers" data-fmt="int">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">Средний охват поста</span><span class="lx-big" data-draw="val" data-source="tg_kpi" data-field="avg_reach" data-fmt="int">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">ERR (охват / подписчики)</span><span class="lx-big" data-draw="val" data-source="tg_kpi" data-field="err" data-fmt="pct1">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">ER (реакции / просмотры)</span><span class="lx-big" data-draw="val" data-source="tg_kpi" data-field="er" data-fmt="pct1">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">Постов в день</span><span class="lx-big" data-draw="val" data-source="tg_kpi" data-field="posts_per_day" data-fmt="num">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">Постов за 30 дней</span><span class="lx-big" data-draw="val" data-source="tg_kpi" data-field="posts" data-fmt="int">—</span></div>
+    </div>
+    <div class="lx-card" id="tg-views"><h3>Просмотры по дням публикации, 30 дней</h3><p class="lx-muted">Сумма просмотров постов, вышедших в этот день, за последние 30 дней; у свежих постов просмотры ещё набираются</p><div class="lx-chart dash-skeleton" data-draw="bars" data-source="tg_by_day" data-x="day" data-y="views" data-label="Просмотры"></div></div>
+    <div class="lx-grid">
+      <div class="lx-card" id="tg-monthly"><h3>Просмотры по месяцам</h3><p class="lx-muted">Сумма просмотров постов, вышедших в месяце; серым — текущий неполный месяц</p><div class="lx-chart dash-skeleton" data-draw="mchart" data-source="tg_monthly" data-x="month" data-y="views" data-kind="bars" data-label="Просмотры"></div></div>
+      <div class="lx-card" id="tg-monthly-med"><h3>Охват поста по месяцам</h3><p class="lx-muted">Медианные просмотры одного поста, вышедшего в месяце</p><div class="lx-chart dash-skeleton" data-draw="mchart" data-source="tg_monthly" data-x="month" data-y="median_views" data-kind="line" data-zero="1" data-label="Медиана"></div></div>
+    </div>
+    <div class="lx-card" id="tg-quarters"><h3>По кварталам</h3><p class="lx-muted">Посты, просмотры и реакции за квартал; изменение — просмотров на пост к прошлому кварталу. Текущий квартал неполный.</p>
+      <div class="lx-tablebox"><table data-source="tg_quarterly" data-row-key="quarter" data-sort="quarter:desc"><thead><tr><th data-field="label">Квартал</th><th class="lx-num" data-field="posts" data-fmt="int">Постов</th><th class="lx-num" data-field="views" data-fmt="int">Просмотров</th><th class="lx-num" data-field="per_post" data-fmt="int">На пост</th><th class="lx-num" data-field="change" data-fmt="spct" data-tone="1">К прошлому кв.</th><th class="lx-num" data-field="react_per_post" data-fmt="num">Реакций на пост</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-grid">
+      <div class="lx-card" id="tg-freq"><h3>Сколько постов в день оптимально</h3><p class="lx-muted">Медианные просмотры поста в зависимости от числа постов в тот же день</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="tg_freq" data-x="bucket" data-y="reach" data-n="posts" data-sort="none"></div></div>
+      <div class="lx-card" id="tg-format"><h3>Оформление поста</h3><p class="lx-muted">Медианные просмотры по длине текста, эмодзи, ссылкам и репостам</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="tg_format" data-x="variant" data-y="reach" data-n="posts" data-sort="none" data-hl="none"></div></div>
+    </div>
+    <div class="lx-card" id="tg-weekday"><h3>Активность по дням недели</h3><p>Самый сильный день — <b data-draw="best" data-source="tg_weekday">—</b>: медианный пост набирает <b data-draw="bestval" data-source="tg_weekday">—</b> просмотров.</p><p class="lx-muted">Медиана просмотров поста по дню публикации, все посты с 22 сентября; посты моложе двух суток не учитываются (просмотры ещё набираются). Под днём — число постов; дни с менее чем 5 постами не выделяются как лучшие.</p><div class="lx-chart dash-skeleton" data-draw="weekday" data-source="tg_weekday"></div></div>
+    <div class="lx-card" id="tg-heat"><h3>Охват по дням и часам публикации</h3><p class="lx-muted">Средние просмотры поста, вышедшего в этот день и час (МСК); чем темнее, тем выше охват</p><div class="lx-chart dash-skeleton" data-draw="heat" data-source="tg_heat"></div></div>
+    <div class="lx-grid">
+      <div class="lx-card" id="tg-formats"><h3>Форматы постов</h3><p class="lx-muted">Медианные просмотры поста по формату и число постов с 22 сентября</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="tg_types" data-x="label" data-y="reach" data-n="posts"></div></div>
+      <div class="lx-card" id="tg-timing"><h3>Время публикации</h3><p class="lx-muted">Лучшие часы — три часа (МСК) с самым высоким средним охватом, где вышло не меньше 3 постов</p>
+        <div class="lx-tiles">
+          <div class="lx-tile"><span class="lx-muted">Лучшие часы</span><span class="lx-big" data-draw="val" data-source="tg_timing" data-field="best_hours" data-fmt="text">—</span></div>
+          <div class="lx-tile"><span class="lx-muted">Постов в эти часы, 30 дней</span><span class="lx-big" data-draw="val" data-source="tg_timing" data-field="share" data-fmt="pct1">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="lx-grid">
+      <div class="lx-card" id="tg-topics"><h3>Рубрики: охват</h3><p class="lx-muted">Медианные просмотры поста по теме; тема определяется по ключевым словам в тексте</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="tg_topics" data-x="topic" data-y="reach" data-n="posts"></div></div>
+      <div class="lx-card" id="tg-topics-r"><h3>Рубрики: реакции</h3><p class="lx-muted">Среднее число реакций на пост по теме</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="tg_topics" data-x="topic" data-y="reactions_avg" data-fmt="num"></div></div>
+    </div>
+    <div class="lx-grid">
+      <div class="lx-card" id="tg-above"><h3>Посты выше нормы</h3><p class="lx-muted">Отклонение просмотров от медианы канала</p>
+        <div class="lx-tablebox"><table data-source="tg_outliers" data-row-key="id" data-filter="kind=выше"><thead><tr><th data-field="posted" data-fmt="date">Дата</th><th data-field="text" data-fmt="link">Пост</th><th class="lx-num" data-field="views" data-fmt="int">Просмотры</th><th class="lx-num" data-field="dev" data-fmt="spct" data-tone="1">К медиане</th></tr></thead><tbody data-draw="table"></tbody></table></div></div>
+      <div class="lx-card" id="tg-below"><h3>Посты ниже нормы</h3><p class="lx-muted">Отклонение просмотров от медианы канала</p>
+        <div class="lx-tablebox"><table data-source="tg_outliers" data-row-key="id" data-filter="kind=ниже"><thead><tr><th data-field="posted" data-fmt="date">Дата</th><th data-field="text" data-fmt="link">Пост</th><th class="lx-num" data-field="views" data-fmt="int">Просмотры</th><th class="lx-num" data-field="dev" data-fmt="spct" data-tone="1">К медиане</th></tr></thead><tbody data-draw="table"></tbody></table></div></div>
+    </div>
+    <div class="lx-card" id="tg-top"><h3>Топ-20 постов за 30 дней</h3><p class="lx-muted">Отсортированы по просмотрам</p>
+      <div class="lx-tablebox"><table data-source="tg_top30" data-row-key="id"><thead><tr><th data-field="day">Дата</th><th data-field="text">Пост</th><th class="lx-num" data-field="views">Просмотры</th><th class="lx-num" data-field="reactions">Реакции</th></tr></thead><tbody data-draw="posts"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="tg-sources"><h3>Кто репостит канал</h3><p class="lx-muted">Полный список источников подписчиков закрыт в платных тарифах TGStat и Telemetr. Здесь — итог по Telemetr и репосты, найденные в открытых лентах каналов региона.</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">Упоминаний за всё время</span><span class="lx-big" data-draw="val" data-source="tg_sources_sum" data-field="mentions" data-fmt="int">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Из них репостов</span><span class="lx-big" data-draw="val" data-source="tg_sources_sum" data-field="reposts" data-fmt="int">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Разных каналов</span><span class="lx-big" data-draw="val" data-source="tg_sources_sum" data-field="channels" data-fmt="int">—</span></div>
+      </div>
+      <div class="lx-tablebox"><table data-source="tg_sources" data-row-key="id" data-sort="date:desc"><thead><tr><th data-field="date" data-fmt="date">Дата</th><th data-field="channel" data-fmt="link">Канал</th><th data-field="kind">Тип</th><th data-field="post">Наш пост</th><th class="lx-num" data-field="views" data-fmt="int">Охват</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- MAX -->
+  <section class="lx-page" id="max" hidden>
+    <div>
+      <h2>MAX · «Экономика Ленобласти»</h2>
+      <p>За 30 дней канал прибавил <b data-draw="val" data-source="max_summary" data-field="growth30" data-fmt="signed">—</b> подписчиков; пост в среднем видят <b data-draw="val" data-source="max_summary" data-field="err" data-fmt="rate">—</b> аудитории.</p>
+    </div>
+    <p class="lx-note">Данные MXStat. Официальный канал комитета экономического развития и АЭРЛО (max.ru/id4703059140_gos).</p>
+    <div class="lx-tiles">
+      <div class="lx-tile"><span class="lx-muted">Подписчики</span><span class="lx-big" data-draw="val" data-source="max_summary" data-field="subscribers" data-fmt="int">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">Прирост, 30 дней</span><span class="lx-big" data-draw="val" data-source="max_summary" data-field="growth30" data-fmt="signed" data-tone="1">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">Средний охват поста</span><span class="lx-big" data-draw="val" data-source="max_summary" data-field="avg_views_post" data-fmt="int">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">ERR (охват / подписчики)</span><span class="lx-big" data-draw="val" data-source="max_summary" data-field="err" data-fmt="rate">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">ER (реакции / просмотры)</span><span class="lx-big" data-draw="val" data-source="max_summary" data-field="er" data-fmt="rate">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">Просмотры, 30 дней</span><span class="lx-big" data-draw="val" data-source="max_summary" data-field="views30" data-fmt="int">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">Постов, 30 дней</span><span class="lx-big" data-draw="val" data-source="max_summary" data-field="posts30" data-fmt="int">—</span></div>
+    </div>
+    <div class="lx-card" id="max-subs"><h3>Подписчики по дням</h3><p class="lx-muted">Последние дни по данным MXStat</p><div class="lx-chart dash-skeleton" data-draw="line" data-source="max_daily" data-x="day" data-y="subscribers" data-label="Подписчики"></div></div>
+    <div class="lx-card" id="max-weekday"><h3>Активность по дням недели</h3><p>Самый сильный день — <b data-draw="best" data-source="max_weekday">—</b>: пост в среднем набирает <b data-draw="bestval" data-source="max_weekday">—</b> просмотров.</p><p class="lx-muted">Средний охват поста по дню публикации за последние 30 дней (MXStat). Под днём — число постов; дни с менее чем 5 постами не выделяются как лучшие.</p><div class="lx-chart dash-skeleton" data-draw="weekday" data-source="max_weekday"></div></div>
+    <div class="lx-card" id="max-heat"><h3>Охват по дням и часам публикации</h3><p class="lx-muted">Средний охват поста, вышедшего в этот день и час (МСК), за 30 дней; чем темнее, тем выше охват</p><div class="lx-chart dash-skeleton" data-draw="heat" data-source="max_heatmap"></div></div>
+    <div class="lx-grid">
+      <div class="lx-card" id="max-formats"><h3>Форматы постов</h3><p class="lx-muted">Средний охват поста по формату и число постов за 30 дней (MXStat)</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="max_content_mix" data-x="label" data-y="reach_avg" data-n="posts"></div></div>
+      <div class="lx-card" id="max-timing"><h3>Время публикации</h3><p class="lx-muted">Лучшие часы — три часа (МСК) с самым высоким средним охватом, где вышло не меньше 2 постов</p>
+        <div class="lx-tiles">
+          <div class="lx-tile"><span class="lx-muted">Лучшие часы</span><span class="lx-big" data-draw="val" data-source="max_timing" data-field="best_hours" data-fmt="text">—</span></div>
+          <div class="lx-tile"><span class="lx-muted">Постов в эти часы, 30 дней</span><span class="lx-big" data-draw="val" data-source="max_timing" data-field="share" data-fmt="pct1">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="lx-card" id="max-speed"><h3>Скорость набора просмотров</h3><p>Медианный пост набирает <b data-draw="val" data-source="max_speed_sum" data-field="p1" data-fmt="pct1">—</b> итоговых просмотров за первый час и <b data-draw="val" data-source="max_speed_sum" data-field="p24" data-fmt="pct1">—</b> — за первые сутки.</p><p class="lx-muted">По постам, видимым на MXStat без входа; итоговые просмотры — на момент снимка</p>
+      <div class="lx-tablebox"><table data-source="max_speed" data-row-key="id" data-sort="posted:desc"><thead><tr><th data-field="posted" data-fmt="date">Дата</th><th data-field="text">Пост</th><th class="lx-num" data-field="views_1h" data-fmt="int">За 1 ч</th><th class="lx-num" data-field="views_24h" data-fmt="int">За 24 ч</th><th class="lx-num" data-field="views" data-fmt="int">Всего</th><th class="lx-num" data-field="p24" data-fmt="pct1">Доля за сутки</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-grid">
+      <div class="lx-card" id="max-mention-in"><h3>Нас упомянули</h3><p class="lx-muted">Посты других каналов с упоминанием нашего и прирост наших подписчиков после них</p>
+        <div class="lx-tablebox"><table data-source="max_mentions" data-row-key="id" data-filter="direction=Нас упомянули"><thead><tr><th data-field="channel" data-fmt="link">Канал</th><th class="lx-num" data-field="channel_subs" data-fmt="int">Подписчики</th><th data-field="posted" data-fmt="date">Дата</th><th class="lx-num" data-field="views_total" data-fmt="int">Охват</th><th class="lx-num" data-field="our_growth_24h" data-fmt="signed" data-tone="1">Нам за 24 ч</th></tr></thead><tbody data-draw="table"></tbody></table></div></div>
+      <div class="lx-card" id="max-mention-out"><h3>Мы упомянули</h3><p class="lx-muted">Наши посты с упоминанием других каналов</p>
+        <div class="lx-tablebox"><table data-source="max_mentions" data-row-key="id" data-filter="direction=Мы упомянули"><thead><tr><th data-field="channel">Канал</th><th data-field="posted" data-fmt="date">Дата</th><th data-field="text" data-fmt="link">Пост</th><th class="lx-num" data-field="views_total" data-fmt="int">Охват</th></tr></thead><tbody data-draw="table"></tbody></table></div></div>
+    </div>
+    <div class="lx-card" id="max-top"><h3>Топ-10 постов</h3><p class="lx-muted">По просмотрам за последние 30 дней</p>
+      <div class="lx-tablebox"><table data-source="max_posts" data-row-key="id"><thead><tr><th data-field="day">Дата</th><th data-field="text">Пост</th><th class="lx-num" data-field="views">Просмотры</th><th class="lx-num" data-field="reactions">Реакции</th></tr></thead><tbody data-draw="posts"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- CMP -->
+  <section class="lx-page" id="cmp" hidden>
+    <div>
+      <h2>Сравнение</h2>
+      <p>Один и тот же пост в MAX набирает в среднем на <b data-draw="val" data-source="cross_sum" data-field="median_diff" data-fmt="spct">—</b> просмотров больше, чем в Telegram (медиана по <b data-draw="val" data-source="cross_sum" data-field="pairs" data-fmt="int">—</b> парам). Охват от подписчиков (ERR) нашего Telegram-канала — <b data-draw="val" data-source="peers_sum" data-field="ours" data-fmt="pct1">—</b>, у похожих каналов в среднем <b data-draw="val" data-source="peers_sum" data-field="others" data-fmt="pct1">—</b>.</p>
+    </div>
+    <div class="lx-grid">
+      <div class="lx-card" id="cmp-platforms"><h3>Подписчики по площадкам</h3><p class="lx-muted">Telegram, ВКонтакте и MAX; ВКонтакте округлено, как показывает сам ВК</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="platforms" data-x="platform" data-y="subscribers" data-hl="none"></div></div>
+      <div class="lx-card" id="cmp-goals"><h3>Цели к 31 декабря</h3><p class="lx-muted">Цели заданы для примера. Прогноз — при текущем темпе за 30 дней.</p>
+        <div class="lx-tablebox"><table data-source="goals_calc" data-row-key="platform"><thead><tr><th data-field="platform">Площадка</th><th class="lx-num" data-field="current" data-fmt="int">Сейчас</th><th class="lx-num" data-field="target" data-fmt="int">Цель</th><th class="lx-num" data-field="progress" data-fmt="pct1">Прогресс</th><th class="lx-num" data-field="forecast" data-fmt="int">Прогноз</th><th class="lx-num" data-field="pace_per_day" data-fmt="num">Темп в день</th><th class="lx-num" data-field="need_per_day" data-fmt="num">Нужно в день</th><th data-field="status" data-fmt="pill">Статус</th></tr></thead><tbody data-draw="table"></tbody></table></div></div>
+    </div>
+    <div class="lx-card" id="cmp-three"><h3>Три площадки: Telegram, MAX и ВКонтакте</h3><p class="lx-muted">За последние 30 дней. ВКонтакте без входа показывает только подписчиков и лайки последних постов — просмотры и число постов не видны.</p>
+      <div class="lx-tablebox"><table data-source="platforms_cmp" data-row-key="platform"><thead><tr><th data-field="platform" data-fmt="link">Площадка</th><th class="lx-num" data-field="subscribers" data-fmt="int">Подписчики</th><th class="lx-num" data-field="posts30" data-fmt="int">Постов</th><th class="lx-num" data-field="reach" data-fmt="int">Охват поста</th><th class="lx-num" data-field="err" data-fmt="pct1">ERR</th><th class="lx-num" data-field="react" data-fmt="num">Реакций на пост</th><th class="lx-num" data-field="growth30" data-fmt="signed" data-tone="1">Прирост, 30 дн.</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="cmp-vk"><h3>ВКонтакте: последние посты</h3><p class="lx-muted">Лайки в ВК и, если тот же пост вышел в Telegram, его просмотры и реакции там</p>
+      <div class="lx-tablebox"><table data-source="vk_posts" data-row-key="id" data-sort="posted:desc"><thead><tr><th data-field="posted" data-fmt="date">Дата</th><th data-field="text" data-fmt="link">Пост</th><th class="lx-num" data-field="likes" data-fmt="int">Лайки ВК</th><th class="lx-num" data-field="tg_views" data-fmt="int">Просмотры TG</th><th class="lx-num" data-field="tg_reactions" data-fmt="int">Реакции TG</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="cmp-goal-charts"><h3>Цели: факт, план и прогноз</h3><p class="lx-muted">Сплошная линия — факт; пунктир — план (равномерно от первого замера до цели); точки — прогноз при текущем темпе. Темп MAX — за 30 дней (MXStat), Telegram — за доступные дни (Telemetr), для ВКонтакте темп пока неизвестен.</p>
+      <div class="lx-grid3">
+        <div class="lx-sub"><b>Telegram</b><div class="lx-chart dash-skeleton" data-h="200" data-draw="goalchart" data-source="goal_series" data-filter="platform=Telegram"></div></div>
+        <div class="lx-sub"><b>MAX</b><div class="lx-chart dash-skeleton" data-h="200" data-draw="goalchart" data-source="goal_series" data-filter="platform=MAX"></div></div>
+        <div class="lx-sub"><b>ВКонтакте</b><div class="lx-chart dash-skeleton" data-h="200" data-draw="goalchart" data-source="goal_series" data-filter="platform=ВКонтакте"></div></div>
+      </div>
+    </div>
+    <div class="lx-card" id="cmp-quarters"><h3>Площадки по кварталам</h3><p class="lx-muted">Telegram — полный год по публичной ленте. MAX — только дни, видимые на MXStat без входа; дальше история копится. ВКонтакте — без входа видно только число подписчиков.</p>
+      <div class="lx-tablebox"><table data-source="platform_quarters" data-row-key="id"><thead><tr><th data-field="platform">Площадка</th><th data-field="quarter">Квартал</th><th class="lx-num" data-field="posts" data-fmt="int">Постов</th><th class="lx-num" data-field="views" data-fmt="int">Просмотров</th><th class="lx-num" data-field="per_post" data-fmt="int">На пост</th><th class="lx-num" data-field="subscribers" data-fmt="int">Подписчики</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="cmp-programs"><h3>Программы в каналах региона</h3><p class="lx-muted">Сколько постов за 30 дней упоминают программу — в нашем канале и в трёх крупных каналах региона</p>
+      <div class="lx-tablebox"><table data-source="programs" data-row-key="id" data-sort="mentions:desc"><thead><tr><th data-field="channel">Канал</th><th data-field="program">Программа</th><th class="lx-num" data-field="mentions" data-fmt="int">Упоминаний</th><th class="lx-num" data-field="posts30" data-fmt="int">Всего постов</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="cmp-cross"><h3>Один пост в Telegram и MAX</h3><p class="lx-muted">Посты, вышедшие в обоих каналах: совпадает начало текста, разница во времени не больше 2 дней. В MAX без входа видны в основном лучшие и последние посты, поэтому выборка смещена в пользу MAX.</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">Пар постов</span><span class="lx-big" data-draw="val" data-source="cross_sum" data-field="pairs" data-fmt="int">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">MAX к Telegram, медиана</span><span class="lx-big" data-draw="val" data-source="cross_sum" data-field="median_diff" data-fmt="spct" data-tone="1">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Где MAX набрал больше</span><span class="lx-big" data-draw="val" data-source="cross_sum" data-field="max_wins" data-fmt="pct1">—</span></div>
+      </div>
+      <div class="lx-tablebox"><table data-source="cross_pairs" data-row-key="id" data-sort="day:desc"><thead><tr><th data-field="day" data-fmt="date">Дата</th><th data-field="text">Пост</th><th class="lx-num" data-field="tg_views" data-fmt="int">Telegram</th><th class="lx-num" data-field="max_views" data-fmt="int">MAX</th><th class="lx-num" data-field="diff" data-fmt="spct" data-tone="1">MAX к TG</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="cmp-peers"><h3>Похожие Telegram-каналы</h3><p class="lx-muted">ERR — медианный охват поста за 30 дней, делённый на подписчиков (подписчики округлены, как их показывает Telegram); посты моложе 2 суток не учитываются</p>
+      <div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="peers_calc" data-x="name" data-y="err" data-fmt="pct1" data-hl="ours"></div>
+      <div class="lx-tablebox"><table data-source="peers_calc" data-row-key="handle" data-sort="err:desc"><thead><tr><th data-field="name" data-fmt="link">Канал</th><th class="lx-num" data-field="subscribers" data-fmt="int">Подписчики</th><th class="lx-num" data-field="median_views" data-fmt="int">Медианный охват</th><th class="lx-num" data-field="err" data-fmt="pct1">ERR</th><th class="lx-num" data-field="posts_per_day" data-fmt="num">Постов в день</th><th class="lx-num" data-field="er" data-fmt="rate">Реакции / просмотры</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- RF -->
+  <section class="lx-page" id="rf" hidden>
+    <div>
+      <h2>Экономика России</h2>
+      <p>Ключевая ставка — <b data-draw="val" data-source="macro" data-where="indicator=key_rate" data-field="value" data-fmt="rate">—</b>, решение от <b data-draw="val" data-source="macro" data-where="indicator=key_rate" data-field="date" data-fmt="date">—</b>; следующее заседание ЦБ — <b data-draw="val" data-source="macro" data-where="indicator=next_meeting" data-field="note" data-fmt="text">—</b>.</p>
+    </div>
+    <div class="lx-tiles">
+      <div class="lx-tile"><span class="lx-muted">Ключевая ставка ЦБ</span><span class="lx-big" data-draw="val" data-source="macro" data-where="indicator=key_rate" data-field="value" data-fmt="rate">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">Прогноз инфляции ЦБ на 2026</span><span class="lx-big"><span data-draw="val" data-source="macro" data-where="indicator=cbr_infl_low" data-field="value" data-fmt="num">—</span>–<span data-draw="val" data-source="macro" data-where="indicator=cbr_infl_high" data-field="value" data-fmt="num">—</span>%</span></div>
+      <div class="lx-tile"><span class="lx-muted">Прогноз роста ВВП 2026, правительство</span><span class="lx-big" data-draw="val" data-source="macro" data-where="indicator=gdp_gov" data-field="value" data-fmt="rate">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">Доллар, IV кв. 2026 (консенсус)</span><span class="lx-big"><span data-draw="val" data-source="macro" data-where="indicator=usd_q4" data-field="value" data-fmt="num">—</span> ₽</span></div>
+    </div>
+    <div class="lx-grid">
+      <div class="lx-card" id="rf-calendar"><h3>Календарь событий</h3><p class="lx-muted">Ближайшие даты для экономики РФ и бизнеса Ленобласти</p>
+        <div class="lx-tablebox"><table data-source="events" data-row-key="id" data-sort="date:asc"><thead><tr><th data-field="date" data-fmt="daysleft">Когда</th><th data-field="title" data-fmt="link">Событие</th><th data-field="kind">Тип</th></tr></thead><tbody data-draw="table"></tbody></table></div></div>
+      <div class="lx-card" id="rf-tone"><h3>Тональность новостей</h3><p class="lx-muted">Сколько новостей в ленте позитивных, нейтральных и негативных для экономики (оценка Claude)</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="tone_rf" data-x="tone" data-y="n" data-color="tone" data-sort="none"></div></div>
+    </div>
+    <div class="lx-card" id="rf-fx"><h3>Курсы ЦБ</h3><p class="lx-muted">Официальный курс на <span data-draw="val" data-source="fx_last" data-field="date" data-fmt="date">—</span>; под курсом — изменение примерно за 30 дней. История — за последний год.</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">Доллар</span><span class="lx-big"><span data-draw="val" data-source="fx_last" data-field="usd" data-fmt="num">—</span> ₽</span><span class="lx-muted" data-draw="val" data-source="fx_last" data-field="usd_ch" data-fmt="spct1" data-tone="1">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Евро</span><span class="lx-big"><span data-draw="val" data-source="fx_last" data-field="eur" data-fmt="num">—</span> ₽</span><span class="lx-muted" data-draw="val" data-source="fx_last" data-field="eur_ch" data-fmt="spct1" data-tone="1">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Юань</span><span class="lx-big"><span data-draw="val" data-source="fx_last" data-field="cny" data-fmt="num">—</span> ₽</span><span class="lx-muted" data-draw="val" data-source="fx_last" data-field="cny_ch" data-fmt="spct1" data-tone="1">—</span></div>
+      </div>
+      <div class="lx-tablebox"><table data-source="fx_changes" data-row-key="cur"><thead><tr><th data-field="cur">Валюта</th><th class="lx-num" data-field="rate" data-fmt="num">Курс, ₽</th><th class="lx-num" data-field="d1" data-fmt="spct1" data-tone="1">За день</th><th class="lx-num" data-field="m1" data-fmt="spct1" data-tone="1">За месяц</th><th class="lx-num" data-field="ytd" data-fmt="spct1" data-tone="1">С начала года</th><th class="lx-num" data-field="y1" data-fmt="spct1" data-tone="1">За год</th><th class="lx-num" data-field="lo" data-fmt="num">Минимум за год</th><th class="lx-num" data-field="hi" data-fmt="num">Максимум за год</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+      <div class="lx-grid">
+        <div class="lx-sub"><b>Доллар и евро за год, ₽</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-source="fx" data-x="date" data-y="usd,eur" data-names="Доллар,Евро" data-unit=" ₽"></div></div>
+        <div class="lx-sub"><b>Юань за год, ₽</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-source="fx" data-x="date" data-y="cny" data-names="Юань" data-unit=" ₽"></div></div>
+      </div>
+      <p class="lx-muted">Рост курса (зелёный) — рубль слабеет, падение (красный) — рубль укрепляется.</p>
+    </div>
+    <div class="lx-card" id="rf-gdp"><h3>ВВП России</h3><p class="lx-muted">Рост в сопоставимых ценах к тому же периоду прошлого года, %. Росстат; месячные цифры и прогноз — оценки Минэкономразвития (бледные столбцы).</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">ВВП за <span data-draw="val" data-source="gdp_tiles" data-field="y_label" data-fmt="text">—</span> год</span><span class="lx-big" data-draw="val" data-source="gdp_tiles" data-field="y_growth" data-fmt="spct1" data-tone="1">—</span><span class="lx-muted"><span data-draw="val" data-source="gdp_tiles" data-field="y_nom" data-fmt="num">—</span> трлн ₽</span></div>
+        <div class="lx-tile"><span class="lx-muted">Последний квартал</span><span class="lx-big" data-draw="val" data-source="gdp_tiles" data-field="q_growth" data-fmt="spct1" data-tone="1">—</span><span class="lx-muted" data-draw="val" data-source="gdp_tiles" data-field="q_label" data-fmt="text">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Последний месяц (оценка МЭР)</span><span class="lx-big" data-draw="val" data-source="gdp_tiles" data-field="m_growth" data-fmt="spct1" data-tone="1">—</span><span class="lx-muted" data-draw="val" data-source="gdp_tiles" data-field="m_label" data-fmt="text">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Прогноз на год</span><span class="lx-big" data-draw="val" data-source="gdp_tiles" data-field="f_growth" data-fmt="spct1" data-tone="1">—</span><span class="lx-muted">Минэкономразвития; ЦБ: 0–1%</span></div>
+      </div>
+      <div class="lx-grid">
+        <div><p class="lx-muted">По годам</p><div class="lx-chart dash-skeleton" data-draw="vbars" data-source="gdp_rf" data-kind="год" data-x="period" data-y="growth" data-fmt="pct1"></div></div>
+        <div><p class="lx-muted">По кварталам</p><div class="lx-chart dash-skeleton" data-draw="vbars" data-source="gdp_rf" data-kind="квартал" data-x="period" data-y="growth" data-fmt="pct1"></div></div>
+      </div>
+      <div class="lx-tablebox"><table data-source="gdp_rf" data-row-key="id" data-sort="order:asc"><thead><tr><th data-field="period" data-fmt="link">Период</th><th class="lx-num" data-field="growth" data-fmt="spct1" data-tone="1">Рост, %</th><th class="lx-num" data-field="nominal" data-fmt="num">Объём, трлн ₽</th><th data-field="note">Комментарий</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="rf-infl"><h3>Инфляция по неделям и месяцам</h3><p class="lx-muted">Росстат публикует недельные цены по средам; годовая инфляция по неделям — оценка Минэкономразвития.</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">За неделю <span data-draw="val" data-source="rf_infl_tiles" data-field="week" data-fmt="text">—</span></span><span class="lx-big" data-draw="val" data-source="rf_infl_tiles" data-field="wow" data-fmt="pct2">—</span><span class="lx-muted">рост цен</span></div>
+        <div class="lx-tile"><span class="lx-muted">Годовая на конец недели</span><span class="lx-big" data-draw="val" data-source="rf_infl_tiles" data-field="yoy" data-fmt="pct2">—</span><span class="lx-muted">оценка Минэкономразвития</span></div>
+        <div class="lx-tile"><span class="lx-muted">Годовая за <span data-draw="val" data-source="rf_infl_tiles" data-field="m_label" data-fmt="text">—</span></span><span class="lx-big" data-draw="val" data-source="rf_infl_tiles" data-field="m_yoy" data-fmt="pct2">—</span><span class="lx-muted">Росстат, итог месяца</span></div>
+      </div>
+      <div class="lx-grid">
+        <div><p class="lx-muted">Годовая инфляция на конец месяца, %</p><div class="lx-chart dash-skeleton" data-draw="mchart" data-source="rf_infl_month" data-x="period" data-y="yoy" data-label="Инфляция, %" data-unit="%"></div></div>
+        <div><p class="lx-muted">Последние недели</p><div class="lx-tablebox"><table data-source="rf_infl_week" data-row-key="id" data-sort="date:desc"><thead><tr><th data-field="week">Неделя</th><th class="lx-num" data-field="wow" data-fmt="pct2">За неделю</th><th class="lx-num" data-field="yoy" data-fmt="pct2">Годовая</th><th data-field="note">Комментарий</th></tr></thead><tbody data-draw="table"></tbody></table></div></div>
+      </div>
+    </div>
+    <div class="lx-card" id="rf-pmi"><h3>Деловая активность (PMI)</h3><p class="lx-muted">Опрос менеджеров по закупкам S&amp;P Global. Выше 50 — активность растёт, ниже 50 — снижается.</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">Промышленность, <span data-draw="val" data-source="rf_pmi_tiles" data-field="label" data-fmt="text">—</span></span><span class="lx-big" data-draw="val" data-source="rf_pmi_tiles" data-field="mfg" data-fmt="num">—</span><span class="lx-muted" data-draw="val" data-source="rf_pmi_tiles" data-field="mfg_note" data-fmt="text">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Сфера услуг, <span data-draw="val" data-source="rf_pmi_tiles" data-field="label" data-fmt="text">—</span></span><span class="lx-big" data-draw="val" data-source="rf_pmi_tiles" data-field="services" data-fmt="num">—</span><span class="lx-muted" data-draw="val" data-source="rf_pmi_tiles" data-field="srv_note" data-fmt="text">—</span></div>
+      </div>
+      <div class="lx-chart dash-skeleton" data-draw="mchart" data-source="rf_pmi" data-x="period" data-y="mfg,services" data-names="Промышленность,Услуги"></div>
+    </div>
+    <div class="lx-card" id="rf-credit"><h3>Кредиты бизнесу и ставки</h3><p class="lx-muted">Банк России: средневзвешенные ставки по новым рублёвым кредитам компаниям и рост корпоративного портфеля.</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">Кредиты компаниям за год</span><span class="lx-big" data-draw="val" data-source="rf_credit_tiles" data-field="yoy" data-fmt="spct1">—</span><span class="lx-muted" data-draw="val" data-source="rf_credit_tiles" data-field="g_label" data-fmt="text">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Ставка свыше 1 года</span><span class="lx-big" data-draw="val" data-source="rf_credit_tiles" data-field="long" data-fmt="pct1">—</span><span class="lx-muted" data-draw="val" data-source="rf_credit_tiles" data-field="r_label" data-fmt="text">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Для МСП свыше 1 года</span><span class="lx-big" data-draw="val" data-source="rf_credit_tiles" data-field="msp_long" data-fmt="pct1">—</span><span class="lx-muted">ключевая ставка 14%</span></div>
+      </div>
+      <div class="lx-grid">
+        <div><p class="lx-muted">Ставки по кредитам, % годовых</p><div class="lx-chart dash-skeleton" data-draw="mchart" data-source="rf_rates" data-x="period" data-y="short,long,msp_short,msp_long" data-names="До 1 года,Свыше 1 года,МСП до 1 года,МСП свыше 1 года" data-h="220"></div></div>
+        <div><p class="lx-muted">Рост кредитования компаний (с облигациями), %</p><div class="lx-tablebox"><table data-source="rf_loans" data-row-key="id" data-sort="period:desc"><thead><tr><th data-field="period">Месяц</th><th class="lx-num" data-field="mom" data-fmt="spct1" data-tone="1">За месяц</th><th class="lx-num" data-field="yoy" data-fmt="spct1">За год</th></tr></thead><tbody data-draw="table"></tbody></table></div></div>
+      </div>
+    </div>
+    <div class="lx-card" id="rf-bankrupt"><h3>Банкротства компаний</h3><p class="lx-muted">Число компаний, которые суды признали банкротами, по кварталам. Федресурс публикует данные раз в квартал, поэтому помесячной разбивки нет.</p>
+      <div class="lx-grid">
+        <div><div class="lx-chart dash-skeleton" data-draw="vbars" data-source="rf_bankrupt" data-x="period" data-y="companies" data-fmt="int"></div></div>
+        <div class="lx-tablebox"><table data-source="rf_bankrupt" data-row-key="id" data-sort="order:asc"><thead><tr><th data-field="period">Квартал</th><th class="lx-num" data-field="companies" data-fmt="int">Банкротов</th><th class="lx-num" data-field="yoy" data-fmt="spct1">К прошлому году</th><th data-field="note">Комментарий</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+      </div>
+      <p class="lx-muted">За январь–сентябрь 2026 — 5 364 компании (+13,3%), но это на треть меньше среднего уровня 2012–2025 годов.</p>
+    </div>
+    <div class="lx-card" id="rf-oil"><h3>Нефть Brent</h3><p class="lx-muted">Ближайший фьючерс на Московской бирже, $ за баррель, на <span data-draw="val" data-source="oil_last" data-field="date" data-fmt="date">—</span>; изменение — примерно за 30 дней</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">Brent</span><span class="lx-big"><span data-draw="val" data-source="oil_last" data-field="brent" data-fmt="num">—</span> $</span><span class="lx-muted" data-draw="val" data-source="oil_last" data-field="ch30" data-fmt="spct1" data-tone="1">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Brent в рублях</span><span class="lx-big"><span data-draw="val" data-source="oil_last" data-field="rub" data-fmt="int">—</span> ₽</span><span class="lx-muted">по курсу ЦБ</span></div>
+      </div>
+      <div class="lx-chart dash-skeleton" data-draw="mchart" data-source="oil" data-x="date" data-y="brent" data-names="Brent" data-unit=" $"></div>
+    </div>
+    <div class="lx-card" id="rf-rate"><h3>Ключевая ставка ЦБ, %</h3><p class="lx-muted">По решениям совета директоров с декабря 2025</p><div class="lx-chart" data-draw="step" data-source="key_rate" data-x="date" data-y="rate" data-label="Ставка, %"></div></div>
+    <div class="lx-card" id="rf-news"><h3>Главные новости</h3><p class="lx-muted">Свежие сверху; клик по заголовку открывает источник</p>
+      <div class="lx-tablebox"><table data-source="news_rf" data-row-key="id"><thead><tr><th data-field="date">Дата</th><th data-field="title">Новость</th><th data-field="topic">Тема</th><th data-field="source">Источник</th><th data-field="tone">Тональность</th></tr></thead><tbody data-draw="news"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- LO -->
+  <section class="lx-page" id="lo" hidden>
+    <div>
+      <h2>Экономика Ленинградской области</h2>
+      <p>Годовая инфляция в регионе — <b data-draw="val" data-source="lo_last" data-where="indicator=lo_infl" data-field="value" data-fmt="rate">—</b> против <b data-draw="val" data-source="macro" data-where="indicator=ru_infl" data-field="value" data-fmt="rate">—</b> по России (<span data-draw="val" data-source="lo_last" data-where="indicator=lo_infl" data-field="note" data-fmt="text">—</span>).</p>
+    </div>
+    <div class="lx-tiles">
+      <div class="lx-tile"><span class="lx-muted">Инфляция, Ленобласть</span><span class="lx-big" data-draw="val" data-source="lo_last" data-where="indicator=lo_infl" data-field="value" data-fmt="rate">—</span><span class="lx-muted" data-draw="val" data-source="lo_last" data-where="indicator=lo_infl" data-field="note" data-fmt="text">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">Инфляция, Россия</span><span class="lx-big" data-draw="val" data-source="macro" data-where="indicator=ru_infl" data-field="value" data-fmt="rate">—</span><span class="lx-muted" data-draw="val" data-source="macro" data-where="indicator=ru_infl" data-field="note" data-fmt="text">—</span></div>
+      <div class="lx-tile"><span class="lx-muted">Инвестсоглашения на ПМЭФ-2026</span><span class="lx-big"><span data-draw="val" data-source="macro" data-where="indicator=lo_pmef" data-field="value" data-fmt="int">—</span> млрд ₽</span></div>
+      <div class="lx-tile"><span class="lx-muted">Новостей в ленте</span><span class="lx-big" data-draw="count" data-source="news_lo">—</span></div>
+    </div>
+    <div class="lx-card" id="lo-grp"><h3>ВРП Ленобласти</h3><p class="lx-muted">Валовой региональный продукт — аналог ВВП для региона. Росстат считает его с задержкой больше года, поэтому последний год — оценка правительства области (бледный столбец).</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">ВРП за <span data-draw="val" data-source="grp_tiles" data-field="l_year" data-fmt="text">—</span> год</span><span class="lx-big"><span data-draw="val" data-source="grp_tiles" data-field="l_grp" data-fmt="num">—</span> трлн ₽</span><span class="lx-muted">рост <span data-draw="val" data-source="grp_tiles" data-field="l_real" data-fmt="spct1">—</span> в сопоставимых ценах</span></div>
+        <div class="lx-tile"><span class="lx-muted">Оценка за <span data-draw="val" data-source="grp_tiles" data-field="e_year" data-fmt="text">—</span></span><span class="lx-big"><span data-draw="val" data-source="grp_tiles" data-field="e_grp" data-fmt="num">—</span> трлн ₽</span><span class="lx-muted">рост <span data-draw="val" data-source="grp_tiles" data-field="e_real" data-fmt="spct1">—</span>; по России +1,0%</span></div>
+        <div class="lx-tile"><span class="lx-muted">Доля в ВРП России</span><span class="lx-big">1,3%</span><span class="lx-muted">2024 год, Банк России</span></div>
+      </div>
+      <div class="lx-grid">
+        <div><p class="lx-muted">Объём ВРП, млрд ₽ (текущие цены)</p><div class="lx-chart dash-skeleton" data-draw="vbars" data-source="grp_lo" data-x="year" data-y="grp" data-fmt="int"></div></div>
+        <div><p class="lx-muted">Реальный рост, % к прошлому году</p><div class="lx-chart dash-skeleton" data-draw="vbars" data-source="grp_lo" data-x="year" data-y="real_pct" data-fmt="pct1"></div></div>
+      </div>
+      <p class="lx-muted">Структура ВРП за 2024 год, % (Банк России по данным Росстата)</p>
+      <div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="grp_structure" data-x="branch" data-y="share" data-fmt="pct1"></div>
+      <div class="lx-tablebox"><table data-source="grp_lo" data-row-key="id"><thead><tr><th data-field="year" data-fmt="link">Год</th><th class="lx-num" data-field="grp" data-fmt="int">ВРП, млрд ₽</th><th class="lx-num" data-field="real_pct" data-fmt="spct1" data-tone="1">Реальный рост, %</th><th data-field="note">Источник и комментарий</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="lo-neighbors"><h3>Ленобласть и соседи</h3><p class="lx-muted">Последние данные из профилей регионов Банка России. Темпы — к тому же периоду прошлого года.</p>
+      <div class="lx-tablebox"><table data-source="nb_pivot" data-row-key="id" data-sort="order:asc"><thead><tr><th data-field="indicator">Показатель</th><th data-field="period">Период</th><th class="lx-num" data-field="lo" data-fmt="num">Ленобласть</th><th class="lx-num" data-field="spb" data-fmt="num">Петербург</th><th class="lx-num" data-field="nov" data-fmt="num">Новгородская</th><th class="lx-num" data-field="psk" data-fmt="num">Псковская</th><th class="lx-num" data-field="ru" data-fmt="num">Россия</th><th data-field="place">Место ЛО среди 4</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="lo-orgs"><h3>Регистрация и закрытие компаний</h3><p class="lx-muted">Юрлица в Ленобласти по месяцам — данные ФНС из профиля региона Банка России. ИП в этой статистике нет: реестр МСП ФНС открыт только через сайт с проверкой.</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">Зарегистрировано, <span data-draw="val" data-source="lo_orgs_tiles" data-field="label" data-fmt="text">—</span></span><span class="lx-big" data-draw="val" data-source="lo_orgs_tiles" data-field="registered" data-fmt="int">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Ликвидировано</span><span class="lx-big" data-draw="val" data-source="lo_orgs_tiles" data-field="liquidated" data-fmt="int">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Сальдо с начала года</span><span class="lx-big" data-draw="val" data-source="lo_orgs_tiles" data-field="ytd" data-fmt="signed" data-tone="1">—</span><span class="lx-muted">по России сальдо отрицательное каждый месяц</span></div>
+      </div>
+      <div class="lx-grid">
+        <div><p class="lx-muted">Зарегистрировано и ликвидировано</p><div class="lx-chart dash-skeleton" data-draw="mchart" data-source="lo_orgs" data-x="period" data-y="registered,liquidated" data-names="Зарегистрировано,Ликвидировано"></div></div>
+        <div><p class="lx-muted">Сальдо (больше нуля — компаний стало больше)</p><div class="lx-chart dash-skeleton" data-draw="mchart" data-source="lo_orgs" data-x="period" data-y="saldo" data-kind="bars" data-label="Сальдо"></div></div>
+      </div>
+    </div>
+    <div class="lx-card" id="lo-housing"><h3>Ввод жилья</h3><p class="lx-muted">Нарастающим итогом с начала года, % к тому же периоду прошлого года (Росстат через Банк России).</p>
+      <div class="lx-chart dash-skeleton" data-draw="mchart" data-source="lo_housing" data-x="period" data-y="lo,ru" data-names="Ленобласть,Россия" data-zero="1" data-unit="%"></div>
+    </div>
+    <div class="lx-card" id="lo-ports"><h3>Грузооборот портов области</h3><p class="lx-muted">Млн тонн нарастающим итогом и изменение к прошлому году — Ассоциация морских торговых портов. За январь–сентябрь отдельно опубликована только Усть-Луга.</p>
+      <div class="lx-tablebox"><table data-source="lo_ports" data-row-key="id" data-sort="period:desc"><thead><tr><th data-field="label">Период</th><th class="lx-num" data-field="ustluga" data-fmt="num">Усть-Луга</th><th class="lx-num" data-field="ustluga_ch" data-fmt="spct1" data-tone="1">%</th><th class="lx-num" data-field="primorsk" data-fmt="num">Приморск</th><th class="lx-num" data-field="primorsk_ch" data-fmt="spct1" data-tone="1">%</th><th class="lx-num" data-field="vysotsk" data-fmt="num">Высоцк</th><th class="lx-num" data-field="vysotsk_ch" data-fmt="spct1" data-tone="1">%</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="lo-asi"><h3>Место в инвестрейтинге АСИ</h3><p class="lx-muted">Национальный рейтинг состояния инвестклимата. Чем ниже столбец, тем лучше место; в 2020 году рейтинг не составляли. В 2026 году Петербург — 3-й.</p>
+      <div class="lx-chart dash-skeleton" data-draw="vbars" data-source="lo_asi" data-x="year" data-y="place" data-fmt="int"></div>
+    </div>
+    <div class="lx-card" id="lo-budget"><h3>Бюджет области</h3><p class="lx-muted">Открытый бюджет ЛО: план и факт, млрд ₽. 2026 год — исполнение на 5 ноября.</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">Доходы 2026, исполнено</span><span class="lx-big"><span data-draw="val" data-source="lo_budget" data-where="id=b2026" data-field="income_pct" data-fmt="int">—</span>%</span><span class="lx-muted"><span data-draw="val" data-source="lo_budget" data-where="id=b2026" data-field="income" data-fmt="num">—</span> из <span data-draw="val" data-source="lo_budget" data-where="id=b2026" data-field="income_plan" data-fmt="num">—</span> млрд ₽</span></div>
+        <div class="lx-tile"><span class="lx-muted">Расходы 2026, исполнено</span><span class="lx-big"><span data-draw="val" data-source="lo_budget" data-where="id=b2026" data-field="expense_pct" data-fmt="int">—</span>%</span><span class="lx-muted"><span data-draw="val" data-source="lo_budget" data-where="id=b2026" data-field="expense" data-fmt="num">—</span> из <span data-draw="val" data-source="lo_budget" data-where="id=b2026" data-field="expense_plan" data-fmt="num">—</span> млрд ₽</span></div>
+        <div class="lx-tile"><span class="lx-muted">Налог на прибыль, план 2026</span><span class="lx-big">111,4 млрд ₽</span><span class="lx-muted">42,7% налоговых доходов — главный источник</span></div>
+      </div>
+      <div class="lx-grid">
+        <div class="lx-tablebox"><table data-source="lo_budget" data-row-key="id" data-sort="order:desc"><thead><tr><th data-field="year">Год</th><th class="lx-num" data-field="income" data-fmt="num">Доходы, факт</th><th class="lx-num" data-field="income_plan" data-fmt="num">План</th><th class="lx-num" data-field="expense" data-fmt="num">Расходы, факт</th><th class="lx-num" data-field="expense_plan" data-fmt="num">План</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+        <div class="lx-tablebox"><table data-source="lo_budget_struct" data-row-key="id"><thead><tr><th data-field="item">Главные налоги, план 2026</th><th class="lx-num" data-field="plan" data-fmt="num">Млрд ₽</th><th class="lx-num" data-field="share" data-fmt="pct1">Доля</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+      </div>
+    </div>
+    <div class="lx-card" id="lo-trends"><h3>Экономика региона по месяцам</h3><p class="lx-muted">Росстат и Банк России, профиль Ленинградской области; % — к тому же месяцу прошлого года</p>
+      <div class="lx-grid3">
+        <div class="lx-sub"><b>Промпроизводство, % г/г</b><div class="lx-chart dash-skeleton" data-h="170" data-draw="mchart" data-source="lo_series" data-filter="indicator=prom" data-x="period" data-y="value" data-kind="bars" data-unit="%"></div></div>
+        <div class="lx-sub"><b>Розничная торговля, % г/г</b><div class="lx-chart dash-skeleton" data-h="170" data-draw="mchart" data-source="lo_series" data-filter="indicator=retail" data-x="period" data-y="value" data-kind="bars" data-unit="%"></div></div>
+        <div class="lx-sub"><b>Реальная зарплата, % г/г</b><div class="lx-chart dash-skeleton" data-h="170" data-draw="mchart" data-source="lo_series" data-filter="indicator=wage" data-x="period" data-y="value" data-kind="bars" data-unit="%"></div></div>
+        <div class="lx-sub"><b>Годовая инфляция, %</b><div class="lx-chart dash-skeleton" data-h="170" data-draw="mchart" data-source="lo_series" data-filter="indicator=infl" data-x="period" data-y="value" data-zero="1" data-unit="%"></div></div>
+        <div class="lx-sub"><b>Финрезультат организаций, % г/г</b><div class="lx-chart dash-skeleton" data-h="170" data-draw="mchart" data-source="lo_series" data-filter="indicator=finres" data-x="period" data-y="value" data-kind="bars" data-unit="%"></div></div>
+        <div class="lx-sub"><b>Кредиты бизнесу, % г/г</b><div class="lx-chart dash-skeleton" data-h="170" data-draw="mchart" data-source="lo_series" data-filter="indicator=loans_biz" data-x="period" data-y="value" data-kind="bars" data-unit="%"></div></div>
+        <div class="lx-sub"><b>Ипотека, % г/г</b><div class="lx-chart dash-skeleton" data-h="170" data-draw="mchart" data-source="lo_series" data-filter="indicator=mortgage" data-x="period" data-y="value" data-kind="bars" data-unit="%"></div></div>
+        <div class="lx-sub"><b>Безработица по МОТ, % (по кварталам)</b><div class="lx-chart dash-skeleton" data-h="170" data-draw="mchart" data-source="lo_series" data-filter="indicator=unemp" data-x="period" data-y="value" data-zero="1" data-unit="%"></div></div>
+        <div class="lx-sub"><b>Инвестиции в основной капитал, % г/г (нарастающим итогом)</b><div class="lx-chart dash-skeleton" data-h="170" data-draw="mchart" data-source="lo_series" data-filter="indicator=invest" data-x="period" data-y="value" data-kind="bars" data-unit="%"></div></div>
+        <div class="lx-sub"><b>Жильё, первичка, ₽ за м²</b><div class="lx-chart dash-skeleton" data-h="170" data-draw="mchart" data-source="lo_series" data-filter="indicator=home1" data-x="period" data-y="value" data-unit=" ₽"></div></div>
+        <div class="lx-sub"><b>Жильё, вторичка, ₽ за м²</b><div class="lx-chart dash-skeleton" data-h="170" data-draw="mchart" data-source="lo_series" data-filter="indicator=home2" data-x="period" data-y="value" data-unit=" ₽"></div></div>
+      </div>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">Безработица (МОТ)</span><span class="lx-big" data-draw="val" data-source="lo_last" data-where="indicator=lo_unemp" data-field="value" data-fmt="rate">—</span><span class="lx-muted" data-draw="val" data-source="lo_last" data-where="indicator=lo_unemp" data-field="note" data-fmt="text">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Инвестиции, % г/г</span><span class="lx-big" data-draw="val" data-source="lo_last" data-where="indicator=lo_invest" data-field="value" data-fmt="spct1">—</span><span class="lx-muted" data-draw="val" data-source="lo_last" data-where="indicator=lo_invest" data-field="note" data-fmt="text">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">Промпроизводство, % г/г</span><span class="lx-big" data-draw="val" data-source="lo_last" data-where="indicator=lo_prom" data-field="value" data-fmt="spct1">—</span><span class="lx-muted" data-draw="val" data-source="lo_last" data-where="indicator=lo_prom" data-field="note" data-fmt="text">—</span></div>
+      </div>
+    </div>
+    <div class="lx-card" id="lo-tone"><h3>Тональность новостей</h3><p class="lx-muted">Сколько новостей региона позитивных, нейтральных и негативных (оценка Claude)</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="tone_lo" data-x="tone" data-y="n" data-color="tone" data-sort="none"></div></div>
+    <div class="lx-card" id="lo-news"><h3>Главные новости региона</h3><p class="lx-muted">Свежие сверху; клик по заголовку открывает источник</p>
+      <div class="lx-tablebox"><table data-source="news_lo" data-row-key="id"><thead><tr><th data-field="date">Дата</th><th data-field="title">Новость</th><th data-field="topic">Тема</th><th data-field="source">Источник</th><th data-field="tone">Тональность</th></tr></thead><tbody data-draw="news"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- COMPANIES -->
+  <section class="lx-page" id="co" hidden>
+    <div>
+      <h2>Компании Ленинградской области</h2>
+      <p>Из <b data-draw="count" data-source="companies">—</b> компаний свежие новости в 2026 году нашлись у <b data-draw="countwith" data-source="companies">—</b>.</p>
+    </div>
+    <div class="lx-card" id="co-mentions"><h3>Упоминания в СМИ, 2026</h3><p class="lx-muted">Число найденных публикаций о компании за год</p><div class="lx-chart lx-tall" data-draw="hbars" data-source="companies" data-x="company" data-y="mentions_2026" data-label="Упоминаний"></div></div>
+    <div class="lx-grid">
+      <div class="lx-card" id="co-own"><h3>Упоминания в Telegram-канале @lenoblinvest</h3><p class="lx-muted">Сколько постов с 22 сентября называют компанию</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="co_own" data-x="company" data-y="posts" data-hl="none"></div></div>
+      <div class="lx-card" id="co-tone"><h3>Тональность</h3><p class="lx-muted">Последнее событие по компании: позитивное, нейтральное или негативное (оценка Claude)</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="tone_co" data-x="tone" data-y="n" data-color="tone" data-sort="none"></div></div>
+    </div>
+    <div class="lx-card" id="co-fin"><h3>Финансы компаний</h3><p class="lx-muted">Выручка и чистая прибыль, млн ₽, по годовой бухотчётности (ГИР БО ФНС) за 2023–2025. Систэм Электрик — завод ООО «СЭЗЭМ» в Коммунаре. Для Северной звезды, Технониколь и Респираторного комплекса свежей отчётности в ГИР БО нет. Численность сотрудников ФНС в открытом доступе больше не публикует.</p>
+      <div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="fin_latest" data-x="company" data-y="revenue" data-hl="none"></div>
+      <div class="lx-tablebox"><table data-source="company_fin" data-row-key="id" data-sort="company:asc"><thead><tr><th data-field="company" data-fmt="link">Компания</th><th class="lx-num" data-field="year" data-fmt="text">Год</th><th class="lx-num" data-field="revenue" data-fmt="num">Выручка, млн ₽</th><th class="lx-num" data-field="profit" data-fmt="num" data-tone="1">Прибыль, млн ₽</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-grid">
+      <div class="lx-card" id="co-jobs"><h3>Вакансии на hh.ru</h3><p class="lx-muted">Открытые вакансии в Петербурге и Ленобласти — признак роста; после точки — всего по России</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-source="company_jobs" data-x="company" data-y="vacancies_spb_lo" data-n="vacancies_all" data-nlabel=" по РФ" data-hl="none"></div></div>
+      <div class="lx-card" id="co-growth"><h3>Индикаторы роста</h3><p class="lx-muted">Вакансии в СПб и ЛО (hh.ru), госконтракты компании как поставщика (ЕИС через Checko) и изменение выручки за последний год. «Растёт» — есть хотя бы два сигнала из трёх.</p>
+        <div class="lx-tablebox"><table data-source="co_growth" data-row-key="company" data-sort="score:desc"><thead><tr><th data-field="company" data-fmt="link">Компания</th><th class="lx-num" data-field="vacancies" data-fmt="int">Вакансий</th><th class="lx-num" data-field="contracts" data-fmt="int">Госконтрактов</th><th class="lx-num" data-field="sum_mln" data-fmt="num">Сумма, млн ₽</th><th class="lx-num" data-field="rev_change" data-fmt="spct" data-tone="1">Выручка г/г</th><th data-field="status" data-fmt="pill">Сигнал</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+      </div>
+    </div>
+    <div class="lx-card" id="co-map"><h3>Карта предприятий</h3><p class="lx-muted">Районы Ленобласти: чем темнее, тем больше компаний из списка. Точка — площадка компании, цвет — тональность последней новости: <span class="lx-up">зелёный</span> — позитив, серый — нейтрально, <span class="lx-down">красный</span> — негатив. Комацо на карте нет: завод Komatsu — в Ярославской области.</p>
+      <div class="lx-chart lx-tall dash-skeleton" data-draw="lomap" data-source="co_map"></div>
+      <div class="lx-tablebox"><table data-source="co_districts" data-row-key="district" data-sort="n:desc"><thead><tr><th data-field="district">Район</th><th class="lx-num" data-field="n" data-fmt="int">Компаний</th><th data-field="names">Какие</th><th class="lx-num" data-field="pos" data-fmt="int">Позитив</th><th class="lx-num" data-field="neg" data-fmt="int">Негатив</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="co-media"><h3>Медиаохват программ по месяцам</h3><p class="lx-muted">Сколько постов в месяц упоминают «Крутую Локацию», АЭРЛО и «Сделано в Ленобласти» — в нашем канале и в Telegram-каналах региона (Администрация ЛО, Дрозденко, ФПП ЛО, ЛенТВ24, Ленправда). Ноябрь неполный.</p>
+      <div class="lx-tiles">
+        <div class="lx-tile"><span class="lx-muted">В нашем канале, прошлый месяц</span><span class="lx-big" data-draw="val" data-source="media_sum" data-field="own" data-fmt="int">—</span><span class="lx-muted" data-draw="val" data-source="media_sum" data-field="month_label" data-fmt="text">—</span></div>
+        <div class="lx-tile"><span class="lx-muted">В других каналах региона</span><span class="lx-big" data-draw="val" data-source="media_sum" data-field="region" data-fmt="int">—</span><span class="lx-muted">упоминаний за тот же месяц</span></div>
+      </div>
+      <div class="lx-tablebox"><table data-source="media_monthly" data-row-key="id" data-sort="month:desc"><thead><tr><th data-field="month_label">Месяц</th><th data-field="program">Программа</th><th class="lx-num" data-field="own" data-fmt="int">Наш канал</th><th class="lx-num" data-field="region" data-fmt="int">Другие каналы региона</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+
+    <div class="lx-card" id="co-table"><h3>Последние события</h3><p class="lx-muted">Последняя найденная новость по каждой компании</p>
+      <div class="lx-tablebox"><table data-source="companies" data-row-key="company"><thead><tr><th data-field="company">Компания</th><th data-field="sector">Отрасль</th><th data-field="district">Где</th><th data-field="last_date">Дата</th><th data-field="last_event">Событие</th><th data-field="status">Статус</th><th data-field="tone">Тональность</th></tr></thead><tbody data-draw="companies"></tbody></table></div>
+    </div>
+  </section>
+
+  <section class="lx-page" id="ideas" hidden>
+    <div class="lx-card" id="ideas-plan"><h3>Темы постов на декабрь</h3><p class="lx-muted">Темы, которые полезны бизнесу Ленобласти и ещё не раскрывались в канале. Каждую проверили поиском по всем постам @lenoblinvest — в колонке «Проверка» написано, что нашлось. Даты — примерные слоты, 3 поста в неделю.</p>
+      <div class="lx-tablebox"><table data-source="content_ideas" data-row-key="id" data-sort="date:asc"><thead><tr><th data-field="date" data-fmt="date">Дата</th><th data-field="title">Тема</th><th data-field="angle">Что объяснить</th><th data-field="rubric">Рубрика</th><th data-field="format">Формат</th><th data-field="audience">Для кого</th><th data-field="check">Проверка по каналу</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="ideas-peers"><h3>Что заходит у похожих каналов, а у нас не было</h3><p class="lx-muted">Посты МойБизнес47, Минэкономразвития, Админки Ленобласти и Дрозденко за 30 дней с охватом выше их обычного (медианы). Новости про БПЛА и поздравления исключены.</p>
+      <div class="lx-tablebox"><table data-source="peer_gaps" data-row-key="id" data-sort="ratio:desc"><thead><tr><th data-field="topic">Тема</th><th data-field="peer_post" data-fmt="link">Пост у соседей</th><th data-field="peer">Канал</th><th class="lx-num" data-field="ratio" data-fmt="num">Охват к медиане, раз</th><th data-field="our">У нас</th><th data-field="idea">Как сделать у нас</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="ideas-calendar"><h3>Календарь поводов на декабрь</h3><p class="lx-muted">Форумы, дедлайны и праздники, к которым можно привязать посты.</p>
+      <div class="lx-tablebox"><table data-source="content_calendar" data-row-key="id" data-sort="date:asc"><thead><tr><th data-field="date" data-fmt="date">Дата</th><th data-field="event" data-fmt="link">Повод</th><th data-field="kind">Тип</th><th data-field="post">Что опубликовать</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="ideas-rubrics"><h3>Какие рубрики можно ввести</h3><p class="lx-muted">Сейчас в канале есть «Словарь инвестора», «История успеха», «Крутая Локация», «Ищем инвестора», «Цифра дня», дайджесты и #МерыПоддержки. Ниже — то, чего пока нет.</p>
+      <div class="lx-tablebox"><table data-source="rubric_ideas" data-row-key="id"><thead><tr><th data-field="name">Рубрика</th><th data-field="idea">Идея</th><th data-field="freq">Как часто</th><th data-field="format">Формат</th><th data-field="example">Первый пост</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+    <div class="lx-card" id="ideas-abbr"><h3>Аббревиатуры для «Словаря инвестора»</h3><p class="lx-muted">Уже расшифровывали: ГПЗУ, ОМС, ТЭО, СП, ГП, ИП, ЗОУИТ, ПЗЗ, ПСД, РНС, ППТ, ПМТ, ПАТ. Ниже — сокращения, которые в постах не расшифровывались, по 6 на выпуск. Проверка шла по тексту постов: что написано только на картинках карточек, поиск не видит.</p>
+      <div class="lx-tablebox"><table data-source="abbr_ideas" data-row-key="id"><thead><tr><th data-field="issue">Выпуск</th><th data-field="abbr">Сокращение</th><th data-field="full">Расшифровка</th><th data-field="short">Коротко для поста</th><th data-field="mentions">Было в канале</th></tr></thead><tbody data-draw="table"></tbody></table></div>
+    </div>
+  </section>
+
+  <details>
+    <summary>Как это устроено и что означают метрики</summary>
+    <dl>
+      <dt>Охват поста</dt><dd>Среднее число просмотров одного поста: все просмотры за период, делённые на число постов.</dd>
+      <dt>ERR (охват от подписчиков)</dt><dd>Средний охват поста, делённый на число подписчиков. Показывает, какая доля аудитории реально читает канал.</dd>
+      <dt>ER (вовлечённость)</dt><dd>Реакции (и репосты, где они известны), делённые на просмотры.</dd>
+      <dt>Упоминания компаний</dt><dd>Число публикаций о компании за 2026 год, найденных поиском по СМИ и в каналах. Это срез, не полный мониторинг.</dd>
+      <dt>Откуда данные</dt><dd>Telegram — TGStat и публичная страница t.me/s/lenoblinvest. MAX — открытая страница канала на MXStat. Новости и показатели — открытые источники, у каждой строки есть ссылка.</dd>
+    </dl>
+  </details>
+</div>

@@ -1,0 +1,134 @@
+[
+ {
+  "id": "y2023",
+  "period": "2023",
+  "kind": "год",
+  "growth": 4.1,
+  "nominal": null,
+  "est": false,
+  "note": "Росстат, уточнённая оценка",
+  "url": "https://ru.themoscowtimes.com/2026/02/06/rosstat-otsenil-rost-vvp-rf-v-25g-v-10-posle-49-v-24g-a186651",
+  "order": 0
+ },
+ {
+  "id": "y2024",
+  "period": "2024",
+  "kind": "год",
+  "growth": 4.9,
+  "nominal": null,
+  "est": false,
+  "note": "Росстат, уточнено в феврале 2026 (было 4,3%)",
+  "url": "https://ru.themoscowtimes.com/2026/02/06/rosstat-otsenil-rost-vvp-rf-v-25g-v-10-posle-49-v-24g-a186651",
+  "order": 1
+ },
+ {
+  "id": "y2025",
+  "period": "2025",
+  "kind": "год",
+  "growth": 1.0,
+  "nominal": 214.3,
+  "est": false,
+  "note": "Росстат, вторая оценка",
+  "url": "https://investfuture.ru/articles/vvp-rossii-za-2025-god-vyros-do-214-3-trln-rub-prevzoydya-pervuyu-otsenku-36138744",
+  "order": 2
+ },
+ {
+  "id": "y2026f",
+  "period": "2026 (прогноз)",
+  "kind": "год",
+  "growth": 0.6,
+  "nominal": null,
+  "est": true,
+  "note": "Прогноз Минэкономразвития (сентябрь 2026); ЦБ ждёт 0–1%",
+  "url": "https://expert.ru/news/minek-soobschil-o-roste-vvp-na-08-v-avguste",
+  "order": 3
+ },
+ {
+  "id": "q2025_1",
+  "period": "I кв. 2025",
+  "kind": "квартал",
+  "growth": 1.3,
+  "nominal": null,
+  "est": false,
+  "note": "Росстат, уточнено",
+  "url": "https://www.finmarket.ru/news/6597631",
+  "order": 4
+ },
+ {
+  "id": "q2025_2",
+  "period": "II кв. 2025",
+  "kind": "квартал",
+  "growth": 1.0,
+  "nominal": null,
+  "est": false,
+  "note": "Росстат, уточнено",
+  "url": "https://www.finmarket.ru/news/6597631",
+  "order": 5
+ },
+ {
+  "id": "q2025_3",
+  "period": "III кв. 2025",
+  "kind": "квартал",
+  "growth": 0.8,
+  "nominal": null,
+  "est": false,
+  "note": "Росстат, уточнено",
+  "url": "https://finance.mail.ru/article/ekspertyi-schitayut-riski-retsessii-nevyisokimi-69205015/",
+  "order": 6
+ },
+ {
+  "id": "q2025_4",
+  "period": "IV кв. 2025",
+  "kind": "квартал",
+  "growth": 1.0,
+  "nominal": null,
+  "est": false,
+  "note": "Росстат, первая оценка",
+  "url": "https://investfuture.ru/articles/vvp-rossii-za-2025-god-vyros-do-214-3-trln-rub-prevzoydya-pervuyu-otsenku-36138744",
+  "order": 7
+ },
+ {
+  "id": "q2026_1",
+  "period": "I кв. 2026",
+  "kind": "квартал",
+  "growth": -0.2,
+  "nominal": null,
+  "est": false,
+  "note": "Росстат; спад во многом из-за меньшего числа рабочих дней",
+  "url": "https://investfuture.ru/articles/vvp-rossii-vo-vtorom-kvartale-vyros-na-1-3-posle-snizheniya-na-0-2-37585318",
+  "order": 8
+ },
+ {
+  "id": "q2026_2",
+  "period": "II кв. 2026",
+  "kind": "квартал",
+  "growth": 1.3,
+  "nominal": 56.2,
+  "est": false,
+  "note": "Росстат, первая оценка; за полугодие +0,6%",
+  "url": "https://www.finmarket.ru/main/news/6705246",
+  "order": 9
+ },
+ {
+  "id": "m2026_8",
+  "period": "август 2026",
+  "kind": "месяц",
+  "growth": 0.8,
+  "nominal": null,
+  "est": true,
+  "note": "Оценка Минэкономразвития",
+  "url": "https://expert.ru/news/minek-soobschil-o-roste-vvp-na-08-v-avguste",
+  "order": 10
+ },
+ {
+  "id": "m2026_9",
+  "period": "сентябрь 2026",
+  "kind": "месяц",
+  "growth": 0.5,
+  "nominal": null,
+  "est": true,
+  "note": "Оценка Минэкономразвития; III квартал Росстат опубликует 13 ноября",
+  "url": "https://sberbusiness.live/news/rost-vvp-rossii-v-sentyabre-zamedlilsya-do-05",
+  "order": 11
+ }
+]

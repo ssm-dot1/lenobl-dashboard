@@ -1,0 +1,74 @@
+[
+ {
+  "id": "r2025-12",
+  "period": "2025-12",
+  "short": 18.0,
+  "long": 13.8,
+  "msp_short": 18.8,
+  "msp_long": 16.6
+ },
+ {
+  "id": "r2026-01",
+  "period": "2026-01",
+  "short": 18.3,
+  "long": 15.6,
+  "msp_short": null,
+  "msp_long": null
+ },
+ {
+  "id": "r2026-02",
+  "period": "2026-02",
+  "short": 18.0,
+  "long": 14.6,
+  "msp_short": 19.7,
+  "msp_long": 16.3
+ },
+ {
+  "id": "r2026-03",
+  "period": "2026-03",
+  "short": 17.3,
+  "long": 14.2,
+  "msp_short": 19.6,
+  "msp_long": 16.5
+ },
+ {
+  "id": "r2026-04",
+  "period": "2026-04",
+  "short": 17.6,
+  "long": 12.2,
+  "msp_short": 19.0,
+  "msp_long": 15.7
+ },
+ {
+  "id": "r2026-05",
+  "period": "2026-05",
+  "short": 17.2,
+  "long": 11.5,
+  "msp_short": 18.2,
+  "msp_long": 14.0
+ },
+ {
+  "id": "r2026-06",
+  "period": "2026-06",
+  "short": 17.1,
+  "long": 12.9,
+  "msp_short": 18.0,
+  "msp_long": 15.1
+ },
+ {
+  "id": "r2026-07",
+  "period": "2026-07",
+  "short": 16.8,
+  "long": 12.9,
+  "msp_short": 17.9,
+  "msp_long": 14.7
+ },
+ {
+  "id": "r2026-08",
+  "period": "2026-08",
+  "short": 17.9,
+  "long": 13.0,
+  "msp_short": 16.4,
+  "msp_long": 14.2
+ }
+]

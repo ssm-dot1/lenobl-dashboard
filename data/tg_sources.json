@@ -1,0 +1,42 @@
+[
+ {
+  "id": "m1",
+  "date": "2026-10-21",
+  "channel": "МойБизнес47 (@fpp_lo)",
+  "kind": "Репост",
+  "views": 175,
+  "post": "Cornēo продолжает развиваться в Ленобласти",
+  "url": "https://t.me/fpp_lo/8148",
+  "source": "t.me"
+ },
+ {
+  "id": "m2",
+  "date": "2026-10-16",
+  "channel": "ЦРП ЛО — самое важное",
+  "kind": "Упоминание",
+  "views": 113,
+  "post": "—",
+  "url": "https://telemetr.me/content/lenoblinvest",
+  "source": "Telemetr"
+ },
+ {
+  "id": "m3",
+  "date": "2026-10-08",
+  "channel": "Внешние связи Ленобласти",
+  "kind": "Упоминание",
+  "views": 30,
+  "post": "—",
+  "url": "https://telemetr.me/content/lenoblinvest",
+  "source": "Telemetr"
+ },
+ {
+  "id": "m4",
+  "date": "2026-09-14",
+  "channel": "МойБизнес47 (@fpp_lo)",
+  "kind": "Репост",
+  "views": 151,
+  "post": "Помощь пострадавшим селлерам Вайлдберриз",
+  "url": "https://t.me/fpp_lo/7933",
+  "source": "t.me"
+ }
+]

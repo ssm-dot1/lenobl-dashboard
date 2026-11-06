@@ -1,0 +1,62 @@
+[
+ {
+  "id": "b2022",
+  "year": "2022",
+  "income": 188.8,
+  "income_plan": 180.4,
+  "expense": 196.8,
+  "expense_plan": 202.4,
+  "income_pct": 105,
+  "expense_pct": 97,
+  "order": 2022,
+  "est": false
+ },
+ {
+  "id": "b2023",
+  "year": "2023",
+  "income": 252.5,
+  "income_plan": 220.7,
+  "expense": 215.3,
+  "expense_plan": 224.4,
+  "income_pct": 114,
+  "expense_pct": 96,
+  "order": 2023,
+  "est": false
+ },
+ {
+  "id": "b2024",
+  "year": "2024",
+  "income": 271.2,
+  "income_plan": 261.5,
+  "expense": 256.1,
+  "expense_plan": 270.9,
+  "income_pct": 104,
+  "expense_pct": 95,
+  "order": 2024,
+  "est": false
+ },
+ {
+  "id": "b2025",
+  "year": "2025",
+  "income": 281.9,
+  "income_plan": 281.7,
+  "expense": 300.7,
+  "expense_plan": 312.8,
+  "income_pct": 100,
+  "expense_pct": 96,
+  "order": 2025,
+  "est": false
+ },
+ {
+  "id": "b2026",
+  "year": "2026 (на 05.11)",
+  "income": 246.6,
+  "income_plan": 281.8,
+  "expense": 255.2,
+  "expense_plan": 312.1,
+  "income_pct": 88,
+  "expense_pct": 82,
+  "order": 2026,
+  "est": true
+ }
+]

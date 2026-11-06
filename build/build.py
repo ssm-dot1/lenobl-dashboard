@@ -71,17 +71,16 @@ import overview as _ov
 _hero_kpis, _overview = _ov.build(data)
 import postgen as _pg
 _cfg=json.load(open(os.path.join(B,'config.json'))) if os.path.exists(os.path.join(B,'config.json')) else {}
-_overview += _pg.build(data, _cfg.get('post_api',''))
 header=f"""<header class="site-head big">
   <div class="hero-band">
     <div class="hero-inner">
       <div class="topbar"><div class="brand"><span class="brand-dot"></span>Экономика Ленобласти · аналитика</div>
-  <div class="channels"><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener">Telegram</a><a href="https://max.ru/id4703059140_gos" target="_blank" rel="noopener">MAX</a><a href="https://vk.com/lenoblinvest" target="_blank" rel="noopener">ВКонтакте</a><button class="theme-toggle" type="button" aria-label="Переключить тему" title="Светлая / тёмная тема"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg><svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg></button></div></div>
+  <div class="channels"><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener">Telegram</a><a href="https://max.ru/id4703059140_gos" target="_blank" rel="noopener">MAX</a><a href="https://vk.com/lenoblinvest" target="_blank" rel="noopener">ВКонтакте</a><a href="post.html" class="nav-post">✎ Написать пост</a><button class="theme-toggle" type="button" aria-label="Переключить тему" title="Светлая / тёмная тема"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg><svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg></button></div></div>
         <div class="hero-main">
         <div class="hero-text"><span class="eyebrow">Обновляется каждый час{(' · ' + upd) if upd else ''}</span>
           <h1 class="hero-title">Каналы, экономика России и&nbsp;Ленобласти</h1>
           <p class="hero-sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», макроэкономика, регион и предприятия области — в одном месте.</p>
-          <div class="hero-cta"><a href="#tg" class="cta-main" onclick="document.querySelector('.lx-tabs').scrollIntoView({{behavior:'smooth'}});return false;">Смотреть дашборд</a><a href="#postgen" class="cta-ghost" onclick="document.getElementById('postgen').scrollIntoView({{behavior:'smooth'}});return false;">Написать пост</a></div>
+          <div class="hero-cta"><a href="#tg" class="cta-main" onclick="document.querySelector('.lx-tabs').scrollIntoView({{behavior:'smooth'}});return false;">Смотреть дашборд</a><a href="post.html" class="cta-ghost">✎ Написать пост</a></div>
         </div>
         <canvas id="globe3d" aria-hidden="true"></canvas>
       </div>
@@ -94,12 +93,35 @@ html=re.sub(r'<header>.*?</header>', lambda m: header, html, count=1, flags=re.S
 html=html.replace('<p class="lx-note">Данные обновляются автоматически раз в час из открытых источников.</p>', '', 1)
 html=re.sub(r'@media \(prefers-color-scheme: dark\)\{.*?\}\}', '', html, count=1)
 html=html.replace("colors: ['#3a6fd8', '#d9822b', '#2e9e6b', '#9b59b6', '#c2412d', '#1f9bb3', '#b8860b', '#7f8c8d']", "colors: ['#7B4DDB', '#12AA9E', '#153F9B', '#FDBC16', '#E0679E', '#d24b3a', '#0e8f84', '#8a84a3']", 1)
-css=open(os.path.join(B,'site.css')).read()+_pg.CSS
+css=open(os.path.join(B,'site.css')).read()+'.site-head .channels a.nav-post,.channels a.nav-post{background:linear-gradient(135deg,var(--ac),var(--ac-2));color:#fff;border-color:transparent;font-weight:600}.site-head .channels a.nav-post:hover,.channels a.nav-post:hover{color:#fff;filter:brightness(1.08)}.site-head.big .channels a.nav-post{background:#fff;color:#4a2a9e;border-color:#fff}.site-head.big .channels a.nav-post:hover{color:#4a2a9e}'
 html=html.replace('</head>','<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap">\n</head>',1)
 i=html.find('</style>', html.find('<div class="wrap">'))
 html=html[:i+8]+'\n<style>\n'+css+'\n</style>\n'+html[i+8:]
 foot='<footer class="site-foot"><span>Агентство экономического развития Ленинградской области · <a href="https://lenoblinvest.ru" target="_blank" rel="noopener">lenoblinvest.ru</a></span><span>Источники: TGStat, Telemetr, MXStat, Банк России, Росстат, Минэкономразвития, открытые данные</span></footer>'
 html=html.replace('\n<script>\n'+scripts, '\n'+foot+'\n<script>\n'+scripts, 1)
 html=html.replace('<body><div class="wrap">','<body><script>(function(){var t=\'light\';try{t=localStorage.getItem(\'lxTheme\')||t}catch(e){}document.documentElement.setAttribute(\'data-theme\',t);var P={light:[\'#153F9B\',\'#12AA9E\',\'#FDBC16\',\'#804F80\',\'#666FB4\',\'#c2412d\',\'#0e8f84\',\'#7f8c8d\'],dark:[\'#6f9bff\',\'#2fd3c4\',\'#FDBC16\',\'#d08fd0\',\'#a3abf0\',\'#ff7a66\',\'#3fd1c3\',\'#aab4c8\']};window.__lxPal=P;if(window.dash&&window.dash.colors){var c=P[t];for(var i=0;i<c.length;i++)window.dash.colors[i]=c[i];}})();</script><div class="bg-anim" aria-hidden="true"><i></i><i></i><i></i><i></i></div><canvas id="bg3d" aria-hidden="true"></canvas><div class="wrap">',1)
-html=html.replace('</body></html>','<script>'+_pg.JS+'</script>\n<script src="site.js" defer></script>\n</body></html>',1)
+html=html.replace('</body></html>','<script src="site.js" defer></script>\n</body></html>',1)
 open(os.path.join(RT,'index.html'),'w').write(html); print(len(html))
+
+# ---- отдельная страница генератора постов ----
+_theme=re.search(r'<script>\(function\(\)\{var t=.*?</script>', html).group(0)
+_toggle=re.search(r'<button class="theme-toggle".*?</button>', html, re.S).group(0)
+post=f"""<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Генератор постов · Экономика Ленобласти</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap">
+<style>:root{{--font-anthropic-sans:"Inter",system-ui,Arial,sans-serif;--color-bad:#c2412d}}*{{box-sizing:border-box}}body{{margin:0}}.wrap{{max-width:1200px;margin:0 auto;padding:24px clamp(12px,3vw,32px) 48px;position:relative;z-index:1;display:flex;flex-direction:column;gap:20px}}
+.pg-head{{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}}.pg-head h1{{font-family:var(--font-head);font-size:clamp(28px,4vw,44px);font-weight:800;margin:4px 0 0;letter-spacing:-.02em}}.pg-lead{{color:var(--color-fg-muted);max-width:720px;margin:0;font-size:16px}}
+.channels a.back{{font-weight:600}}
+{css}{_pg.CSS}</style></head>
+<body>{_theme}<div class="bg-anim" aria-hidden="true"><i></i><i></i><i></i><i></i></div><canvas id="bg3d" aria-hidden="true"></canvas>
+<div class="wrap">
+<div class="pg-head"><div class="brand"><span class="brand-dot"></span>Экономика Ленобласти · аналитика</div><div class="channels"><a href="./" class="back">← К дашборду</a>{_toggle}</div></div>
+<div><h1>Генератор постов для бизнеса</h1><p class="pg-lead">Опишите тему или выберите её из контент-плана — нейросеть подготовит черновик поста для Telegram, MAX или ВКонтакте с пользой для предпринимателей и списком того, что проверить перед публикацией.</p></div>
+{_pg.build(data, _cfg.get('post_api','')).replace('<h2 class="ix-sec-h">Генератор постов для бизнеса</h2>','')}
+{foot}
+</div>
+<script>{_pg.JS}</script>
+<script src="site.js" defer></script>
+</body></html>"""
+open(os.path.join(RT,'post.html'),'w').write(post); print('post.html', len(post))

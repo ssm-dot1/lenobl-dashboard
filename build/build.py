@@ -69,16 +69,22 @@ kpis=''.join([
 import sys; sys.path.insert(0, B)
 import overview as _ov
 _hero_kpis, _overview = _ov.build(data)
-header=f"""<header class="site-head">
-  <div class="topbar"><div class="brand"><span class="brand-dot"></span>Экономика Ленобласти · аналитика</div>
+header=f"""<header class="site-head big">
+  <div class="hero-band">
+    <div class="hero-inner">
+      <div class="topbar"><div class="brand"><span class="brand-dot"></span>Экономика Ленобласти · аналитика</div>
   <div class="channels"><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener">Telegram</a><a href="https://max.ru/id4703059140_gos" target="_blank" rel="noopener">MAX</a><a href="https://vk.com/lenoblinvest" target="_blank" rel="noopener">ВКонтакте</a><button class="theme-toggle" type="button" aria-label="Переключить тему" title="Светлая / тёмная тема"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg><svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg></button></div></div>
-  <div class="hero-grid">
-    <div class="hero-card"><div class="hero-text"><span class="eyebrow">Обновляется каждый час{(' · ' + upd) if upd else ''}</span>
-      <h1 class="hero-title">Каналы, экономика России и&nbsp;Ленобласти</h1>
-      <p class="hero-sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», макроэкономика, регион и предприятия области — в одном месте.</p></div>
-      <canvas id="globe3d" aria-hidden="true"></canvas></div>
-    <div class="kpi-grid">{_hero_kpis}</div>
+        <div class="hero-main">
+        <div class="hero-text"><span class="eyebrow">Обновляется каждый час{(' · ' + upd) if upd else ''}</span>
+          <h1 class="hero-title">Каналы, экономика России и&nbsp;Ленобласти</h1>
+          <p class="hero-sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», макроэкономика, регион и предприятия области — в одном месте.</p>
+          <div class="hero-cta"><a href="#tg" class="cta-main" onclick="document.querySelector('.lx-tabs').scrollIntoView({{behavior:'smooth'}});return false;">Смотреть дашборд</a><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener" class="cta-ghost">Подписаться в Telegram</a></div>
+        </div>
+        <canvas id="globe3d" aria-hidden="true"></canvas>
+      </div>
+    </div>
   </div>
+  <div class="kpi-grid">{_hero_kpis}</div>
 </header>
 {_overview}"""
 html=re.sub(r'<header>.*?</header>', lambda m: header, html, count=1, flags=re.S)

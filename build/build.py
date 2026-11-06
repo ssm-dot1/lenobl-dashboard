@@ -78,7 +78,7 @@ header=f"""<header class="site-head big">
         <div class="hero-text"><span class="eyebrow">Обновляется каждый час{(' · ' + upd) if upd else ''}</span>
           <h1 class="hero-title">Каналы, экономика России и&nbsp;Ленобласти</h1>
           <p class="hero-sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», макроэкономика, регион и предприятия области — в одном месте.</p>
-          <div class="hero-cta"><a href="#tg" class="cta-main" onclick="document.querySelector('.lx-tabs').scrollIntoView({{behavior:'smooth'}});return false;">Смотреть дашборд</a><a href="https://t.me/lenoblinvest" target="_blank" rel="noopener" class="cta-ghost">Подписаться в Telegram</a></div>
+          <div class="hero-cta"><a href="#tg" class="cta-main" onclick="document.querySelector('.lx-tabs').scrollIntoView({{behavior:'smooth'}});return false;">Смотреть дашборд</a></div>
         </div>
         <canvas id="globe3d" aria-hidden="true"></canvas>
       </div>

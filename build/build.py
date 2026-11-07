@@ -86,7 +86,7 @@ header=f"""<header class="site-head big">
         <div class="hero-text"><span class="eyebrow">Обновляется каждый час{(' · ' + upd) if upd else ''}</span>
           <h1 class="hero-title">Каналы, экономика России и&nbsp;Ленобласти</h1>
           <p class="hero-sub">Telegram, MAX и ВКонтакте «Экономика Ленобласти», макроэкономика, регион и предприятия области — в одном месте.</p>
-          <div class="hero-cta"><a href="#tg" class="cta-main" onclick="document.querySelector('.lx-tabs').scrollIntoView({{behavior:'smooth'}});return false;">Смотреть дашборд</a><a href="post.html" class="cta-ghost">✎ Написать пост</a></div>
+          <div class="hero-cta"><a href="#tg" class="cta-main" onclick="var t=document.querySelector('.lx-tab[data-tab=tg]');if(t)t.click();document.querySelector('.lx-tabs').scrollIntoView({{behavior:'smooth'}});return false;">Смотреть дашборд</a><a href="post.html" class="cta-ghost">✎ Написать пост</a></div>
         </div>
         <canvas id="globe3d" aria-hidden="true"></canvas>
       </div>
@@ -96,6 +96,16 @@ header=f"""<header class="site-head big">
 </header>
 {_overview}"""
 html=re.sub(r'<header>.*?</header>', lambda m: header, html, count=1, flags=re.S)
+# ---- разделы дашборда сразу под шапкой; «Обзор» — отдельный раздел ----
+_nav=re.search(r'\s*<nav class="lx-tabs" role="tablist">.*?</nav>', html, re.S).group(0)
+html=html.replace(_nav,'',1)
+_nav=_nav.replace('<nav class="lx-tabs" role="tablist">','<nav class="lx-tabs" role="tablist" aria-label="Разделы дашборда">\n    <button class="lx-tab" role="tab" data-tab="overview" aria-selected="true">Обзор</button>',1)
+_nav=_nav.replace('data-tab="tg" aria-selected="true"','data-tab="tg" aria-selected="false"',1)
+_sum=re.search(r'\s*<div class="lx-grid">\s*<div class="lx-card" id="summary">.*?</div>\s*</div>', html, re.S)
+_sumhtml=_sum.group(0) if _sum else ''
+if _sum: html=html.replace(_sumhtml,'',1)
+html=html.replace(_overview, '<div id="lx-nav-anchor"></div>'+_nav+'\n<section class="lx-page" id="overview">'+_overview+_sumhtml+'</section>',1)
+html=html.replace('<section class="lx-page" id="tg">','<section class="lx-page" id="tg" hidden>',1)
 import plan as _plan
 _cp=json.load(open(os.path.join(RT,'data','content_plan.json')))
 html=html.replace('<button class="lx-tab" role="tab" data-tab="ideas" aria-selected="false">Идеи для постов</button>','<button class="lx-tab" role="tab" data-tab="plan" aria-selected="false">Контент-план</button>\n    <button class="lx-tab" role="tab" data-tab="ideas" aria-selected="false">Идеи для постов</button>',1)
@@ -106,14 +116,15 @@ html=html.replace('<section class="lx-page" id="ideas" hidden>', _ms.build(json.
 html=html.replace('<p class="lx-note">Данные обновляются автоматически раз в час из открытых источников.</p>', '', 1)
 html=re.sub(r'@media \(prefers-color-scheme: dark\)\{.*?\}\}', '', html, count=1)
 html=html.replace("colors: ['#3a6fd8', '#d9822b', '#2e9e6b', '#9b59b6', '#c2412d', '#1f9bb3', '#b8860b', '#7f8c8d']", "colors: ['#7B4DDB', '#12AA9E', '#153F9B', '#FDBC16', '#E0679E', '#d24b3a', '#0e8f84', '#8a84a3']", 1)
-css=open(os.path.join(B,'site.css')).read()+'.site-head .channels a.nav-post,.channels a.nav-post{background:linear-gradient(135deg,var(--ac),var(--ac-2));color:#fff;border-color:transparent;font-weight:600}.site-head .channels a.nav-post:hover,.channels a.nav-post:hover{color:#fff;filter:brightness(1.08)}.site-head.big .channels a.nav-post{background:#fff;color:#4a2a9e;border-color:#fff}.site-head.big .channels a.nav-post:hover{color:#4a2a9e}.channels a.nav-recs{width:38px;height:38px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:19px;background:var(--yellow)!important;color:#2a1b00!important;border-color:var(--yellow)!important;position:relative}.channels a.nav-recs::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--yellow);opacity:.6;animation:recsPulse 2.2s ease-out infinite}@keyframes recsPulse{0%{transform:scale(.85);opacity:.7}100%{transform:scale(1.35);opacity:0}}@media (prefers-reduced-motion:reduce){.channels a.nav-recs::after{animation:none}}'+_plan.CSS+_ms.CSS
+css=open(os.path.join(B,'site.css')).read()+'.site-head .channels a.nav-post,.channels a.nav-post{background:linear-gradient(135deg,var(--ac),var(--ac-2));color:#fff;border-color:transparent;font-weight:600}.site-head .channels a.nav-post:hover,.channels a.nav-post:hover{color:#fff;filter:brightness(1.08)}.site-head.big .channels a.nav-post{background:#fff;color:#4a2a9e;border-color:#fff}.site-head.big .channels a.nav-post:hover{color:#4a2a9e}.channels a.nav-recs{width:38px;height:38px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:19px;background:var(--yellow)!important;color:#2a1b00!important;border-color:var(--yellow)!important;position:relative}.channels a.nav-recs::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--yellow);opacity:.6;animation:recsPulse 2.2s ease-out infinite}@keyframes recsPulse{0%{transform:scale(.85);opacity:.7}100%{transform:scale(1.35);opacity:0}}@media (prefers-reduced-motion:reduce){.channels a.nav-recs::after{animation:none}}'+_plan.CSS+_ms.CSS+'.lx-tabs{position:sticky;top:0;z-index:20;margin:0 -6px;padding:10px 6px;background:color-mix(in srgb,var(--color-bg) 82%,transparent);border-radius:0 0 18px 18px;box-shadow:0 10px 24px -18px rgba(40,20,90,.45);flex-wrap:wrap;gap:6px}.lx-tab{white-space:nowrap;padding:7px 13px;font-size:13.5px}@media (max-width:900px){.lx-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.lx-tabs::-webkit-scrollbar{display:none}.lx-tab{flex:none}}'
 html=html.replace('</head>','<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap">\n</head>',1)
 i=html.find('</style>', html.find('<div class="wrap">'))
 html=html[:i+8]+'\n<style>\n'+css+'\n</style>\n'+html[i+8:]
 foot='<footer class="site-foot"><span>Агентство экономического развития Ленинградской области · <a href="https://lenoblinvest.ru" target="_blank" rel="noopener">lenoblinvest.ru</a></span><span>Источники: TGStat, Telemetr, MXStat, Банк России, Росстат, Минэкономразвития, открытые данные</span></footer>'
 html=html.replace('\n<script>\n'+scripts, '\n'+foot+'\n<script>\n'+scripts, 1)
 html=html.replace('<body><div class="wrap">','<body><script>(function(){var t=\'light\';try{t=localStorage.getItem(\'lxTheme\')||t}catch(e){}document.documentElement.setAttribute(\'data-theme\',t);var P={light:[\'#153F9B\',\'#12AA9E\',\'#FDBC16\',\'#804F80\',\'#666FB4\',\'#c2412d\',\'#0e8f84\',\'#7f8c8d\'],dark:[\'#6f9bff\',\'#2fd3c4\',\'#FDBC16\',\'#d08fd0\',\'#a3abf0\',\'#ff7a66\',\'#3fd1c3\',\'#aab4c8\']};window.__lxPal=P;if(window.dash&&window.dash.colors){var c=P[t];for(var i=0;i<c.length;i++)window.dash.colors[i]=c[i];}})();</script><div class="bg-anim" aria-hidden="true"><i></i><i></i><i></i><i></i></div><canvas id="bg3d" aria-hidden="true"></canvas><div class="wrap">',1)
-html=html.replace('</body></html>','<script>'+_plan.JS+_ms.JS+'</script>\n<script src="site.js" defer></script>\n</body></html>',1)
+for _a,_b in (('aria-selected="false">Экономика Ленобласти</button>','aria-selected="false">Ленобласть</button>'),('aria-selected="false">Компании Ленобласти</button>','aria-selected="false">Компании</button>'),('aria-selected="false">Идеи для постов</button>','aria-selected="false">Идеи постов</button>')): html=html.replace(_a,_b,1)
+html=html.replace('</body></html>','<script>'+_plan.JS+_ms.JS+"(function(){var n=document.querySelector('.lx-tabs');if(!n)return;n.addEventListener('click',function(e){var b=e.target.closest('.lx-tab');if(!b)return;b.scrollIntoView({block:'nearest',inline:'center'});var a=document.getElementById('lx-nav-anchor'),y=(a?a.getBoundingClientRect().top:n.getBoundingClientRect().top)+window.scrollY;if(window.scrollY>y)window.scrollTo({top:y,behavior:'smooth'});});})();"+'</script>\n<script src="site.js" defer></script>\n</body></html>',1)
 open(os.path.join(RT,'index.html'),'w').write(html); print(len(html))
 
 # ---- отдельные страницы: генератор постов и рекомендации ----

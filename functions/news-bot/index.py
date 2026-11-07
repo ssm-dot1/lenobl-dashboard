@@ -238,6 +238,7 @@ def handler(event, context):
             on_update(json.loads(raw))
         except Exception as e:
             print("update error", repr(e))
+            handler.last_error = repr(e)[:300]
         return _resp(200, {"ok": True})
     q = event.get("queryStringParameters") or {}
     if not secret or q.get("key") != secret:
@@ -247,6 +248,8 @@ def handler(event, context):
         r = tg("setWebhook", url=url, secret_token=secret, allowed_updates=["message", "channel_post", "my_chat_member"])
         me = tg("getMe")
         return _resp(200, {"webhook": r, "bot": me.get("result", {}).get("username"), "chats": chats()})
+    if q.get("info"):  # состояние вебхука: ?key=...&info=1
+        return _resp(200, {"webhook": tg("getWebhookInfo").get("result"), "chats": chats(), "relay": os.environ.get("TG_API", "")})
     if q.get("check"):  # проверить ленты: ?key=...&check=1
         items, status = collect(dt.datetime.now(MSK) - dt.timedelta(hours=float(q.get("hours", "6"))))
         return _resp(200, {"feeds": status, "candidates": len(items), "sample": [x["src"] + ": " + x["title"] for x in items[:10]]})

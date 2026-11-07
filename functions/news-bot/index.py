@@ -35,13 +35,12 @@ FEEDS = [
     ("РБК", "https://rssexport.rbc.ru/rbcnews/news/30/full.rss", "РФ", False),
     ("Коммерсантъ", "https://www.kommersant.ru/RSS/section-economics.xml", "РФ", True),
     ("Ведомости", "https://www.vedomosti.ru/rss/rubric/economics", "РФ", True),
-    ("Правительство ЛО", "https://lenobl.ru/ru/rss/", "ЛО", True),
+    ("Правительство ЛО", "https://lenobl.ru/rss/", "ЛО", True),
     ("47news", "https://47news.ru/rss/", "ЛО", False),
-    ("АБН24", "https://abnews.ru/rss", "ЛО", False),
 ]
 ECON = re.compile(r"эконом|ставк|налог|бизнес|предпри|инфляц|рубл|курс|банк|инвест|ввп|бюджет|промышл|завод|производ|экспорт|импорт|"
-                  r"санкц|мсп|закон|минфин|минэк|минпром|кредит|ипотек|цен[аыу]|тариф|нефт|газ|зарплат|занятост|субсид|льгот|"
-                  r"ленобласт|ленинградск|дрозденко|аэрло|порт|логист", re.I)
+                  r"санкц|\bмсп|закон|минфин|минэк|минпром|кредит|ипотек|\bцен[аыуе]\b|тариф|нефт|\bгаз|зарплат|занятост|субсид|льгот|"
+                  r"ленобласт|ленинградск|дрозденко|аэрло|\bпорт[аыу]?\b|логист", re.I)
 LO = re.compile(r"ленобласт|ленинградск|дрозденко|аэрло|47 ?регион|гатчин|всеволожск|выборг|кириш|тихвин|луг[аи]|сосновый бор|"
                 r"кингисепп|усть-луг|волхов|приозерск|тосно|кировск|ломонос|пикал|бокситогор|подпорож|лодейнопол|сланц", re.I)
 
@@ -118,6 +117,7 @@ def rate(items, folder, token):
                                  headers={"Content-Type": "application/json", "Authorization": f"Bearer {token}", "x-folder-id": folder})
     with urllib.request.urlopen(req, timeout=60) as r:
         text = json.loads(r.read())["result"]["alternatives"][0]["message"]["text"]
+    rate.raw = text[:1500]
     m = re.search(r"\[.*\]", text, re.S)
     res = json.loads(m.group(0)) if m else []
     out = []
@@ -170,6 +170,8 @@ def run_digest(context, window_hours=None, dry=False):
     token = (getattr(context, "token", None) or {}).get("access_token")
     news = rate(items, os.environ.get("FOLDER_ID", ""), token)
     result["important"] = [{"s": x["score"], "r": x["reg"], "t": x["title"]} for x in news]
+    if dry:
+        result["gpt_raw"] = getattr(rate, "raw", "")
     if news and not dry:
         text = fmt(news, night=(window_hours >= 8))
         for c in chats():

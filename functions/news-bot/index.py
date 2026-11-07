@@ -42,6 +42,7 @@ FEEDS = [
 ECON = re.compile(r"эконом|ставк|налог|бизнес|предпри|инфляц|рубл|курс|банк|инвест|ввп|бюджет|промышл|завод|производ|экспорт|импорт|"
                   r"санкц|\bмсп|закон|минфин|минэк|минпром|кредит|ипотек|\bцен[аыуе]\b|тариф|нефт|\bгаз|зарплат|занятост|субсид|льгот|"
                   r"ленобласт|ленинградск|дрозденко|аэрло|\bпорт[аыу]?\b|логист", re.I)
+SKIP = re.compile(r"украин|всу\b|\bсво\b|беспилот|\bбпла|обстрел|удар[аы]? по|ракет|погиб|ранен|теракт|войн|фронт|армия|военн|нато|убийств|задержан|суд приговор|дтп|пожар", re.I)
 LO = re.compile(r"ленобласт|ленинградск|дрозденко|аэрло|47 ?регион|гатчин|всеволожск|выборг|кириш|тихвин|луг[аи]|сосновый бор|"
                 r"кингисепп|усть-луг|волхов|приозерск|тосно|кировск|ломонос|пикал|бокситогор|подпорож|лодейнопол|сланц", re.I)
 
@@ -74,7 +75,7 @@ def read_feed(name, url, region, take_all, since):
         if when < since or not title or not link:
             continue
         blob = title + " " + desc
-        if not take_all and not ECON.search(blob):
+        if SKIP.search(blob) or (not take_all and not ECON.search(blob)):
             continue
         reg = "ЛО" if (region == "ЛО" or LO.search(blob)) else "РФ"
         out.append({"src": name, "title": title, "desc": desc, "url": link, "when": when, "reg": reg})
@@ -109,18 +110,31 @@ PROMPT = """Ты — редактор деловых новостей для п�
 Ответь строго JSON-массивом без пояснений: [{"i": номер, "s": оценка, "r": "РФ" или "ЛО", "t": "суть в одном предложении до 160 знаков, своими словами, без выдумок"}]. Включи только новости с оценкой 4 и 5."""
 
 
-def rate(items, folder, token):
-    lines = [f'{i}. [{x["src"]}] {x["title"]} — {x["desc"]}' for i, x in enumerate(items)]
+def _rate_chunk(chunk, base, folder, token):
+    lines = [f'{base + i}. [{x["src"]}] {x["title"]} — {x["desc"]}' for i, x in enumerate(chunk)]
     model = os.environ.get("MODEL", "yandexgpt-lite/latest")
-    body = {"modelUri": f"gpt://{folder}/{model}", "completionOptions": {"stream": False, "temperature": 0.1, "maxTokens": "2000"},
+    body = {"modelUri": f"gpt://{folder}/{model}", "completionOptions": {"stream": False, "temperature": 0.1, "maxTokens": "1500"},
             "messages": [{"role": "system", "text": PROMPT}, {"role": "user", "text": "\n".join(lines)}]}
     req = urllib.request.Request("https://llm.api.cloud.yandex.net/foundationModels/v1/completion", data=json.dumps(body).encode(),
                                  headers={"Content-Type": "application/json", "Authorization": f"Bearer {token}", "x-folder-id": folder})
     with urllib.request.urlopen(req, timeout=60) as r:
         text = json.loads(r.read())["result"]["alternatives"][0]["message"]["text"]
-    rate.raw = text[:1500]
+    rate.raw = (getattr(rate, "raw", "") + " || " + text[:400])[-1500:]
     m = re.search(r"\[.*\]", text, re.S)
-    res = json.loads(m.group(0)) if m else []
+    try:
+        return json.loads(m.group(0)) if m else []
+    except ValueError:
+        return []
+
+
+def rate(items, folder, token):
+    rate.raw = ""
+    res = []
+    for k in range(0, len(items), 12):  # небольшими пачками: если модель откажется от одной новости, остальные не пропадут
+        try:
+            res += _rate_chunk(items[k:k + 12], k, folder, token)
+        except Exception as e:
+            print("rate error", repr(e))
     out = []
     for r in res:
         try:

@@ -214,7 +214,7 @@ def run_digest(context, window_hours=None, dry=False):
 
 
 def on_update(upd):
-    """Вебхук Telegram: подсказываем ID чата, чтобы добавить его в CHAT_IDS."""
+    """Вебхук Telegram: отвечаем прямо в ответе на вебхук (без исходящего запроса из облака)."""
     msg = upd.get("message") or upd.get("channel_post")
     if msg and msg.get("chat"):
         cid = str(msg["chat"]["id"])
@@ -222,12 +222,14 @@ def on_update(upd):
         text = ("✅ Вы подписаны: сюда приходят важные новости экономики РФ и Ленобласти (раз в час, если есть важное; ночью — тишина)."
                 if sub else f"👋 Это бот важных новостей экономики РФ и Ленобласти.\n\nВаш ID: <code>{cid}</code>\n"
                             "Чтобы получать новости, добавьте этот ID в переменную CHAT_IDS функции в Yandex Cloud.")
-        tg("sendMessage", chat_id=cid, text=text, parse_mode="HTML")
+        return {"method": "sendMessage", "chat_id": cid, "text": text, "parse_mode": "HTML"}
     mcm = upd.get("my_chat_member")
     if mcm and mcm.get("chat", {}).get("type") == "channel" and mcm.get("new_chat_member", {}).get("status") == "administrator":
         cid = str(mcm["chat"]["id"])
         if cid not in chats():
-            tg("sendMessage", chat_id=cid, text=f"ID этого канала: <code>{cid}</code> — добавьте его в CHAT_IDS, чтобы сюда приходили новости.", parse_mode="HTML")
+            return {"method": "sendMessage", "chat_id": cid, "parse_mode": "HTML",
+                    "text": f"ID этого канала: <code>{cid}</code> — добавьте его в CHAT_IDS, чтобы сюда приходили новости."}
+    return None
 
 
 def _resp(code, body):
@@ -249,11 +251,11 @@ def handler(event, context):
             import base64
             raw = base64.b64decode(raw).decode("utf-8", "replace")
         try:
-            on_update(json.loads(raw))
+            reply = on_update(json.loads(raw))
         except Exception as e:
             print("update error", repr(e))
-            handler.last_error = repr(e)[:300]
-        return _resp(200, {"ok": True})
+            reply = None
+        return _resp(200, reply or {"ok": True})
     q = event.get("queryStringParameters") or {}
     if not secret or q.get("key") != secret:
         return _resp(403, {"error": "нет доступа"})

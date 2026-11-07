@@ -12,12 +12,15 @@ export default {
         return new Response("forbidden", { status: 403 });
       }
       const body = await request.text();
-      await fetch(FUNCTION_URL, {
+      const r = await fetch(FUNCTION_URL, {
         method: "POST",
         headers: { "content-type": "application/json", "x-telegram-bot-api-secret-token": KEY },
         body,
       });
-      return new Response("ok");
+      // функция отвечает готовым методом (например sendMessage) — Telegram выполнит его сам
+      const answer = await r.text();
+      return new Response(r.ok && answer.includes('"method"') ? answer : "ok",
+        { headers: { "content-type": "application/json" } });
     }
     if (request.headers.get("x-relay-key") !== KEY) {
       return new Response("forbidden", { status: 403 });

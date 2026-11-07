@@ -1,10 +1,24 @@
-// Ретранслятор Telegram Bot API для бота новостей (Cloudflare Workers).
-// Пропускает только запросы бота с правильным ключом и только к api.telegram.org.
+// Ретранслятор Telegram для бота новостей (Cloudflare Workers).
+// 1) Бот → Telegram: пропускает запросы к api.telegram.org только с правильным ключом.
+// 2) Telegram → бот: принимает вебхук на /hook и передаёт его функции в Yandex Cloud.
 const KEY = "Dt7CVnFXrrrqp9K9OlBJMDkmdTsIFn3A";
+const FUNCTION_URL = "https://functions.yandexcloud.net/d4ejsjlrsosgmi8b6nlk";
 
 export default {
   async fetch(request) {
     const url = new URL(request.url);
+    if (url.pathname === "/hook") {
+      if (request.method !== "POST" || request.headers.get("x-telegram-bot-api-secret-token") !== KEY) {
+        return new Response("forbidden", { status: 403 });
+      }
+      const body = await request.text();
+      await fetch(FUNCTION_URL, {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-telegram-bot-api-secret-token": KEY },
+        body,
+      });
+      return new Response("ok");
+    }
     if (request.headers.get("x-relay-key") !== KEY) {
       return new Response("forbidden", { status: 403 });
     }

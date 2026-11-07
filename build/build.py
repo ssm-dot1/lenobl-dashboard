@@ -60,6 +60,7 @@ plat={}
 for r in data.get('platforms', []): plat[r['platform']]=r
 fx=_last(data.get('fx', []), 'usd'); oil=_last(data.get('oil', []), 'brent')
 ms=_last(data.get('max_summary', []), 'at'); _at=str(ms.get('at',''))
+_lc=_last(data.get('last_check', []), 'at'); _at=max(_at, str(_lc.get('at','')))  # время последней проверки: даже если данные не изменились
 upd=(_at[8:10]+'.'+_at[5:7]+'.'+_at[:4]+', '+_at[11:16]+' МСК') if len(_at)>=16 else ''
 kr=next((m for m in data.get('macro', []) if m.get('indicator')=='key_rate'), {})
 def _kpi(k, v, d=''):

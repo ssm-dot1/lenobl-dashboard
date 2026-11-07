@@ -54,3 +54,4 @@ news_lo
 companies
 events
 tg_peers
+last_check

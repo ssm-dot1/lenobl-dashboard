@@ -20,6 +20,8 @@ import html
 import json
 import os
 import re
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -151,10 +153,22 @@ def rate(items, folder, token):
 def tg(method, **params):
     token = os.environ["BOT_TOKEN"]
     base = os.environ.get("TG_API", "https://api.telegram.org").rstrip("/")
-    req = urllib.request.Request(f"{base}/bot{token}/{method}", data=json.dumps(params).encode(),
-                                 headers={"Content-Type": "application/json", "X-Relay-Key": os.environ.get("SECRET", "")})
-    with urllib.request.urlopen(req, timeout=20) as r:
-        return json.loads(r.read())
+    last = None
+    for attempt in range(3):  # ретранслятор иногда отвечает 403/5xx — повторяем
+        req = urllib.request.Request(f"{base}/bot{token}/{method}", data=json.dumps(params).encode(),
+                                     headers={"Content-Type": "application/json", "User-Agent": UA["User-Agent"],
+                                              "X-Relay-Key": os.environ.get("SECRET", "")})
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                return json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            last = e
+            if e.code == 400:
+                raise
+        except Exception as e:
+            last = e
+        time.sleep(1.5 * (attempt + 1))
+    raise last
 
 
 def fmt(news, night=False):

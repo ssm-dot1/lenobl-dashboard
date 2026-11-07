@@ -11,6 +11,7 @@
   SECRET     — любой длинный пароль: защищает служебные вызовы и вебхук
   MODEL      — по умолчанию yandexgpt-lite/latest (можно yandexgpt/latest — точнее, но дороже)
   MIN_SCORE  — порог важности, по умолчанию 4
+  TG_API     — адрес Bot API или ретранслятора (если api.telegram.org недоступен из облака)
 Функции нужен сервисный аккаунт с ролью ai.languageModels.user.
 """
 import datetime as dt
@@ -135,8 +136,9 @@ def rate(items, folder, token):
 
 def tg(method, **params):
     token = os.environ["BOT_TOKEN"]
-    req = urllib.request.Request(f"https://api.telegram.org/bot{token}/{method}", data=json.dumps(params).encode(),
-                                 headers={"Content-Type": "application/json"})
+    base = os.environ.get("TG_API", "https://api.telegram.org").rstrip("/")
+    req = urllib.request.Request(f"{base}/bot{token}/{method}", data=json.dumps(params).encode(),
+                                 headers={"Content-Type": "application/json", "X-Relay-Key": os.environ.get("SECRET", "")})
     with urllib.request.urlopen(req, timeout=20) as r:
         return json.loads(r.read())
 

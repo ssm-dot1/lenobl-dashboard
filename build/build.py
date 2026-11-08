@@ -137,7 +137,7 @@ html=html.replace('</body></html>','<script>'+_plan.JS+_ms.JS+"(function(){var n
 try:
     import readability as _rd
     html=_rd.apply(html)
-    html=html.replace('</head>','<style>'+_rd.CSS+_dz.CSS+'</style></head>',1).replace('</body>','<script>'+_rd.JS+_dz.JS+'</script></body>',1)
+    html=html.replace('</head>','<style>'+_rd.CSS+_dz.CSS+_dz.CSS2+'</style></head>',1).replace('</body>','<script>'+_rd.JS+_dz.JS+_dz.JS2+'</script></body>',1)
 except ImportError as _e:  # нет bs4 — публикуем без доработок читабельности
     print('readability skipped:', _e)
 open(os.path.join(RT,'index.html'),'w').write(html); print(len(html))

@@ -159,3 +159,88 @@ window.addEventListener('beforeprint',prep);window.addEventListener('afterprint'
 document.querySelectorAll('.nav-pdf').forEach(function(b){b.addEventListener('click',function(){prep();setTimeout(function(){window.print()},500)})});
 })();
 '''
+
+CSS2 = r'''
+/* ===== 4. Ритм и типографика ===== */
+.lx{gap:28px!important}
+.lx-page{display:flex;flex-direction:column;gap:22px}
+.lx-grid,.lx-grid3{gap:18px!important}
+.lx-card{padding:22px 24px!important;border-radius:20px!important}
+.lx-card h3{margin:0 0 4px!important;line-height:1.25;min-height:0}
+.lx-card>p.lx-muted{margin:0 0 14px!important}
+.ix-sec{margin-top:6px}
+.ix-sec-h{font-family:var(--font-head);font-weight:800;letter-spacing:-.015em;margin:0 0 14px}
+body{font-feature-settings:"tnum" 1,"cv11" 1;-webkit-font-smoothing:antialiased}
+p,li,td{font-weight:400}
+.lx-page b,.lx-page strong{font-weight:600}
+.lx-page>div:first-child p b{font-weight:800}
+.lx-tile .lx-muted,.ix-t,.vd-l,.lx-sub>b{font-weight:600!important;letter-spacing:.01em}
+.lx-big,.ix-big,.vd-v,.kpi-card .ix-big{letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.ix-note,.lx-note,.vd-hint{letter-spacing:.005em}
+h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+
+/* ===== 6. Фирменная ночная тема ===== */
+[data-theme="dark"]{
+  --ac:#A98BFF; --ac-2:#C6B2FF; --ac-3:rgba(169,139,255,.16); --ac-deep:#E4DAFF;
+  --color-fg:#F1EDFF; --color-fg-muted:#A9A0D0; --color-bg:#0B0720; --color-panel:#150F33;
+  --cds-chart-grid:rgba(169,139,255,.10); --cds-chart-axis:rgba(169,139,255,.28);
+  --glass:linear-gradient(150deg,rgba(43,30,96,.72),rgba(20,13,50,.66)); --glass-border:rgba(169,139,255,.18);
+  --glass-shadow:0 18px 44px rgba(0,0,0,.45),inset 0 1px 0 rgba(198,178,255,.10)}
+[data-theme="dark"] body,[data-theme="dark"] html{background:#0B0720}
+[data-theme="dark"] .bg-anim{background:radial-gradient(90% 60% at 15% 0%,#2a1670 0%,transparent 60%),radial-gradient(70% 50% at 100% 30%,#3d1a6e 0%,transparent 60%),radial-gradient(80% 60% at 50% 100%,#0a3a4a 0%,transparent 65%),#0B0720!important}
+[data-theme="dark"] .hero-band{background:linear-gradient(120deg,#12082f,#2b1470,#5b2fd0,#1aa79b,#12082f)!important;background-size:300% 300%!important;box-shadow:0 30px 80px rgba(91,47,208,.35)!important}
+[data-theme="dark"] .lx-card,[data-theme="dark"] .ix,[data-theme="dark"] .lx-tile,[data-theme="dark"] .vd{border-color:rgba(169,139,255,.18)!important}
+[data-theme="dark"] .lx-big,[data-theme="dark"] .ix-big,[data-theme="dark"] .vd-v,[data-theme="dark"] .kpi-card .ix-big{color:#fff;text-shadow:0 0 18px rgba(169,139,255,.55),0 0 2px rgba(169,139,255,.6)}
+[data-theme="dark"] .vd-good .vd-v{text-shadow:0 0 18px rgba(63,209,195,.45)}
+[data-theme="dark"] .vd-bad .vd-v{text-shadow:0 0 18px rgba(255,122,102,.45)}
+[data-theme="dark"] .lx-tab[aria-selected="true"]{background:linear-gradient(135deg,#7B4DDB,#A98BFF)!important;box-shadow:0 0 0 1px rgba(198,178,255,.35),0 8px 26px rgba(169,139,255,.45)!important}
+[data-theme="dark"] .lx-tab{background:rgba(43,30,96,.55)!important;border-color:rgba(169,139,255,.2)!important;color:#E4DAFF!important}
+[data-theme="dark"] .lx-tabs{background:color-mix(in srgb,#0B0720 82%,transparent)!important}
+[data-theme="dark"] .lx-card h3::before{box-shadow:0 0 10px #A98BFF}
+[data-theme="dark"] a{color:#C6B2FF}
+[data-theme="dark"] .lx-sl-btn{background:rgba(43,30,96,.7);color:#C6B2FF;border-color:rgba(169,139,255,.3)}
+[data-theme="dark"] .lx-sl-dot.on{box-shadow:0 0 14px rgba(169,139,255,.6)}
+[data-theme="dark"] .spark .sp-l{stroke:#C6B2FF;filter:drop-shadow(0 0 4px rgba(169,139,255,.7))}
+[data-theme="dark"] .lx-more{background:rgba(169,139,255,.05);border-color:rgba(169,139,255,.3)}
+[data-theme="dark"] ::selection{background:#7B4DDB;color:#fff}
+
+/* ===== 8. Живые цифры и графики ===== */
+.lx-chart svg rect,.lx-chart svg path,.lx-chart svg circle{transition:filter .15s,opacity .15s}
+.lx-chart svg rect:hover{filter:brightness(1.15) saturate(1.2)}
+.lx-chart svg:hover rect:not(:hover){opacity:.85}
+.lx-chart svg circle:hover{filter:drop-shadow(0 0 6px var(--ac))}
+.vbars .vb:hover .vb-b,.hbars .hb:hover i{filter:brightness(1.12)}
+@keyframes lxGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes lxGrowX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes lxFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.lx-anim .lx-chart svg rect{transform-box:fill-box;transform-origin:50% 100%;animation:lxGrow .7s cubic-bezier(.2,.8,.2,1) both}
+.lx-anim .lx-chart svg path{animation:lxFade .7s ease both}
+.lx-anim .vbars .vb-b{transform-origin:50% 100%;animation:lxGrow .7s cubic-bezier(.2,.8,.2,1) both}
+.lx-anim .hbars i,.lx-anim .prog i{transform-origin:0 50%;animation:lxGrowX .8s cubic-bezier(.2,.8,.2,1) both}
+.lx-page:not([hidden]){animation:lxFade .35s ease both}
+@media (prefers-reduced-motion:reduce){.lx-anim *,.lx-page{animation:none!important}}
+'''
+
+JS2 = r'''
+(function(){
+var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* досчёт цифр */
+function parse(t){var m=t.match(/^([^\d−\-+]*)([−\-+]?)([\d\s  ]+(?:[.,]\d+)?)(.*)$/);if(!m)return null;var n=parseFloat(m[3].replace(/[\s  ]/g,'').replace(',','.'));if(isNaN(n))return null;
+ var dec=(m[3].split(/[.,]/)[1]||'').length;return {pre:m[1],sign:m[2],n:n,dec:dec,post:m[4],sep:m[3].indexOf(',')>=0?',':'.'}}
+function fmt(p,v){var s=v.toFixed(p.dec).split('.');s[0]=s[0].replace(/\B(?=(\d{3})+(?!\d))/g,' ');return p.pre+p.sign+s.join(p.dec?p.sep:'')+p.post}
+function count(el){if(el.__cnt||RM)return;var tx=el.firstChild&&el.firstChild.nodeType===3&&el.childNodes.length===1?el.textContent.trim():null;if(!tx)return;var p=parse(tx);if(!p||p.n===0)return;el.__cnt=1;
+ var t0=null,d=900;function step(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/d),e=1-Math.pow(1-k,3);el.textContent=fmt(p,p.n*e);if(k<1)requestAnimationFrame(step);else el.textContent=tx}requestAnimationFrame(step)}
+var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.unobserve(e.target);count(e.target)}})},{threshold:.4}):null;
+function watchNums(){document.querySelectorAll('.ix-big,.lx-big,.vd-v,.mini-row b,.ix-row .ix-big').forEach(function(el){if(el.__w)return;el.__w=1;
+ var vd=el.classList.contains('vd-v')?[].filter.call(el.childNodes,function(n){return n.nodeType===3})[0]:null;
+ if(vd){var sp=document.createElement('span');sp.textContent=vd.nodeValue;el.replaceChild(sp,vd);el=sp}
+ if(io)io.observe(el)})}
+/* рост графиков при первом показе раздела */
+function anim(sec){if(RM||!sec||sec.__an)return;sec.__an=1;sec.classList.add('lx-anim');setTimeout(function(){sec.classList.remove('lx-anim')},1600)}
+function cur(){return document.querySelector('.lx-page:not([hidden])')}
+setTimeout(function(){watchNums();anim(cur())},300);
+document.querySelectorAll('.lx-tab').forEach(function(t){t.addEventListener('click',function(){setTimeout(function(){watchNums();anim(cur())},120)})});
+document.querySelectorAll('details').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)setTimeout(watchNums,200)})});
+})();
+'''

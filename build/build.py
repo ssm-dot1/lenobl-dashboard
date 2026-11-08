@@ -10,6 +10,10 @@ _OURS=_re0.compile(r't\.me/(s/)?lenoblinvest|max\.ru/id4703059140|vk\.(com|ru)/l
 for _nk in ('news_lo','news_rf'):
     if isinstance(data.get(_nk), list):
         data[_nk]=[x for x in data[_nk] if not _OURS.search(str(x.get('url') or '')+' '+str(x.get('source') or ''))]
+_pl={}
+for _r in data.get('platforms',[]) or []:
+    if _r.get('platform') and str(_r.get('at',''))>=str(_pl.get(_r['platform'],{}).get('at','')): _pl[_r['platform']]=_r
+data['platforms_last']=list(_pl.values())  # одна строка на площадку
 body=open(os.path.join(B,'page_body.html')).read(); scripts=open(os.path.join(B,'page_scripts.js')).read()
 head='''<!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -105,7 +109,10 @@ _nav=_nav.replace('data-tab="tg" aria-selected="true"','data-tab="tg" aria-selec
 _sum=re.search(r'\s*<div class="lx-grid">\s*<div class="lx-card" id="summary">.*?</div>\s*</div>', html, re.S)
 _sumhtml=_sum.group(0) if _sum else ''
 if _sum: html=html.replace(_sumhtml,'',1)
-html=html.replace(_overview, '<div id="lx-nav-anchor"></div>'+_nav+'\n<section class="lx-page" id="overview">'+_overview+_sumhtml+'</section>',1)
+_ovw=_overview.replace('</div><p class="vd-hint">', '</div><p class="vd-hint">',1)
+_i=_ovw.find('</section>', _ovw.find('vd-sec'))+len('</section>') if 'vd-sec' in _ovw else 0
+_ovw=_ovw[:_i]+_sumhtml+_ovw[_i:]
+html=html.replace(_overview, '<div id="lx-nav-anchor"></div>'+_nav+'\n<section class="lx-page" id="overview">'+_ovw+'</section>',1)
 html=html.replace('<section class="lx-page" id="tg">','<section class="lx-page" id="tg" hidden>',1)
 import plan as _plan
 _cp=json.load(open(os.path.join(RT,'data','content_plan.json')))
@@ -126,13 +133,16 @@ html=html.replace('\n<script>\n'+scripts, '\n'+foot+'\n<script>\n'+scripts, 1)
 html=html.replace('<body><div class="wrap">','<body><script>(function(){var t=\'light\';try{t=localStorage.getItem(\'lxTheme\')||t}catch(e){}document.documentElement.setAttribute(\'data-theme\',t);var P={light:[\'#153F9B\',\'#12AA9E\',\'#FDBC16\',\'#804F80\',\'#666FB4\',\'#c2412d\',\'#0e8f84\',\'#7f8c8d\'],dark:[\'#6f9bff\',\'#2fd3c4\',\'#FDBC16\',\'#d08fd0\',\'#a3abf0\',\'#ff7a66\',\'#3fd1c3\',\'#aab4c8\']};window.__lxPal=P;if(window.dash&&window.dash.colors){var c=P[t];for(var i=0;i<c.length;i++)window.dash.colors[i]=c[i];}})();</script><div class="bg-anim" aria-hidden="true"><i></i><i></i><i></i><i></i></div><canvas id="bg3d" aria-hidden="true"></canvas><div class="wrap">',1)
 for _a,_b in (('aria-selected="false">Экономика Ленобласти</button>','aria-selected="false">Ленобласть</button>'),('aria-selected="false">Компании Ленобласти</button>','aria-selected="false">Компании</button>'),('aria-selected="false">Идеи для постов</button>','aria-selected="false">Идеи постов</button>')): html=html.replace(_a,_b,1)
 html=html.replace('</body></html>','<script>'+_plan.JS+_ms.JS+"(function(){var n=document.querySelector('.lx-tabs');if(!n)return;n.addEventListener('click',function(e){var b=e.target.closest('.lx-tab');if(!b)return;b.scrollIntoView({block:'nearest',inline:'center'});var a=document.getElementById('lx-nav-anchor'),y=(a?a.getBoundingClientRect().top:n.getBoundingClientRect().top)+window.scrollY;if(window.scrollY>y)window.scrollTo({top:y,behavior:'smooth'});});})();"+'</script>\n<script src="site.js" defer></script>\n</body></html>',1)
+import readability as _rd
+html=_rd.apply(html)
+html=html.replace('</head>','<style>'+_rd.CSS+'</style></head>',1).replace('</body>','<script>'+_rd.JS+'</script></body>',1)
 open(os.path.join(RT,'index.html'),'w').write(html); print(len(html))
 
 # ---- отдельные страницы: генератор постов и рекомендации ----
 import recs as _recs
 import weekposts as _wp
 _theme=re.search(r'<script>\(function\(\)\{var t=.*?</script>', html).group(0)
-_toggle=re.search(r'<button class="theme-toggle".*?</button>', html, re.S).group(0)
+_toggle=re.search(r'<button[^>]*class="theme-toggle".*?</button>', html, re.S).group(0)
 def subpage(fn, title, h1, lead, body, extra_css='', js=''):
     page=f"""<!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">

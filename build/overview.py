@@ -165,8 +165,44 @@ def build(data):
         kpi('ВКонтакте', '≈' + num(vk), 'подписчиков', 'users'),
         kpi('Ключевая ставка', num(macro.get('key_rate', {}).get('value')) + '%', 'Банк России', 'bank', note=E(macro.get('key_rate', {}).get('note', ''))),
         kpi('Доллар', num(fx_l.get('usd'), 2) + ' ₽', 'курс ЦБ', 'ruble', note=(f'{signed(usd_ytd)}% с начала года' if usd_ytd is not None else '')),
-        kpi('Нефть Brent', num(oil.get('brent'), 2) + ' $', 'Мосбиржа', 'drop'),
+        kpi('Инфляция', num(macro.get('ru_infl', {}).get('value'), 2) + '%', 'годовая, Россия', 'spark', note=E(macro.get('ru_infl', {}).get('note', ''))),
     ])
+
+    # ---------- «Главное сейчас»: выводы одной строкой ----------
+    def verdict(label, value, text, tone, link):
+        arrow = {'good': '▲', 'bad': '▼', 'warn': '●', 'neutral': '●'}[tone]
+        return (f'<a class="vd vd-{tone}" href="#{link}" data-tab-link="{link}"><span class="vd-l">{E(label)}</span>'
+                f'<span class="vd-v"><i>{arrow}</i>{value}</span><span class="vd-t">{text}</span></a>')
+    vds = []
+    if med_last is not None and med_ch is not None:
+        vds.append(verdict('Telegram: охват поста', num(med_last),
+                           f'просмотров у типичного поста, <b>{signed(med_ch, 0)}%</b> к прошлому месяцу'
+                           + (' — охват падает' if med_ch <= -5 else (' — охват растёт' if med_ch >= 5 else ' — без изменений')),
+                           'bad' if med_ch <= -5 else ('good' if med_ch >= 5 else 'neutral'), 'tg'))
+    if ms.get('growth30') is not None:
+        g30 = ms.get('growth30')
+        vds.append(verdict('MAX: рост', signed(g30, 0), f'подписчиков за 30 дней, всего {num(mx_)}; пост видят <b>{num(ms.get("err"), 0)}%</b> подписчиков',
+                           'good' if g30 > 0 else 'bad', 'max'))
+    kr, nm = macro.get('key_rate', {}), macro.get('next_meeting', {})
+    if kr.get('value') is not None:
+        nmd = str(nm.get('date') or '')
+        nmd = (nmd[8:10] + '.' + nmd[5:7]) if len(nmd) >= 10 else ''
+        vds.append(verdict('Ключевая ставка', num(kr.get('value')) + '%', E(kr.get('note') or 'решение Банка России')
+                           + (f'; следующее решение — <b>{nmd}</b>' if nmd else ''), 'neutral', 'rf'))
+    ri = macro.get('ru_infl', {}).get('value')
+    if ri is not None:
+        vds.append(verdict('Инфляция в России', num(ri, 2) + '%', 'годовая' + (f' ({E(macro["ru_infl"].get("note", ""))})' if macro['ru_infl'].get('note') else '')
+                           + ('; цель ЦБ — 4%, цены растут быстрее' if ri > 4.5 else '; близко к цели ЦБ 4%'), 'warn' if ri > 4.5 else 'good', 'rf'))
+    if prom_lo.get('value') is not None:
+        pv = prom_lo['value']
+        vds.append(verdict('Промышленность Ленобласти', signed(pv, 1) + '%', f'к прошлому году ({prom_lo["period"][5:7]}.{prom_lo["period"][:4]})'
+                           + (' — производство снижается' if pv < 0 else ' — производство растёт'), 'bad' if pv < 0 else 'good', 'lo'))
+    if loans_lo.get('value') is not None:
+        lv = loans_lo['value']
+        vds.append(verdict('Кредиты бизнесу в Ленобласти', signed(lv, 1) + '%', f'к прошлому году ({loans_lo["period"][5:7]}.{loans_lo["period"][:4]})'
+                           + (' — бизнес активно берёт кредиты' if lv > 5 else ''), 'good' if lv > 0 else 'bad', 'lo'))
+    verdicts = (f'<section class="ix-sec vd-sec"><h2 class="ix-sec-h">Главное сейчас</h2><div class="vd-grid">{"".join(vds)}</div>'
+                '<p class="vd-hint">▲ хорошо · ▼ стоит обратить внимание · ● к сведению. Нажмите на карточку, чтобы открыть подробности.</p></section>')
 
     # ---------- Инфографика «Каналы» ----------
     aud = [('Telegram', tg or 0, 'c1'), ('ВКонтакте', vk or 0, 'c2'), ('MAX', mx_ or 0, 'c3')]
@@ -242,4 +278,4 @@ def build(data):
     economy = (f'<section class="ix-sec"><h2 class="ix-sec-h">Экономика в цифрах</h2><div class="bento">'
                f'{eco_dark}{grp_card}{lo_card}{bud_card}{nb_card}</div></section>')
 
-    return hero_kpis, channels + economy
+    return hero_kpis, verdicts + channels + economy

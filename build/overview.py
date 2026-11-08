@@ -51,9 +51,22 @@ def card(cls, inner):
     return f'<div class="ix {cls}">{inner}</div>'
 
 
-def kpi(title, value, sub, ic, tone='', note=''):
+def spark(vals, w=120, h=30):
+    vals = [v for v in vals if v is not None]
+    if len(vals) < 3:
+        return ''
+    lo, hi = min(vals), max(vals)
+    rng = (hi - lo) or 1
+    pts = [(i * w / (len(vals) - 1), h - 3 - (v - lo) / rng * (h - 6)) for i, v in enumerate(vals)]
+    d = 'M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in pts)
+    up = vals[-1] >= vals[0]
+    return (f'<svg class="spark {"up" if up else "down"}" viewBox="0 0 {w} {h}" preserveAspectRatio="none" aria-hidden="true">'
+            f'<path d="{d} L{w},{h} L0,{h} Z" class="sp-a"/><path d="{d}" class="sp-l"/><circle cx="{pts[-1][0]:.1f}" cy="{pts[-1][1]:.1f}" r="2.6" class="sp-d"/></svg>')
+
+
+def kpi(title, value, sub, ic, tone='', note='', sp=''):
     return card('kpi-card ' + tone, f'<div class="ix-top"><span class="ix-t">{E(title)}</span>{icon(ic)}</div>'
-                f'<div class="ix-big">{value}</div><div class="ix-sub">{sub}</div>' + (f'<div class="ix-note">{E(note)}</div>' if note else ''))
+                f'<div class="ix-big">{value}</div><div class="ix-sub">{sub}</div>' + sp + (f'<div class="ix-note">{E(note)}</div>' if note else ''))
 
 
 def donut(parts, size=150, w=22):
@@ -158,14 +171,21 @@ def build(data):
     prom_lo = lo_last('prom')
     loans_lo = lo_last('loans_biz')
 
+    sp_tg = spark([r.get('subscribers') for r in subs_d])
+    sp_mx = spark([r.get('subscribers') for r in sorted(g('max_daily'), key=lambda r: r['day'])])
+    sp_vk = spark([r.get('subscribers') for r in sorted([r for r in g('platforms') if r.get('platform') == 'ВКонтакте'], key=lambda r: str(r.get('at')))])
+    sp_kr = spark([r.get('rate') for r in sorted(g('key_rate'), key=lambda r: r['date'])])
+    sp_fx = spark([r.get('usd') for r in fx[-90:]])
+    sp_in = spark([r.get('yoy') for r in sorted(g('rf_infl_month'), key=lambda r: r['period'])])
+
     # ---------- Шапка: тёмная «геро»-карточка + KPI ----------
     hero_kpis = ''.join([
-        kpi('Telegram', num(tg), 'подписчиков', 'users', note=(f'{signed(tg_week, 0)} за неделю' if tg_week is not None else '')),
-        kpi('MAX', num(mx_), 'подписчиков', 'users', note=(f'{signed(ms.get("growth30"), 0)} за 30 дней' if ms.get('growth30') is not None else '')),
-        kpi('ВКонтакте', '≈' + num(vk), 'подписчиков', 'users'),
-        kpi('Ключевая ставка', num(macro.get('key_rate', {}).get('value')) + '%', 'Банк России', 'bank', note=E(macro.get('key_rate', {}).get('note', ''))),
-        kpi('Доллар', num(fx_l.get('usd'), 2) + ' ₽', 'курс ЦБ', 'ruble', note=(f'{signed(usd_ytd)}% с начала года' if usd_ytd is not None else '')),
-        kpi('Инфляция', num(macro.get('ru_infl', {}).get('value'), 2) + '%', 'годовая, Россия', 'spark', note=E(macro.get('ru_infl', {}).get('note', ''))),
+        kpi('Telegram', num(tg), 'подписчиков', 'users', note=(f'{signed(tg_week, 0)} за неделю' if tg_week is not None else ''), sp=sp_tg),
+        kpi('MAX', num(mx_), 'подписчиков', 'users', note=(f'{signed(ms.get("growth30"), 0)} за 30 дней' if ms.get('growth30') is not None else ''), sp=sp_mx),
+        kpi('ВКонтакте', '≈' + num(vk), 'подписчиков', 'users', sp=sp_vk),
+        kpi('Ключевая ставка', num(macro.get('key_rate', {}).get('value')) + '%', 'Банк России', 'bank', note=E(macro.get('key_rate', {}).get('note', '')), sp=sp_kr),
+        kpi('Доллар', num(fx_l.get('usd'), 2) + ' ₽', 'курс ЦБ', 'ruble', note=(f'{signed(usd_ytd)}% с начала года' if usd_ytd is not None else ''), sp=sp_fx),
+        kpi('Инфляция', num(macro.get('ru_infl', {}).get('value'), 2) + '%', 'годовая, Россия', 'spark', note=E(macro.get('ru_infl', {}).get('note', '')), sp=sp_in),
     ])
 
     # ---------- «Главное сейчас»: выводы одной строкой ----------

@@ -63,6 +63,35 @@ window.__DATA = {"rf_infl_week": [{"id": "w2026-09-28", "date": "2026-09-28", "w
 .lx-more[open]>summary b::after{content:"  ▴"}
 .lx-more>summary span{font-size:13px;color:var(--color-fg-muted);line-height:1.4}
 .lx-more-in{display:flex;flex-direction:column;gap:22px;padding:4px 14px 18px}
+/* фон блоков в «Подробнее» */
+.lx-more-in .lx-card{background:#f3eefe!important;border:1px solid rgba(123,77,219,.2)!important;box-shadow:none!important}
+.lx-more-in .lx-card table th{background:rgba(123,77,219,.10)}
+.lx-more-in .lx-card table tr:nth-child(even) td{background:rgba(255,255,255,.55)}
+[data-theme="dark"] .lx-more-in .lx-card{background:rgba(179,155,245,.09)!important;border-color:rgba(179,155,245,.22)!important}
+[data-theme="dark"] .lx-more-in .lx-card table th{background:rgba(179,155,245,.14)}
+[data-theme="dark"] .lx-more-in .lx-card table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+/* карусели со стрелками */
+.lx-slider{display:flex;flex-direction:column;gap:10px;min-width:0}
+.lx-sl-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.lx-sl-title{font-family:var(--font-head);font-size:20px;font-weight:800}
+.lx-sl-nav{display:flex;align-items:center;gap:8px;margin-left:auto}
+.lx-sl-btn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(123,77,219,.3);background:var(--glass);color:var(--ac);font:800 22px/1 var(--font-head);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--glass-shadow)}
+.lx-sl-btn:hover:not(:disabled){background:var(--ac);color:#fff}
+.lx-sl-btn:disabled{opacity:.35;cursor:default}
+.lx-sl-dots{display:flex;gap:6px;flex-wrap:wrap}
+.lx-sl-dot{font:inherit;font-size:12.5px;font-weight:600;border:1px solid rgba(123,77,219,.25);background:transparent;color:var(--color-fg-muted);border-radius:999px;padding:5px 11px;cursor:pointer}
+.lx-sl-dot.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.lx-sl-dot.num{width:10px;height:10px;padding:0;border-radius:50%;background:rgba(123,77,219,.25);border:0}
+.lx-sl-dot.num.on{background:var(--ac)}
+.lx-sl-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;padding:2px 2px 10px}
+.lx-sl-track::-webkit-scrollbar{display:none}
+.lx-sl-slide{flex:0 0 100%;scroll-snap-align:start;min-width:0}
+.lx-slider[data-per="3"] .lx-sl-slide{flex-basis:calc((100% - 28px)/3)}
+@media (max-width:1000px){.lx-slider[data-per="3"] .lx-sl-slide{flex-basis:calc((100% - 14px)/2)}}
+@media (max-width:640px){.lx-slider[data-per="3"] .lx-sl-slide{flex-basis:100%}.lx-sl-dot:not(.num){padding:4px 9px;font-size:12px}}
+.lx-sl-inner .lx-sl-slide{background:rgba(123,77,219,.05);border-radius:16px;padding:12px}
+.lx-sl-inner .lx-sl-head{justify-content:flex-end}
+.lx-sl-cards .lx-sl-slide>.lx-card{height:100%;box-sizing:border-box}
 /* «Главное сейчас» */
 .vd-sec .ix-sec-h{font-size:clamp(22px,2vw,28px)}
 .vd-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
@@ -480,12 +509,9 @@ html,body{background:var(--color-bg);color:var(--color-fg);overflow-x:clip;font-
 <div class="lx-tile"><span class="lx-muted">ER (реакции / просмотры)</span><span class="lx-big" data-draw="val" data-field="er" data-fmt="pct1" data-source="tg_kpi">—</span></div>
 <div class="lx-tile"><span class="lx-muted">Постов в день</span><span class="lx-big" data-draw="val" data-field="posts_per_day" data-fmt="num" data-source="tg_kpi">—</span></div>
 <div class="lx-tile"><span class="lx-muted">Постов за 30 дней</span><span class="lx-big" data-draw="val" data-field="posts" data-fmt="int" data-source="tg_kpi">—</span></div>
-</div><div class="lx-card" id="tg-monthly-med"><h3>Охват поста по месяцам</h3><p class="lx-muted">Медианные просмотры одного поста, вышедшего в месяце</p><div class="lx-chart dash-skeleton" data-draw="mchart" data-kind="line" data-label="Медиана" data-source="tg_monthly" data-x="month" data-y="median_views" data-zero="1"></div></div>
-<div class="lx-card" id="tg-views"><h3>Просмотры по дням публикации, 30 дней</h3><p class="lx-muted">Сумма просмотров постов, вышедших в этот день, за последние 30 дней; у свежих постов просмотры ещё набираются</p><div class="lx-chart dash-skeleton" data-draw="bars" data-label="Просмотры" data-source="tg_by_day" data-x="day" data-y="views"></div></div>
-<div class="lx-grid">
-<div class="lx-card" id="tg-monthly"><h3>Просмотры по месяцам</h3><p class="lx-muted">Сумма просмотров постов, вышедших в месяце; серым — текущий неполный месяц</p><div class="lx-chart dash-skeleton" data-draw="mchart" data-kind="bars" data-label="Просмотры" data-source="tg_monthly" data-x="month" data-y="views"></div></div>
+</div><div class="lx-slider lx-sl-cards" data-per="1"><div class="lx-sl-head"><b class="lx-sl-title">Динамика просмотров Telegram</b><div class="lx-sl-nav"><button aria-label="Назад" class="lx-sl-btn prev" type="button">‹</button><div class="lx-sl-dots"></div><button aria-label="Вперёд" class="lx-sl-btn next" type="button">›</button></div></div><div class="lx-sl-track"><div class="lx-sl-slide" data-label="Охват поста по месяцам"><div class="lx-card" id="tg-monthly-med"><h3>Охват поста по месяцам</h3><p class="lx-muted">Медианные просмотры одного поста, вышедшего в месяце</p><div class="lx-chart dash-skeleton" data-draw="mchart" data-kind="line" data-label="Медиана" data-source="tg_monthly" data-x="month" data-y="median_views" data-zero="1"></div></div></div><div class="lx-sl-slide" data-label="Просмотры по дням публикации, 30 дней"><div class="lx-card" id="tg-views"><h3>Просмотры по дням публикации, 30 дней</h3><p class="lx-muted">Сумма просмотров постов, вышедших в этот день, за последние 30 дней; у свежих постов просмотры ещё набираются</p><div class="lx-chart dash-skeleton" data-draw="bars" data-label="Просмотры" data-source="tg_by_day" data-x="day" data-y="views"></div></div></div><div class="lx-sl-slide" data-label="Просмотры по месяцам"><div class="lx-card" id="tg-monthly"><h3>Просмотры по месяцам</h3><p class="lx-muted">Сумма просмотров постов, вышедших в месяце; серым — текущий неполный месяц</p><div class="lx-chart dash-skeleton" data-draw="mchart" data-kind="bars" data-label="Просмотры" data-source="tg_monthly" data-x="month" data-y="views"></div></div></div></div></div>
 
-</div>
+
 
 <div class="lx-grid">
 <div class="lx-card" id="tg-freq"><h3>Сколько постов в день оптимально</h3><p class="lx-muted">Медианные просмотры поста в зависимости от числа постов в тот же день</p><div class="lx-chart lx-auto dash-skeleton" data-draw="cbars" data-n="posts" data-sort="none" data-source="tg_freq" data-x="bucket" data-y="reach"></div></div>
@@ -698,19 +724,7 @@ html,body{background:var(--color-bg);color:var(--color-fg);overflow-x:clip;font-
 <div class="lx-tile"><span class="lx-muted">Инвестсоглашения на ПМЭФ-2026</span><span class="lx-big"><span data-draw="val" data-field="value" data-fmt="int" data-source="macro" data-where="indicator=lo_pmef">—</span> млрд ₽</span></div>
 <div class="lx-tile"><span class="lx-muted">Новостей в ленте</span><span class="lx-big" data-draw="count" data-source="news_lo">—</span></div>
 </div><div class="lx-card" id="lo-trends"><h3>Экономика региона по месяцам</h3><p class="lx-muted">Росстат и Банк России, профиль Ленинградской области; % — к тому же месяцу прошлого года</p>
-<div class="lx-grid3">
-<div class="lx-sub"><b>Промпроизводство, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=prom" data-h="170" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div>
-<div class="lx-sub"><b>Розничная торговля, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=retail" data-h="170" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div>
-<div class="lx-sub"><b>Реальная зарплата, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=wage" data-h="170" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div>
-<div class="lx-sub"><b>Годовая инфляция, %</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=infl" data-h="170" data-source="lo_series" data-unit="%" data-x="period" data-y="value" data-zero="1"></div></div>
-<div class="lx-sub"><b>Финрезультат организаций, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=finres" data-h="170" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div>
-<div class="lx-sub"><b>Кредиты бизнесу, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=loans_biz" data-h="170" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div>
-<div class="lx-sub"><b>Ипотека, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=mortgage" data-h="170" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div>
-<div class="lx-sub"><b>Безработица по МОТ, % (по кварталам)</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=unemp" data-h="170" data-source="lo_series" data-unit="%" data-x="period" data-y="value" data-zero="1"></div></div>
-<div class="lx-sub"><b>Инвестиции в основной капитал, % г/г (нарастающим итогом)</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=invest" data-h="170" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div>
-<div class="lx-sub"><b>Жильё, первичка, ₽ за м²</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=home1" data-h="170" data-source="lo_series" data-unit=" ₽" data-x="period" data-y="value"></div></div>
-<div class="lx-sub"><b>Жильё, вторичка, ₽ за м²</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=home2" data-h="170" data-source="lo_series" data-unit=" ₽" data-x="period" data-y="value"></div></div>
-</div>
+<div class="lx-slider lx-sl-inner" data-per="3"><div class="lx-sl-head"><div class="lx-sl-nav"><button aria-label="Назад" class="lx-sl-btn prev" type="button">‹</button><div class="lx-sl-dots"></div><button aria-label="Вперёд" class="lx-sl-btn next" type="button">›</button></div></div><div class="lx-sl-track"><div class="lx-sl-slide" data-label="Промпроизводство, % г/г"><div class="lx-sub"><b>Промпроизводство, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=prom" data-h="210" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div></div><div class="lx-sl-slide" data-label="Розничная торговля, % г/г"><div class="lx-sub"><b>Розничная торговля, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=retail" data-h="210" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div></div><div class="lx-sl-slide" data-label="Реальная зарплата, % г/г"><div class="lx-sub"><b>Реальная зарплата, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=wage" data-h="210" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div></div><div class="lx-sl-slide" data-label="Годовая инфляция, %"><div class="lx-sub"><b>Годовая инфляция, %</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=infl" data-h="210" data-source="lo_series" data-unit="%" data-x="period" data-y="value" data-zero="1"></div></div></div><div class="lx-sl-slide" data-label="Финрезультат организаций, % г/г"><div class="lx-sub"><b>Финрезультат организаций, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=finres" data-h="210" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div></div><div class="lx-sl-slide" data-label="Кредиты бизнесу, % г/г"><div class="lx-sub"><b>Кредиты бизнесу, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=loans_biz" data-h="210" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div></div><div class="lx-sl-slide" data-label="Ипотека, % г/г"><div class="lx-sub"><b>Ипотека, % г/г</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=mortgage" data-h="210" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div></div><div class="lx-sl-slide" data-label="Безработица по МОТ, % (по кварталам)"><div class="lx-sub"><b>Безработица по МОТ, % (по кварталам)</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=unemp" data-h="210" data-source="lo_series" data-unit="%" data-x="period" data-y="value" data-zero="1"></div></div></div><div class="lx-sl-slide" data-label="Инвестиции в основной капитал, % г/г (на"><div class="lx-sub"><b>Инвестиции в основной капитал, % г/г (нарастающим итогом)</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=invest" data-h="210" data-kind="bars" data-source="lo_series" data-unit="%" data-x="period" data-y="value"></div></div></div><div class="lx-sl-slide" data-label="Жильё, первичка, ₽ за м²"><div class="lx-sub"><b>Жильё, первичка, ₽ за м²</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=home1" data-h="210" data-source="lo_series" data-unit=" ₽" data-x="period" data-y="value"></div></div></div><div class="lx-sl-slide" data-label="Жильё, вторичка, ₽ за м²"><div class="lx-sub"><b>Жильё, вторичка, ₽ за м²</b><div class="lx-chart dash-skeleton" data-draw="mchart" data-filter="indicator=home2" data-h="210" data-source="lo_series" data-unit=" ₽" data-x="period" data-y="value"></div></div></div></div></div>
 <div class="lx-tiles">
 <div class="lx-tile"><span class="lx-muted">Безработица (МОТ)</span><span class="lx-big" data-draw="val" data-field="value" data-fmt="rate" data-source="lo_last" data-where="indicator=lo_unemp">—</span><span class="lx-muted" data-draw="val" data-field="note" data-fmt="text" data-source="lo_last" data-where="indicator=lo_unemp">—</span></div>
 <div class="lx-tile"><span class="lx-muted">Инвестиции, % г/г</span><span class="lx-big" data-draw="val" data-field="value" data-fmt="spct1" data-source="lo_last" data-where="indicator=lo_invest">—</span><span class="lx-muted" data-draw="val" data-field="note" data-fmt="text" data-source="lo_last" data-where="indicator=lo_invest">—</span></div>
@@ -1530,6 +1544,15 @@ if(dlg){dlg.querySelector('.ms-x').addEventListener('click',function(){dlg.close
 (function(){
 document.querySelectorAll('details.lx-more,details.lx-tbl-more').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)setTimeout(function(){window.dispatchEvent(new Event('resize'))},30)})});
 document.querySelectorAll('a[data-tab-link]').forEach(function(a){a.addEventListener('click',function(e){var t=document.querySelector('.lx-tab[data-tab="'+a.getAttribute('data-tab-link')+'"]');if(t){e.preventDefault();t.click();var n=document.getElementById('lx-nav-anchor');if(n)window.scrollTo({top:n.getBoundingClientRect().top+window.scrollY,behavior:'smooth'});}})});
+document.querySelectorAll('.lx-slider').forEach(function(w){var tr=w.querySelector('.lx-sl-track'),sl=[].slice.call(tr.children),per=+w.getAttribute('data-per')||1,dots=w.querySelector('.lx-sl-dots'),pv=w.querySelector('.prev'),nx=w.querySelector('.next');
+ function perNow(){var a=tr.clientWidth,b=sl[0].getBoundingClientRect().width;return (a&&b)?Math.max(1,Math.round(a/b)):per}
+ function pages(){return Math.max(1,Math.ceil(sl.length/perNow()))}
+ function cur(){var w0=sl[0].getBoundingClientRect().width+14;return w0>14?Math.round(tr.scrollLeft/(w0*perNow())):0}
+ function go(i){var p=Math.max(0,Math.min(pages()-1,i));var w0=sl[0].getBoundingClientRect().width+14;tr.scrollTo({left:p*w0*perNow()})}
+ function draw(){dots.innerHTML='';var n=pages(),labels=per===1;for(var i=0;i<n;i++){var b=document.createElement('button');b.type='button';b.className='lx-sl-dot'+(labels?'':' num');if(labels)b.textContent=sl[i].getAttribute('data-label')||String(i+1);b.setAttribute('aria-label','Слайд '+(i+1));(function(k){b.addEventListener('click',function(){go(k)})})(i);dots.appendChild(b)}upd()}
+ function upd(){var c=cur(),n=pages();[].forEach.call(dots.children,function(d,i){d.classList.toggle('on',i===c)});pv.disabled=c<=0;nx.disabled=c>=n-1}
+ pv.addEventListener('click',function(){go(cur()-1)});nx.addEventListener('click',function(){go(cur()+1)});
+ var t;tr.addEventListener('scroll',function(){clearTimeout(t);t=setTimeout(upd,80)});window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(draw,120)});document.querySelectorAll('.lx-tab').forEach(function(x){x.addEventListener('click',function(){setTimeout(draw,60)})});draw();});
 var s=document.querySelector('#summary .lx-list');if(s){var b=document.createElement('button');b.type='button';b.className='lx-showall';b.textContent='Показать все выводы';
  b.addEventListener('click',function(){var on=s.classList.toggle('all');b.textContent=on?'Свернуть':'Показать все выводы'});s.parentNode.appendChild(b);
  setTimeout(function(){if(s.children.length<=4)b.remove()},3000);}

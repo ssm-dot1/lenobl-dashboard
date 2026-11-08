@@ -133,9 +133,12 @@ html=html.replace('\n<script>\n'+scripts, '\n'+foot+'\n<script>\n'+scripts, 1)
 html=html.replace('<body><div class="wrap">','<body><script>(function(){var t=\'light\';try{t=localStorage.getItem(\'lxTheme\')||t}catch(e){}document.documentElement.setAttribute(\'data-theme\',t);var P={light:[\'#153F9B\',\'#12AA9E\',\'#FDBC16\',\'#804F80\',\'#666FB4\',\'#c2412d\',\'#0e8f84\',\'#7f8c8d\'],dark:[\'#6f9bff\',\'#2fd3c4\',\'#FDBC16\',\'#d08fd0\',\'#a3abf0\',\'#ff7a66\',\'#3fd1c3\',\'#aab4c8\']};window.__lxPal=P;if(window.dash&&window.dash.colors){var c=P[t];for(var i=0;i<c.length;i++)window.dash.colors[i]=c[i];}})();</script><div class="bg-anim" aria-hidden="true"><i></i><i></i><i></i><i></i></div><canvas id="bg3d" aria-hidden="true"></canvas><div class="wrap">',1)
 for _a,_b in (('aria-selected="false">Экономика Ленобласти</button>','aria-selected="false">Ленобласть</button>'),('aria-selected="false">Компании Ленобласти</button>','aria-selected="false">Компании</button>'),('aria-selected="false">Идеи для постов</button>','aria-selected="false">Идеи постов</button>')): html=html.replace(_a,_b,1)
 html=html.replace('</body></html>','<script>'+_plan.JS+_ms.JS+"(function(){var n=document.querySelector('.lx-tabs');if(!n)return;n.addEventListener('click',function(e){var b=e.target.closest('.lx-tab');if(!b)return;b.scrollIntoView({block:'nearest',inline:'center'});var a=document.getElementById('lx-nav-anchor'),y=(a?a.getBoundingClientRect().top:n.getBoundingClientRect().top)+window.scrollY;if(window.scrollY>y)window.scrollTo({top:y,behavior:'smooth'});});})();"+'</script>\n<script src="site.js" defer></script>\n</body></html>',1)
-import readability as _rd
-html=_rd.apply(html)
-html=html.replace('</head>','<style>'+_rd.CSS+'</style></head>',1).replace('</body>','<script>'+_rd.JS+'</script></body>',1)
+try:
+    import readability as _rd
+    html=_rd.apply(html)
+    html=html.replace('</head>','<style>'+_rd.CSS+'</style></head>',1).replace('</body>','<script>'+_rd.JS+'</script></body>',1)
+except ImportError as _e:  # нет bs4 — публикуем без доработок читабельности
+    print('readability skipped:', _e)
 open(os.path.join(RT,'index.html'),'w').write(html); print(len(html))
 
 # ---- отдельные страницы: генератор постов и рекомендации ----

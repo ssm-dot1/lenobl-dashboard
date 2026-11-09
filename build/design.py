@@ -225,22 +225,10 @@ p{text-wrap:pretty}
 JS2 = r'''
 (function(){
 var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-/* досчёт цифр */
-function parse(t){var m=t.match(/^([^\d−\-+]*)([−\-+]?)([\d\s  ]+(?:[.,]\d+)?)(.*)$/);if(!m)return null;var n=parseFloat(m[3].replace(/[\s  ]/g,'').replace(',','.'));if(isNaN(n))return null;
- var dec=(m[3].split(/[.,]/)[1]||'').length;return {pre:m[1],sign:m[2],n:n,dec:dec,post:m[4],sep:m[3].indexOf(',')>=0?',':'.'}}
-function fmt(p,v){var s=v.toFixed(p.dec).split('.');s[0]=s[0].replace(/\B(?=(\d{3})+(?!\d))/g,' ');return p.pre+p.sign+s.join(p.dec?p.sep:'')+p.post}
-function count(el){if(el.__cnt||RM)return;var tx=el.firstChild&&el.firstChild.nodeType===3&&el.childNodes.length===1?el.textContent.trim():null;if(!tx)return;var p=parse(tx);if(!p||p.n===0)return;el.__cnt=1;
- var t0=null,d=900;function step(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/d),e=1-Math.pow(1-k,3);el.textContent=fmt(p,p.n*e);if(k<1)requestAnimationFrame(step);else el.textContent=tx}requestAnimationFrame(step)}
-var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.unobserve(e.target);count(e.target)}})},{threshold:.4}):null;
-function watchNums(){document.querySelectorAll('.ix-big,.lx-big,.vd-v,.mini-row b,.ix-row .ix-big').forEach(function(el){if(el.__w)return;el.__w=1;
- var vd=el.classList.contains('vd-v')?[].filter.call(el.childNodes,function(n){return n.nodeType===3})[0]:null;
- if(vd){var sp=document.createElement('span');sp.textContent=vd.nodeValue;el.replaceChild(sp,vd);el=sp}
- if(io)io.observe(el)})}
 /* рост графиков при первом показе раздела */
 function anim(sec){if(RM||!sec||sec.__an)return;sec.__an=1;sec.classList.add('lx-anim');setTimeout(function(){sec.classList.remove('lx-anim')},1600)}
 function cur(){return document.querySelector('.lx-page:not([hidden])')}
-setTimeout(function(){watchNums();anim(cur())},300);
-document.querySelectorAll('.lx-tab').forEach(function(t){t.addEventListener('click',function(){setTimeout(function(){watchNums();anim(cur())},120)})});
-document.querySelectorAll('details').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)setTimeout(watchNums,200)})});
+setTimeout(function(){anim(cur())},300);
+document.querySelectorAll('.lx-tab').forEach(function(t){t.addEventListener('click',function(){setTimeout(function(){anim(cur())},120)})});
 })();
 '''
